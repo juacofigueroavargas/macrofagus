@@ -218,32 +218,40 @@ body{
 @media(max-width:620px){
     body{
         padding:14px;
+        display:block;
     }
 
-    .brand-panel,
+    .brand-panel{
+        display:none;
+    }
+
     .form-panel{
         padding:28px;
     }
 
     .auth-wrapper{
+        display:block;
         border-radius:24px;
-    }
-
-    .brand-panel h1{
-        font-size:30px;
+        min-height:auto;
     }
 
     .form h2{
-        font-size:26px;
+        font-size:32px;
     }
 
     .row{
-        grid-template-columns:1fr;
-        gap:4px;
+        grid-template-columns:1.2fr .8fr .8fr .8fr;
+        gap:8px;
+        font-size:13px;
+        padding:12px;
     }
 
     .row.header{
-        display:none;
+        display:grid;
+    }
+
+    .table{
+        overflow-x:auto;
     }
 }
 </style>
