@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MacroFagus · Macros</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Segoe UI,system-ui,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#111827);
+    color:#f8fafc;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+}
+
+.auth-wrapper{
+    width:100%;
+    max-width:1050px;
+    min-height:620px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border-radius:34px;
+    overflow:hidden;
+    background:rgba(15,23,42,.9);
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 28px 90px rgba(0,0,0,.38);
+}
+
+.brand-panel{
+    padding:60px;
+    background:
+        radial-gradient(circle at top left, rgba(34,197,94,.22), transparent 38%),
+        linear-gradient(135deg,rgba(34,197,94,.12),rgba(20,184,166,.05));
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.logo-icon{
+    width:70px;
+    height:70px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    display:grid;
+    place-items:center;
+    color:#052e16;
+    font-size:32px;
+    margin-bottom:28px;
+}
+
+.brand-panel h1{
+    font-size:46px;
+    font-weight:900;
+    letter-spacing:1px;
+    margin-bottom:18px;
+}
+
+.brand-panel p{
+    color:#cbd5e1;
+    font-size:20px;
+    line-height:1.6;
+    max-width:360px;
+}
+
+.form-panel{
+    padding:60px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.top-bar{
+    width:100%;
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:24px;
+}
+
+.hub-btn{
+    height:42px;
+    padding:0 16px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.hub-btn i{
+    color:#86efac;
+}
+
+.form h2{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.form-subtitle{
+    color:#94a3b8;
+    font-size:15px;
+    margin-bottom:24px;
+}
+
+.result-box{
+    background:rgba(34,197,94,.12);
+    border:1px solid rgba(34,197,94,.25);
+    border-radius:18px;
+    padding:22px;
+    margin-bottom:24px;
+}
+
+.result-box span{
+    display:block;
+    color:#94a3b8;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.result-box strong{
+    font-size:36px;
+    color:#86efac;
+}
+
+.field{
+    margin-bottom:18px;
+}
+
+.field label{
+    display:block;
+    font-size:13px;
+    color:#cbd5e1;
+    margin-bottom:8px;
+}
+
+.field select{
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#f8fafc;
+    outline:none;
+    font-size:15px;
+}
+
+.field select option{
+    color:#0f172a;
+}
+
+.field select:focus{
+    border-color:#22c55e;
+}
+
+.btn{
+    width:100%;
+    height:52px;
+    border:0;
+    border-radius:14px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+    font-weight:900;
+    font-size:15px;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+.btn-secondary{
+    width:100%;
+    height:48px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:14px;
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    font-weight:800;
+    font-size:14px;
+    cursor:pointer;
+    margin-top:12px;
+}
+
+.message{
+    margin-top:18px;
+    padding:12px;
+    border-radius:14px;
+    font-size:14px;
+    display:none;
+}
+
+.message.error{
+    display:block;
+    background:rgba(239,68,68,.12);
+    color:#fecaca;
+    border:1px solid rgba(239,68,68,.25);
+}
+
+.macros-box{
+    display:none;
+    margin-top:22px;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.macro-card{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:16px;
+    padding:16px;
+}
+
+.macro-card span{
+    display:block;
+    color:#94a3b8;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.macro-card strong{
+    font-size:24px;
+    color:#f8fafc;
+}
+
+.macro-card small{
+    display:block;
+    margin-top:6px;
+    color:#86efac;
+}
+
+@media(max-width:850px){
+    .auth-wrapper{
+        grid-template-columns:1fr;
+        min-height:auto;
+    }
+
+    .brand-panel{
+        padding:42px;
+        text-align:center;
+        align-items:center;
+    }
+
+    .form-panel{
+        padding:42px;
+    }
+
+    .brand-panel h1{
+        font-size:38px;
+    }
+
+    .macros-box{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:520px){
+    body{
+        padding:14px;
+    }
+
+    .brand-panel,
+    .form-panel{
+        padding:28px;
+    }
+
+    .auth-wrapper{
+        border-radius:24px;
+    }
+
+    .brand-panel h1{
+        font-size:30px;
+    }
+
+    .form h2{
+        font-size:26px;
+    }
+
+    .result-box strong{
+        font-size:30px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="auth-wrapper">
+
+    <section class="brand-panel">
+        <div class="logo-icon">
+            <i class="fa-solid fa-chart-simple"></i>
+        </div>
+
+        <h1>PLANNER</h1>
+
+        <p>
+            Ahora definiremos los factores para calcular tus macros.
+        </p>
+    </section>
+
+    <section class="form-panel">
+
+        <div class="top-bar">
+            <button class="hub-btn" onclick="window.location.href='app.html'">
+                <i class="fa-solid fa-house"></i>
+                Hub
+            </button>
+        </div>
+
+        <div class="form">
+            <h2>Calcular macros</h2>
+
+            <p class="form-subtitle">
+                Primero revisa tus calorías finales y luego selecciona los factores.
+            </p>
+
+            <div class="result-box">
+                <span>Calorías finales</span>
+                <strong id="caloriasFinales">0 kcal</strong>
+            </div>
+
+            <div class="field">
+                <label>Objetivo principal</label>
+                <select id="objetivoPrincipal" onchange="cargarFactoresProteicos()">
+                    <option value="">Seleccionar objetivo</option>
+                    <option value="ganar">Ganar masa muscular</option>
+                    <option value="resistencia">Resistencia</option>
+                    <option value="perder">Perder grasa</option>
+                    <option value="poca">Poca actividad</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Factor proteico</label>
+                <select id="factorProteico">
+                    <option value="">Selecciona primero un objetivo</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Factor graso</label>
+                <select id="factorGraso">
+                    <option value="">Seleccionar factor graso</option>
+                    <option value="1.2">Aumentar volumen · 1.2 g/kg</option>
+                    <option value="1">Mantener · 1.0 g/kg</option>
+                    <option value="0.7">Definir · 0.7 g/kg</option>
+                </select>
+            </div>
+
+            <button class="btn" onclick="mostrarMacros()">
+                Mostrar macros
+            </button>
+
+            <button class="btn-secondary" onclick="window.location.href='planner-calorias.html'">
+                Volver
+            </button>
+
+            <div id="mensaje" class="message"></div>
+
+            <div class="macros-box" id="macrosBox">
+                <div class="macro-card">
+                    <span>Proteínas</span>
+                    <strong id="proteinasGr">0 g</strong>
+                    <small id="proteinasKcal">0 kcal</small>
+                </div>
+
+                <div class="macro-card">
+                    <span>Grasas</span>
+                    <strong id="grasasGr">0 g</strong>
+                    <small id="grasasKcal">0 kcal</small>
+                </div>
+
+                <div class="macro-card">
+                    <span>Carbohidratos</span>
+                    <strong id="carbosGr">0 g</strong>
+                    <small id="carbosKcal">0 kcal</small>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+const KEY_USUARIOS = "macrofagus_usuarios";
+const KEY_ACTIVO = "macrofagus_usuario_activo";
+
+let usuarioActivo = JSON.parse(localStorage.getItem(KEY_ACTIVO));
+
+if(!usuarioActivo){
+    window.location.href = "index.html";
+}
+
+if(!usuarioActivo.planner || !usuarioActivo.planner.caloriasObjetivo){
+    window.location.href = "planner-calorias.html";
+}
+
+document.getElementById("caloriasFinales").textContent =
+    usuarioActivo.planner.caloriasObjetivo + " kcal";
+
+function obtenerUsuarios(){
+    return JSON.parse(localStorage.getItem(KEY_USUARIOS)) || [];
+}
+
+function guardarUsuarios(usuarios){
+    localStorage.setItem(KEY_USUARIOS, JSON.stringify(usuarios));
+}
+
+function guardarUsuarioActivo(){
+    localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
+
+    const usuarios = obtenerUsuarios();
+
+    const usuariosActualizados = usuarios.map(u => {
+        if(u.id === usuarioActivo.id){
+            return usuarioActivo;
+        }
+
+        return u;
+    });
+
+    guardarUsuarios(usuariosActualizados);
+}
+
+function mostrarMensaje(texto){
+    const msg = document.getElementById("mensaje");
+    msg.textContent = texto;
+    msg.className = "message error";
+}
+
+function limpiarMensaje(){
+    const msg = document.getElementById("mensaje");
+    msg.textContent = "";
+    msg.className = "message";
+}
+
+function cargarFactoresProteicos(){
+    const objetivo = document.getElementById("objetivoPrincipal").value;
+    const select = document.getElementById("factorProteico");
+
+    select.innerHTML = "";
+
+    let opciones = [];
+
+    if(objetivo === "ganar"){
+        opciones = [
+            {valor:2.0, texto:"2.0 g/kg · Mínimo para ganar músculo"},
+            {valor:2.1, texto:"2.1 g/kg · Equilibrio moderado"},
+            {valor:2.2, texto:"2.2 g/kg · Óptimo para hipertrofia"},
+            {valor:2.3, texto:"2.3 g/kg · Alto requerimiento"},
+            {valor:2.4, texto:"2.4 g/kg · Máximo recomendado"}
+        ];
+    }
+
+    if(objetivo === "resistencia"){
+        opciones = [
+            {valor:1.0, texto:"1.0 g/kg · Mínimo resistencia"},
+            {valor:1.2, texto:"1.2 g/kg · Base recomendada"},
+            {valor:1.4, texto:"1.4 g/kg · Entrenamiento medio"},
+            {valor:1.5, texto:"1.5 g/kg · Crossfit diario"},
+            {valor:1.6, texto:"1.6 g/kg · Alta demanda"},
+            {valor:1.7, texto:"1.7 g/kg · Máxima resistencia"}
+        ];
+    }
+
+    if(objetivo === "perder"){
+        opciones = [
+            {valor:1.5, texto:"1.5 g/kg · Mínimo para preservar músculo"},
+            {valor:1.6, texto:"1.6 g/kg · Equilibrio en déficit"},
+            {valor:1.7, texto:"1.7 g/kg · Control de hambre"},
+            {valor:1.8, texto:"1.8 g/kg · Alta protección muscular"}
+        ];
+    }
+
+    if(objetivo === "poca"){
+        opciones = [
+            {valor:0.8, texto:"0.8 g/kg · Mínimo funciones vitales"},
+            {valor:0.9, texto:"0.9 g/kg · Margen extra salud"},
+            {valor:1.0, texto:"1.0 g/kg · Maximo para sedentarios"}
+        ];
+    }
+
+    if(opciones.length === 0){
+        select.innerHTML = `<option value="">Selecciona primero un objetivo</option>`;
+        return;
+    }
+
+    select.innerHTML = `<option value="">Seleccionar factor proteico</option>`;
+
+    opciones.forEach(op => {
+        const option = document.createElement("option");
+        option.value = op.valor;
+        option.textContent = op.texto;
+        select.appendChild(option);
+    });
+}
+
+function mostrarMacros(){
+    limpiarMensaje();
+
+    const objetivoPrincipal = document.getElementById("objetivoPrincipal").value;
+    const factorProteico = parseFloat(document.getElementById("factorProteico").value);
+    const factorGraso = parseFloat(document.getElementById("factorGraso").value);
+
+    if(!objetivoPrincipal || !factorProteico || !factorGraso){
+        mostrarMensaje("Selecciona objetivo, factor proteico y factor graso.");
+        return;
+    }
+
+    const peso = usuarioActivo.planner.peso;
+    const caloriasFinales = usuarioActivo.planner.caloriasObjetivo;
+
+    const proteinasGr = Math.round(factorProteico * peso);
+    const proteinasKcal = proteinasGr * 4;
+
+    const grasasGr = Math.round(factorGraso * peso);
+    const grasasKcal = grasasGr * 9;
+
+    const carbosKcal = Math.round(caloriasFinales - (proteinasKcal + grasasKcal));
+    const carbosGr = Math.round(carbosKcal / 4);
+
+    usuarioActivo.planner = {
+        ...usuarioActivo.planner,
+        objetivoPrincipal,
+        factorProteico,
+        factorGraso,
+        proteinasGr,
+        proteinasKcal,
+        grasasGr,
+        grasasKcal,
+        carbosGr,
+        carbosKcal
+    };
+
+    guardarUsuarioActivo();
+
+    window.location.href = "planner-resultado.html";
+}
+</script>
+
+</body>
+</html>

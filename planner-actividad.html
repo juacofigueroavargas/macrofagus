@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MacroFagus · Actividad</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Segoe UI,system-ui,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#111827);
+    color:#f8fafc;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+}
+
+.auth-wrapper{
+    width:100%;
+    max-width:1050px;
+    min-height:620px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border-radius:34px;
+    overflow:hidden;
+    background:rgba(15,23,42,.9);
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 28px 90px rgba(0,0,0,.38);
+}
+
+.brand-panel{
+    padding:60px;
+    background:
+        radial-gradient(circle at top left, rgba(34,197,94,.22), transparent 38%),
+        linear-gradient(135deg,rgba(34,197,94,.12),rgba(20,184,166,.05));
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.logo-icon{
+    width:70px;
+    height:70px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    display:grid;
+    place-items:center;
+    color:#052e16;
+    font-size:32px;
+    margin-bottom:28px;
+}
+
+.brand-panel h1{
+    font-size:46px;
+    font-weight:900;
+    letter-spacing:1px;
+    margin-bottom:18px;
+}
+
+.brand-panel p{
+    color:#cbd5e1;
+    font-size:20px;
+    line-height:1.6;
+    max-width:360px;
+}
+
+.form-panel{
+    padding:60px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.top-bar{
+    width:100%;
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:24px;
+}
+
+.hub-btn{
+    height:42px;
+    padding:0 16px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:.25s;
+}
+
+.hub-btn:hover{
+    background:rgba(255,255,255,.10);
+    color:#ffffff;
+    border-color:rgba(34,197,94,.35);
+}
+
+.hub-btn i{
+    color:#86efac;
+    font-size:13px;
+}
+
+.form h2{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.form-subtitle{
+    color:#94a3b8;
+    font-size:15px;
+    margin-bottom:28px;
+}
+
+.tmb-box{
+    background:rgba(34,197,94,.12);
+    border:1px solid rgba(34,197,94,.25);
+    border-radius:18px;
+    padding:22px;
+    margin-bottom:26px;
+}
+
+.tmb-box span{
+    display:block;
+    color:#94a3b8;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.tmb-box strong{
+    font-size:38px;
+    color:#86efac;
+}
+
+.field{
+    margin-bottom:18px;
+}
+
+.field label{
+    display:block;
+    font-size:13px;
+    color:#cbd5e1;
+    margin-bottom:8px;
+}
+
+.field select{
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#f8fafc;
+    outline:none;
+    font-size:15px;
+}
+
+.field select option{
+    color:#0f172a;
+}
+
+.field select:focus{
+    border-color:#22c55e;
+}
+
+.btn{
+    width:100%;
+    height:52px;
+    border:0;
+    border-radius:14px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+    font-weight:900;
+    font-size:15px;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+.btn-secondary{
+    width:100%;
+    height:48px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:14px;
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    font-weight:800;
+    font-size:14px;
+    cursor:pointer;
+    margin-top:12px;
+}
+
+.message{
+    margin-top:18px;
+    padding:12px;
+    border-radius:14px;
+    font-size:14px;
+    display:none;
+}
+
+.message.error{
+    display:block;
+    background:rgba(239,68,68,.12);
+    color:#fecaca;
+    border:1px solid rgba(239,68,68,.25);
+}
+
+@media(max-width:850px){
+    .auth-wrapper{
+        grid-template-columns:1fr;
+        min-height:auto;
+    }
+
+    .brand-panel{
+        padding:42px;
+        text-align:center;
+        align-items:center;
+    }
+
+    .brand-panel h1{
+        font-size:38px;
+    }
+
+    .brand-panel p{
+        font-size:17px;
+    }
+
+    .form-panel{
+        padding:42px;
+    }
+
+    .top-bar{
+        justify-content:flex-end;
+    }
+}
+
+@media(max-width:520px){
+    body{
+        padding:14px;
+    }
+
+    .auth-wrapper{
+        border-radius:24px;
+    }
+
+    .brand-panel,
+    .form-panel{
+        padding:28px;
+    }
+
+    .logo-icon{
+        width:58px;
+        height:58px;
+        font-size:26px;
+    }
+
+    .brand-panel h1{
+        font-size:30px;
+    }
+
+    .form h2{
+        font-size:26px;
+    }
+
+    .tmb-box strong{
+        font-size:32px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="auth-wrapper">
+
+    <section class="brand-panel">
+        <div class="logo-icon">
+            <i class="fa-solid fa-fire"></i>
+        </div>
+
+        <h1>PLANNER</h1>
+
+        <p>
+            Ya tenemos tu primer cálculo. Ahora definiremos tu actividad física.
+        </p>
+    </section>
+
+    <section class="form-panel">
+
+        <div class="top-bar">
+            <button class="hub-btn" onclick="window.location.href='app.html'">
+                <i class="fa-solid fa-house"></i>
+                Hub
+            </button>
+        </div>
+
+        <div class="form">
+            <h2>Actividad física</h2>
+
+            <p class="form-subtitle">
+                Selecciona la opción que más se parece a tu rutina semanal.
+            </p>
+
+            <div class="tmb-box">
+                <span>TMB / Metabolismo Basal</span>
+                <strong id="valorTMB">0 kcal</strong>
+            </div>
+
+            <div class="field">
+                <label>Actividad física</label>
+                <select id="actividad">
+                    <option value="">Seleccionar actividad</option>
+                    <option value="sedentario">Sedentario</option>
+                    <option value="ligero">Ligero (1 a 3 días por semana)</option>
+                    <option value="moderado">Moderado (3 a 5 días por semana)</option>
+                    <option value="alto">Alto (6 a 7 días por semana)</option>
+                </select>
+            </div>
+
+            <button class="btn" onclick="guardarActividad()">
+                Continuar
+            </button>
+
+            <button class="btn-secondary" onclick="window.location.href='planner.html'">
+                Volver
+            </button>
+
+            <div id="mensaje" class="message"></div>
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+const KEY_USUARIOS = "macrofagus_usuarios";
+const KEY_ACTIVO = "macrofagus_usuario_activo";
+
+let usuarioActivo = JSON.parse(localStorage.getItem(KEY_ACTIVO));
+
+if(!usuarioActivo){
+    window.location.href = "index.html";
+}
+
+if(!usuarioActivo.planner || !usuarioActivo.planner.tmb){
+    window.location.href = "planner.html";
+}
+
+document.getElementById("valorTMB").textContent =
+    usuarioActivo.planner.tmb + " kcal";
+
+if(usuarioActivo.planner.actividad){
+    document.getElementById("actividad").value = usuarioActivo.planner.actividad;
+}
+
+function obtenerUsuarios(){
+    return JSON.parse(localStorage.getItem(KEY_USUARIOS)) || [];
+}
+
+function guardarUsuarios(usuarios){
+    localStorage.setItem(KEY_USUARIOS, JSON.stringify(usuarios));
+}
+
+function mostrarMensaje(texto){
+    const msg = document.getElementById("mensaje");
+    msg.textContent = texto;
+    msg.className = "message error";
+}
+
+function guardarUsuarioActivo(){
+    localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
+
+    const usuarios = obtenerUsuarios();
+
+    const usuariosActualizados = usuarios.map(u => {
+        if(u.id === usuarioActivo.id){
+            return usuarioActivo;
+        }
+
+        return u;
+    });
+
+    guardarUsuarios(usuariosActualizados);
+}
+
+function guardarActividad(){
+    const actividad = document.getElementById("actividad").value;
+
+    if(!actividad){
+        mostrarMensaje("Selecciona una actividad física.");
+        return;
+    }
+
+    const factores = {
+        sedentario: 1.2,
+        ligero: 1.375,
+        moderado: 1.55,
+        alto: 1.725
+    };
+
+    const factorActividad = factores[actividad];
+    const caloriasNecesarias = Math.round(usuarioActivo.planner.tmb * factorActividad);
+
+    usuarioActivo.planner = {
+        ...usuarioActivo.planner,
+        actividad,
+        factorActividad,
+        caloriasNecesarias
+    };
+
+    guardarUsuarioActivo();
+
+    window.location.href = "planner-calorias.html";
+}
+</script>
+
+</body>
+</html>

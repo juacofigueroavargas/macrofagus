@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MacroFagus · Progress</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Segoe UI,system-ui,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#111827);
+    color:#f8fafc;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+}
+
+.auth-wrapper{
+    width:100%;
+    max-width:1050px;
+    min-height:620px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border-radius:34px;
+    overflow:hidden;
+    background:rgba(15,23,42,.9);
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 28px 90px rgba(0,0,0,.38);
+}
+
+.brand-panel{
+    padding:60px;
+    background:
+        radial-gradient(circle at top left, rgba(34,197,94,.22), transparent 38%),
+        linear-gradient(135deg,rgba(34,197,94,.12),rgba(20,184,166,.05));
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.logo-icon{
+    width:70px;
+    height:70px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    display:grid;
+    place-items:center;
+    color:#052e16;
+    font-size:32px;
+    margin-bottom:28px;
+}
+
+.brand-panel h1{
+    font-size:46px;
+    font-weight:900;
+    margin-bottom:18px;
+}
+
+.brand-panel p{
+    color:#cbd5e1;
+    font-size:20px;
+    line-height:1.6;
+}
+
+.form-panel{
+    padding:60px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.top-bar{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:24px;
+}
+
+.hub-btn{
+    height:42px;
+    padding:0 16px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.hub-btn i{
+    color:#86efac;
+}
+
+.form h2{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.form-subtitle{
+    color:#94a3b8;
+    font-size:15px;
+    margin-bottom:24px;
+}
+
+.card{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:18px;
+}
+
+.card span{
+    display:block;
+    color:#94a3b8;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.card strong{
+    font-size:24px;
+    color:#86efac;
+}
+
+.field{
+    margin-bottom:18px;
+}
+
+.field label{
+    display:block;
+    font-size:13px;
+    color:#cbd5e1;
+    margin-bottom:8px;
+}
+
+.field input{
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#f8fafc;
+    outline:none;
+    font-size:15px;
+}
+
+.field input:focus{
+    border-color:#22c55e;
+}
+
+.btn{
+    width:100%;
+    height:52px;
+    border:0;
+    border-radius:14px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+    font-weight:900;
+    font-size:15px;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+.btn-secondary{
+    width:100%;
+    height:48px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:14px;
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    font-weight:800;
+    font-size:14px;
+    cursor:pointer;
+    margin-top:12px;
+}
+
+.message{
+    display:none;
+    margin-top:18px;
+    padding:12px;
+    border-radius:14px;
+    font-size:14px;
+}
+
+.message.error{
+    display:block;
+    background:rgba(239,68,68,.12);
+    color:#fecaca;
+    border:1px solid rgba(239,68,68,.25);
+}
+
+@media(max-width:850px){
+    .auth-wrapper{
+        grid-template-columns:1fr;
+    }
+
+    .brand-panel,
+    .form-panel{
+        padding:42px;
+    }
+
+    .brand-panel{
+        text-align:center;
+        align-items:center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="auth-wrapper">
+
+    <section class="brand-panel">
+        <div class="logo-icon">
+            <i class="fa-solid fa-chart-line"></i>
+        </div>
+
+        <h1>PROGRESS</h1>
+
+        <p>
+            Antes de comenzar el seguimiento, define tu peso objetivo.
+        </p>
+    </section>
+
+    <section class="form-panel">
+
+        <div class="top-bar">
+            <button class="hub-btn" onclick="window.location.href='app.html'">
+                <i class="fa-solid fa-house"></i>
+                Hub
+            </button>
+        </div>
+
+        <div class="form">
+            <h2>Configurar seguimiento</h2>
+
+            <p class="form-subtitle">
+                Usaremos el plan guardado desde Planner como base para tu progreso.
+            </p>
+
+            <div class="card">
+                <span>Usuario</span>
+                <strong id="nombreUsuario">-</strong>
+            </div>
+
+            <div class="card">
+                <span>Peso inicial</span>
+                <strong id="pesoInicial">0 kg</strong>
+            </div>
+
+            <div class="field">
+                <label>Peso objetivo (kg)</label>
+                <input type="number" id="pesoObjetivo" placeholder="Ej: 75" min="1" step="0.1">
+            </div>
+          
+            <div class="field">
+    <label>Fecha de inicio del plan</label>
+    <input type="date" id="fechaInicioPlan">
+</div>
+
+            <button class="btn" onclick="comenzarSeguimiento()">
+                Comenzar seguimiento
+            </button>
+
+            <button class="btn-secondary" onclick="window.location.href='app.html'">
+                Volver
+            </button>
+
+            <div id="mensaje" class="message"></div>
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+const KEY_USUARIOS = "macrofagus_usuarios";
+const KEY_ACTIVO = "macrofagus_usuario_activo";
+
+let usuarioActivo = JSON.parse(localStorage.getItem(KEY_ACTIVO));
+
+if(!usuarioActivo){
+    window.location.href = "index.html";
+}
+
+if(!usuarioActivo.progress || !usuarioActivo.progress.planActivo){
+    alert("Primero debes guardar un plan desde Planner.");
+    window.location.href = "app.html";
+}
+
+const plan = usuarioActivo.progress.planActivo;
+
+document.getElementById("nombreUsuario").textContent =
+    plan.nombre || usuarioActivo.nombre + " " + usuarioActivo.apellidos;
+
+document.getElementById("pesoInicial").textContent =
+    plan.pesoInicial + " kg";
+
+if(usuarioActivo.progress.pesoObjetivo){
+    document.getElementById("pesoObjetivo").value =
+        usuarioActivo.progress.pesoObjetivo;
+}
+  
+if(usuarioActivo.progress.fechaInicioPlan){
+    document.getElementById("fechaInicioPlan").value =
+        usuarioActivo.progress.fechaInicioPlan;
+}
+
+function obtenerUsuarios(){
+    return JSON.parse(localStorage.getItem(KEY_USUARIOS)) || [];
+}
+
+function guardarUsuarios(usuarios){
+    localStorage.setItem(KEY_USUARIOS, JSON.stringify(usuarios));
+}
+
+function mostrarMensaje(texto){
+    const msg = document.getElementById("mensaje");
+    msg.textContent = texto;
+    msg.className = "message error";
+}
+
+function guardarUsuarioActivo(){
+    localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
+
+    const usuarios = obtenerUsuarios();
+
+    const usuariosActualizados = usuarios.map(u => {
+        if(u.id === usuarioActivo.id){
+            return usuarioActivo;
+        }
+
+        return u;
+    });
+
+    guardarUsuarios(usuariosActualizados);
+}
+
+function comenzarSeguimiento(){
+    const pesoObjetivo = parseFloat(document.getElementById("pesoObjetivo").value);
+    const fechaInicioPlan = document.getElementById("fechaInicioPlan").value;
+
+    if(!pesoObjetivo){
+        mostrarMensaje("Ingresa el peso objetivo.");
+        return;
+    }
+
+    if(!fechaInicioPlan){
+        mostrarMensaje("Ingresa la fecha de inicio del plan.");
+        return;
+    }
+
+    const pesoInicial = parseFloat(plan.pesoInicial);
+
+    usuarioActivo.progress = {
+        ...usuarioActivo.progress,
+        pesoInicial,
+        pesoObjetivo,
+        fechaInicioPlan,
+        pesoActual: pesoInicial,
+        historialPesos: usuarioActivo.progress.historialPesos || [
+            {
+                fecha: fechaInicioPlan,
+                peso: pesoInicial,
+                tipo: "Inicial"
+            }
+        ]
+    };
+
+    guardarUsuarioActivo();
+
+    window.location.href = "progress-panel.html";
+}
+</script>
+
+</body>
+</html>

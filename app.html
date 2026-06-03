@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MacroFagus · Hub</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Segoe UI,system-ui,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#111827);
+    color:#f8fafc;
+    padding:32px;
+}
+
+.header{
+    max-width:1500px;
+    margin:0 auto 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.logo-icon{
+    width:52px;
+    height:52px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    display:grid;
+    place-items:center;
+    color:#052e16;
+    font-size:24px;
+}
+
+.logo h1{
+    font-size:28px;
+    font-weight:900;
+}
+
+.logo p{
+    color:#94a3b8;
+    font-size:14px;
+}
+
+.user-box{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:10px 12px;
+    border-radius:18px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+}
+
+.user-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+    display:grid;
+    place-items:center;
+    font-weight:900;
+    font-size:16px;
+}
+
+.user-info{
+    display:flex;
+    flex-direction:column;
+    line-height:1.2;
+}
+
+.user-fullname{
+    color:#f8fafc;
+    font-size:14px;
+    font-weight:800;
+}
+
+.user-username{
+    color:#94a3b8;
+    font-size:12px;
+}
+
+.logout{
+    border:none;
+    padding:12px 16px;
+    border-radius:12px;
+    background:rgba(255,255,255,.08);
+    color:#f8fafc;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.logout:hover{
+    background:rgba(239,68,68,.22);
+}
+
+.hero{
+    max-width:1500px;
+    margin:90px auto 36px;
+}
+
+.hero h2{
+    font-size:46px;
+    margin-bottom:12px;
+}
+
+.hero p{
+    color:#94a3b8;
+    font-size:17px;
+}
+
+.cards{
+    max-width:1500px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+}
+
+.card{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:26px;
+    padding:30px;
+    min-height:280px;
+    display:flex;
+    flex-direction:column;
+    transition:.25s;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    border-color:rgba(34,197,94,.45);
+    background:rgba(255,255,255,.10);
+}
+
+.card-icon{
+    width:62px;
+    height:62px;
+    border-radius:18px;
+    background:rgba(255,255,255,.08);
+    display:grid;
+    place-items:center;
+    color:#86efac;
+    font-size:26px;
+    margin-bottom:24px;
+}
+
+.card h3{
+    font-size:28px;
+    margin-bottom:12px;
+}
+
+.card p{
+    color:#cbd5e1;
+    line-height:1.6;
+    margin-bottom:30px;
+}
+
+.btn{
+    margin-top:auto;
+    width:100%;
+    height:50px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+    font-weight:900;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.btn:hover{
+    filter:brightness(1.08);
+}
+
+.footer{
+    max-width:1150px;
+    margin:42px auto 0;
+    color:#64748b;
+    text-align:center;
+    font-size:13px;
+}
+
+@media(max-width:900px){
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+    }
+
+    .hero h2{
+        font-size:34px;
+    }
+}
+
+@media(max-width:520px){
+    body{
+        padding:20px;
+    }
+
+    .hero h2{
+        font-size:29px;
+    }
+
+    .user-box{
+        width:100%;
+        justify-content:space-between;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="logo">
+        <div class="logo-icon">
+            <i class="fa-solid fa-dna"></i>
+        </div>
+
+        <div>
+            <h1>MACROFAGUS</h1>
+            <p>Hub principal</p>
+        </div>
+    </div>
+
+    <div class="user-box">
+    <div class="user-avatar" id="userAvatar">U</div>
+
+    <div class="user-info">
+        <div class="user-fullname" id="userFullname"></div>
+        <div class="user-username">
+            @<span id="usuarioActivo"></span>
+        </div>
+    </div>
+
+    <button class="logout" onclick="cerrarSesion()">
+        Cerrar sesión
+    </button>
+</div>
+</header>
+
+<section class="hero">
+    <h2>Bienvenido a MacroFagus</h2>
+    <p>Selecciona el módulo que quieres utilizar.</p>
+</section>
+
+<main class="cards">
+
+    <section class="card">
+        <div class="card-icon">
+            <i class="fa-solid fa-chart-pie"></i>
+        </div>
+
+        <h3>Planner</h3>
+
+        <p>
+            Diseña objetivos, distribuciones y planificación personalizada.
+        </p>
+
+        <button class="btn" onclick="entrarModulo('planner')">
+            Entrar a Planner
+        </button>
+    </section>
+
+    <section class="card">
+        <div class="card-icon">
+            <i class="fa-solid fa-chart-line"></i>
+        </div>
+
+        <h3>Progress</h3>
+
+        <p>
+            Controla avances, registros, estadísticas y evolución.
+        </p>
+
+        <button class="btn" onclick="entrarModulo('progress')">
+            Entrar a Progress
+        </button>
+    </section>
+
+    <section class="card">
+        <div class="card-icon">
+            <i class="fa-solid fa-layer-group"></i>
+        </div>
+
+        <h3>Daily</h3>
+
+        <p>
+            Gestiona comidas, recetas, alimentos y registros diarios.
+        </p>
+
+        <button class="btn" onclick="entrarModulo('daily')">
+            Entrar a Daily
+        </button>
+    </section>
+
+</main>
+
+<div class="footer">
+    © 2026 MacroFagus · Plataforma principal
+</div>
+
+<script>
+const KEY_ACTIVO = "macrofagus_usuario_activo";
+
+const usuarioActivo = JSON.parse(localStorage.getItem(KEY_ACTIVO));
+
+if(!usuarioActivo){
+    window.location.href = "index.html";
+}
+
+document.getElementById("usuarioActivo").textContent = usuarioActivo.usuario;
+
+document.getElementById("userFullname").textContent =
+    usuarioActivo.nombre + " " + usuarioActivo.apellidos;
+
+document.getElementById("userAvatar").textContent =
+    usuarioActivo.nombre.charAt(0).toUpperCase();
+
+function cerrarSesion(){
+    localStorage.removeItem(KEY_ACTIVO);
+    window.location.href = "index.html";
+}
+
+function entrarModulo(modulo){
+    localStorage.setItem("macrofagus_modulo_activo", modulo);
+
+    if(modulo === "planner"){
+        window.location.href = "planner.html";
+    }
+
+    if(modulo === "progress"){
+        window.location.href = "progress.html";
+    }
+
+    if(modulo === "daily"){
+        window.location.href = "daily.html";
+    }
+}
+</script>
+
+</body>
+</html>

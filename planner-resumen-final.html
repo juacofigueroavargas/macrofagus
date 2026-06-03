@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MacroFagus · Resumen Final</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Segoe UI,system-ui,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#111827);
+    color:#f8fafc;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+}
+
+.auth-wrapper{
+    width:100%;
+    max-width:1050px;
+    min-height:620px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border-radius:34px;
+    overflow:hidden;
+    background:rgba(15,23,42,.9);
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 28px 90px rgba(0,0,0,.38);
+}
+
+.brand-panel{
+    padding:60px;
+    background:
+        radial-gradient(circle at top left, rgba(34,197,94,.22), transparent 38%),
+        linear-gradient(135deg,rgba(34,197,94,.12),rgba(20,184,166,.05));
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.logo-icon{
+    width:70px;
+    height:70px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    display:grid;
+    place-items:center;
+    color:#052e16;
+    font-size:32px;
+    margin-bottom:28px;
+}
+
+.brand-panel h1{
+    font-size:46px;
+    font-weight:900;
+    margin-bottom:18px;
+}
+
+.brand-panel p{
+    color:#cbd5e1;
+    font-size:20px;
+    line-height:1.6;
+}
+
+.form-panel{
+    padding:60px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.top-bar{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-bottom:24px;
+}
+
+.hub-btn{
+    height:42px;
+    padding:0 16px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.hub-btn i{
+    color:#86efac;
+}
+  
+.pdf-btn i{
+    color:#ef4444;
+}
+
+.form h2{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.form-subtitle{
+    color:#94a3b8;
+    font-size:15px;
+    margin-bottom:24px;
+}
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.card{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:16px;
+    padding:16px;
+}
+
+.card span{
+    display:block;
+    color:#94a3b8;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.card strong{
+    font-size:20px;
+    color:#f8fafc;
+}
+
+.macros-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.macro-card{
+    background:rgba(34,197,94,.10);
+    border:1px solid rgba(34,197,94,.22);
+    border-radius:16px;
+    padding:16px;
+}
+
+.macro-card span{
+    display:block;
+    color:#94a3b8;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.macro-card strong{
+    font-size:22px;
+    color:#86efac;
+}
+
+.macro-card small{
+    display:block;
+    margin-top:6px;
+    color:#cbd5e1;
+}
+
+.btn{
+    width:100%;
+    height:52px;
+    border:0;
+    border-radius:14px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+    font-weight:900;
+    font-size:15px;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+.btn-secondary{
+    width:100%;
+    height:48px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:14px;
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    font-weight:800;
+    font-size:14px;
+    cursor:pointer;
+    margin-top:12px;
+}
+
+@media(max-width:850px){
+    .auth-wrapper{
+        grid-template-columns:1fr;
+    }
+
+    .brand-panel,
+    .form-panel{
+        padding:42px;
+    }
+
+    .brand-panel{
+        text-align:center;
+        align-items:center;
+    }
+
+    .summary-grid,
+    .macros-grid{
+        grid-template-columns:1fr;
+    }
+}
+  
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    backdrop-filter:blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+}
+
+.modal{
+    width:90%;
+    max-width:420px;
+    background:#0f172a;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:24px;
+    padding:32px;
+    text-align:center;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+}
+
+.modal-icon{
+    width:72px;
+    height:72px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    background:rgba(34,197,94,.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.modal-icon i{
+    font-size:34px;
+    color:#22c55e;
+}
+
+.modal h3{
+    font-size:24px;
+    margin-bottom:10px;
+}
+
+.modal p{
+    color:#94a3b8;
+    line-height:1.6;
+    margin-bottom:22px;
+}
+
+.modal-btn{
+    width:100%;
+    height:48px;
+    border:none;
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:800;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+}
+</style>
+</head>
+
+<body>
+
+<div class="auth-wrapper">
+
+    <section class="brand-panel">
+        <div class="logo-icon">
+            <i class="fa-solid fa-file-lines"></i>
+        </div>
+
+        <h1>PLANNER</h1>
+
+        <p>
+            Resumen final del cálculo generado para el usuario activo.
+        </p>
+    </section>
+
+    <section class="form-panel">
+
+        <div class="top-bar">
+
+    <button class="hub-btn pdf-btn" onclick="descargarPDF()">
+    <i class="fa-solid fa-file-pdf"></i>
+    PDF
+</button>
+
+    <button class="hub-btn" onclick="window.location.href='app.html'">
+        <i class="fa-solid fa-house"></i>
+        Hub
+    </button>
+
+</div>
+
+        <div class="form">
+            <h2>Resumen final</h2>
+
+            <p class="form-subtitle">
+                Revisa los datos principales y descarga el informe en PDF.
+            </p>
+
+            <div class="summary-grid">
+                <div class="card">
+                    <span>Objetivo</span>
+                    <strong id="objetivo">-</strong>
+                </div>
+
+                <div class="card">
+                    <span>TMB</span>
+                    <strong id="tmb">0 kcal</strong>
+                </div>
+
+                <div class="card">
+                    <span>Ajuste</span>
+                    <strong id="ajuste">0 kcal</strong>
+                </div>
+
+                <div class="card">
+                    <span>Calorías finales</span>
+                    <strong id="caloriasFinales">0 kcal</strong>
+                </div>
+            </div>
+
+            <div class="macros-grid">
+                <div class="macro-card">
+                    <span>Proteínas</span>
+                    <strong id="proteinasGr">0 g</strong>
+                    <small id="proteinasKcal">0 kcal</small>
+                </div>
+
+                <div class="macro-card">
+                    <span>Grasas</span>
+                    <strong id="grasasGr">0 g</strong>
+                    <small id="grasasKcal">0 kcal</small>
+                </div>
+
+                <div class="macro-card">
+                    <span>Carbohidratos</span>
+                    <strong id="carbosGr">0 g</strong>
+                    <small id="carbosKcal">0 kcal</small>
+                </div>
+            </div>
+
+            <button class="btn" onclick="guardarPlanParaProgress()">
+              Guardar plan para Progress
+            </button>
+          
+            <button class="btn-secondary" onclick="window.location.href='planner-distribucion-resultado.html'">
+                Volver
+            </button>
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+const KEY_ACTIVO = "macrofagus_usuario_activo";
+
+let usuarioActivo = JSON.parse(localStorage.getItem(KEY_ACTIVO));
+
+if(!usuarioActivo){
+    window.location.href = "index.html";
+}
+
+if(!usuarioActivo.planner || !usuarioActivo.planner.proteinasGr){
+    window.location.href = "planner-macros.html";
+}
+
+const p = usuarioActivo.planner;
+
+function textoObjetivo(valor){
+    const objetivos = {
+        ganar: "Ganar masa muscular",
+        resistencia: "Resistencia",
+        perder: "Perder grasa",
+        poca: "Poca actividad"
+    };
+
+    return objetivos[valor] || "-";
+}
+
+function textoAjuste(){
+    if(p.tipoAjuste === "deficit"){
+        return p.ajusteCalorias + " kcal";
+    }
+
+    if(p.tipoAjuste === "superavit"){
+        return "+" + p.ajusteCalorias + " kcal";
+    }
+
+    return "Sin ajuste";
+}
+
+document.getElementById("objetivo").textContent =
+    textoObjetivo(p.objetivoPrincipal);
+
+document.getElementById("tmb").textContent =
+    p.tmb + " kcal";
+
+document.getElementById("ajuste").textContent =
+    textoAjuste();
+
+document.getElementById("caloriasFinales").textContent =
+    p.caloriasObjetivo + " kcal";
+
+document.getElementById("proteinasGr").textContent =
+    p.proteinasGr + " g";
+
+document.getElementById("proteinasKcal").textContent =
+    p.proteinasKcal + " kcal";
+
+document.getElementById("grasasGr").textContent =
+    p.grasasGr + " g";
+
+document.getElementById("grasasKcal").textContent =
+    p.grasasKcal + " kcal";
+
+document.getElementById("carbosGr").textContent =
+    p.carbosGr + " g";
+
+document.getElementById("carbosKcal").textContent =
+    p.carbosKcal + " kcal";
+
+function descargarPDF(){
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const C = {
+        dark:[15,23,42],
+        green:[34,197,94],
+        teal:[20,184,166],
+        gray:[100,116,139],
+        light:[241,245,249],
+        white:[255,255,255],
+        border:[226,232,240]
+    };
+
+    const nombreCompleto = usuarioActivo.nombre + " " + usuarioActivo.apellidos;
+    const fecha = new Date().toLocaleDateString("es-CL");
+    let y = 0;
+
+    function addHeader(){
+        doc.setFillColor(...C.dark);
+        doc.rect(0, 0, 210, 38, "F");
+
+        doc.setFillColor(...C.green);
+        doc.roundedRect(14, 10, 18, 18, 5, 5, "F");
+
+        doc.setTextColor(...C.white);
+        doc.setFontSize(20);
+        doc.setFont(undefined, "bold");
+        doc.text("MacroFagus", 38, 17);
+
+        doc.setFontSize(10);
+        doc.setFont(undefined, "normal");
+        doc.setTextColor(203,213,225);
+        doc.text("Planner · Resumen final", 38, 25);
+
+        doc.setFontSize(8);
+        doc.setTextColor(148,163,184);
+        doc.text("Generado: " + fecha, 152, 17);
+
+        y = 52;
+    }
+
+    function addFooter(){
+        doc.setFillColor(...C.dark);
+        doc.rect(0, 285, 210, 12, "F");
+
+        doc.setTextColor(203,213,225);
+        doc.setFontSize(8);
+        doc.text("MacroFagus Planner · Planifica. Organiza. Controla.", 14, 292);
+    }
+
+    function section(titulo){
+        doc.setFillColor(...C.green);
+        doc.roundedRect(14, y, 182, 10, 2, 2, "F");
+
+        doc.setTextColor(...C.white);
+        doc.setFontSize(9);
+        doc.setFont(undefined, "bold");
+        doc.text(titulo, 18, y + 6.8);
+
+        y += 16;
+    }
+
+    function card(x, yCard, w, h, titulo, valor, detalle = ""){
+        doc.setFillColor(...C.light);
+        doc.roundedRect(x, yCard, w, h, 4, 4, "F");
+
+        doc.setDrawColor(...C.border);
+        doc.roundedRect(x, yCard, w, h, 4, 4, "S");
+
+        doc.setTextColor(...C.gray);
+        doc.setFontSize(8);
+        doc.setFont(undefined, "normal");
+        doc.text(titulo, x + 5, yCard + 7);
+
+        doc.setTextColor(...C.dark);
+        doc.setFontSize(12);
+        doc.setFont(undefined, "bold");
+        doc.text(String(valor), x + 5, yCard + 15);
+
+        if(detalle){
+            doc.setTextColor(...C.green);
+            doc.setFontSize(8);
+            doc.setFont(undefined, "normal");
+            doc.text(String(detalle), x + 5, yCard + 21);
+        }
+    }
+
+    function textoObjetivoPDF(valor){
+        const objetivos = {
+            ganar: "Ganar masa muscular",
+            resistencia: "Resistencia",
+            perder: "Perder grasa",
+            poca: "Poca actividad"
+        };
+        return objetivos[valor] || "-";
+    }
+
+    addHeader();
+
+    section("DATOS DEL USUARIO");
+
+    card(14, y, 86, 24, "Usuario", nombreCompleto);
+    card(110, y, 86, 24, "Sexo", usuarioActivo.sexo);
+    y += 30;
+
+    card(14, y, 54, 24, "Peso", p.peso + " kg");
+    card(78, y, 54, 24, "Altura", p.altura + " cm");
+    card(142, y, 54, 24, "Edad", p.edad + " años");
+    y += 34;
+
+    section("OBJETIVO Y CALORÍAS");
+
+    card(14, y, 86, 24, "Objetivo", textoObjetivoPDF(p.objetivoPrincipal));
+    card(110, y, 86, 24, "TMB", p.tmb + " kcal");
+    y += 30;
+
+    card(14, y, 86, 24, "Ajuste calórico", textoAjuste());
+    card(110, y, 86, 24, "Calorías finales", p.caloriasObjetivo + " kcal");
+    y += 34;
+
+    section("MACROS DIARIOS");
+
+    card(14, y, 54, 25, "Proteínas", p.proteinasGr + " g", p.proteinasKcal + " kcal");
+    card(78, y, 54, 25, "Grasas", p.grasasGr + " g", p.grasasKcal + " kcal");
+    card(142, y, 54, 25, "Carbohidratos", p.carbosGr + " g", p.carbosKcal + " kcal");
+
+    addFooter();
+
+    if(p.distribucionMacros && p.distribucionMacros.length > 0){
+        doc.addPage();
+        addHeader();
+
+        section("DISTRIBUCIÓN DE COMIDAS");
+
+        doc.setTextColor(...C.dark);
+        doc.setFontSize(12);
+        doc.setFont(undefined, "bold");
+        doc.text(
+            "Distribución seleccionada: " + (p.cantidadComidas || "-") + " comidas",
+            14,
+            y
+        );
+
+        y += 14;
+
+        p.distribucionMacros.forEach((item, index) => {
+            const x = index % 2 === 0 ? 14 : 108;
+            const yCard = y;
+
+            doc.setFillColor(...C.light);
+            doc.roundedRect(x, yCard, 88, 38, 4, 4, "F");
+
+            doc.setDrawColor(...C.border);
+            doc.roundedRect(x, yCard, 88, 38, 4, 4, "S");
+
+            doc.setTextColor(...C.dark);
+            doc.setFontSize(10);
+            doc.setFont(undefined, "bold");
+            doc.text(item.comida + " (" + item.porcentaje + "%)", x + 5, yCard + 8);
+
+            doc.setTextColor(...C.gray);
+            doc.setFontSize(8);
+            doc.setFont(undefined, "normal");
+
+            doc.text("Proteínas", x + 5, yCard + 18);
+            doc.text("Carbos", x + 34, yCard + 18);
+            doc.text("Grasas", x + 62, yCard + 18);
+
+            doc.setTextColor(...C.green);
+            doc.setFontSize(10);
+            doc.setFont(undefined, "bold");
+
+            doc.text(item.proteinas + " g", x + 5, yCard + 29);
+            doc.text(item.carbos + " g", x + 34, yCard + 29);
+            doc.text(item.grasas + " g", x + 62, yCard + 29);
+
+            if(index % 2 === 1){
+                y += 46;
+            }
+        });
+
+        if(p.distribucionMacros.length % 2 !== 0){
+            y += 46;
+        }
+
+        doc.setTextColor(...C.gray);
+        doc.setFontSize(8);
+        doc.setFont(undefined, "normal");
+        doc.text("Informe generado automáticamente desde MacroFagus Planner.", 14, y + 4);
+
+        addFooter();
+    }
+
+    doc.save("MacroFagus_Resumen_" + usuarioActivo.usuario + ".pdf");
+}
+
+function mostrarModal(){
+    document.getElementById("modalGuardado").style.display = "flex";
+}
+
+function cerrarModal(){
+    document.getElementById("modalGuardado").style.display = "none";
+}  
+
+function guardarPlanParaProgress(){
+
+    const planProgress = {
+        id: Date.now(),
+        fechaGuardado: new Date().toISOString(),
+
+        nombre: usuarioActivo.nombre + " " + usuarioActivo.apellidos,
+        usuario: usuarioActivo.usuario,
+
+        edad: p.edad,
+        estatura: p.altura,
+        pesoInicial: p.peso,
+
+        objetivo: textoObjetivo(p.objetivoPrincipal),
+
+        tmb: p.tmb,
+        caloriasNecesarias: p.caloriasNecesarias,
+        ajusteCalorico: p.ajusteCalorias || 0,
+        tipoAjuste: p.tipoAjuste || "mantener",
+        caloriasTotales: p.caloriasObjetivo,
+
+        macros: {
+            proteinasGr: p.proteinasGr,
+            proteinasKcal: p.proteinasKcal,
+
+            grasasGr: p.grasasGr,
+            grasasKcal: p.grasasKcal,
+
+            carbohidratosGr: p.carbosGr,
+            carbohidratosKcal: p.carbosKcal
+        },
+
+        distribucionMacros: p.distribucionMacros || []
+    };
+
+    usuarioActivo.progress = {
+        ...usuarioActivo.progress,
+        planActivo: planProgress
+    };
+
+    localStorage.setItem(
+        "macrofagus_usuario_activo",
+        JSON.stringify(usuarioActivo)
+    );
+
+    const usuarios = JSON.parse(localStorage.getItem("macrofagus_usuarios")) || [];
+
+    const usuariosActualizados = usuarios.map(u => {
+        if(u.id === usuarioActivo.id){
+            return usuarioActivo;
+        }
+
+        return u;
+    });
+
+    localStorage.setItem(
+        "macrofagus_usuarios",
+        JSON.stringify(usuariosActualizados)
+    );
+  
+  mostrarModal();
+}  
+</script>
+
+<div class="modal-overlay" id="modalGuardado">
+
+    <div class="modal">
+
+        <div class="modal-icon">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+
+        <h3>Plan guardado</h3>
+
+        <p>
+            El plan fue guardado correctamente y ya está disponible para Progress.
+        </p>
+
+        <button class="modal-btn" onclick="cerrarModal()">
+            Entendido
+        </button>
+
+    </div>
+
+</div>  
+  
+</body>
+</html>

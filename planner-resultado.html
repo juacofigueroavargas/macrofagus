@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MacroFagus · Resultado</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Segoe UI,system-ui,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#111827);
+    color:#f8fafc;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+}
+
+.auth-wrapper{
+    width:100%;
+    max-width:1050px;
+    min-height:620px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border-radius:34px;
+    overflow:hidden;
+    background:rgba(15,23,42,.9);
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 28px 90px rgba(0,0,0,.38);
+}
+
+.brand-panel{
+    padding:60px;
+    background:
+        radial-gradient(circle at top left, rgba(34,197,94,.22), transparent 38%),
+        linear-gradient(135deg,rgba(34,197,94,.12),rgba(20,184,166,.05));
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.logo-icon{
+    width:70px;
+    height:70px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    display:grid;
+    place-items:center;
+    color:#052e16;
+    font-size:32px;
+    margin-bottom:28px;
+}
+
+.brand-panel h1{
+    font-size:46px;
+    font-weight:900;
+    letter-spacing:1px;
+    margin-bottom:18px;
+}
+
+.brand-panel p{
+    color:#cbd5e1;
+    font-size:20px;
+    line-height:1.6;
+    max-width:360px;
+}
+
+.form-panel{
+    padding:60px;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+}
+
+.top-bar{
+    width:100%;
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:16px;
+}
+
+.hub-btn{
+    height:42px;
+    padding:0 16px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.hub-btn i{
+    color:#86efac;
+}
+
+.form h2{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.form-subtitle{
+    color:#94a3b8;
+    font-size:15px;
+    margin-bottom:24px;
+}
+
+.main-result{
+    background:rgba(34,197,94,.12);
+    border:1px solid rgba(34,197,94,.25);
+    border-radius:18px;
+    padding:22px;
+    margin-bottom:18px;
+}
+
+.main-result span{
+    display:block;
+    color:#94a3b8;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.main-result strong{
+    font-size:38px;
+    color:#86efac;
+}
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.info-card,
+.macro-card{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:16px;
+    padding:16px;
+}
+
+.info-card span,
+.macro-card span{
+    display:block;
+    color:#94a3b8;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.info-card strong,
+.macro-card strong{
+    font-size:22px;
+    color:#f8fafc;
+}
+
+.info-card small,
+.macro-card small{
+    display:block;
+    margin-top:6px;
+    color:#86efac;
+}
+
+.macros-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.btn{
+    width:100%;
+    height:52px;
+    border:0;
+    border-radius:14px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+    font-weight:900;
+    font-size:15px;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+.btn-secondary{
+    width:100%;
+    height:48px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:14px;
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    font-weight:800;
+    font-size:14px;
+    cursor:pointer;
+    margin-top:12px;
+}
+
+@media(max-width:850px){
+    .auth-wrapper{
+        grid-template-columns:1fr;
+        min-height:auto;
+    }
+
+    .brand-panel{
+        padding:42px;
+        text-align:center;
+        align-items:center;
+    }
+
+    .form-panel{
+        padding:42px;
+    }
+
+    .brand-panel h1{
+        font-size:38px;
+    }
+
+    .summary-grid,
+    .macros-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:520px){
+    body{
+        padding:14px;
+    }
+
+    .brand-panel,
+    .form-panel{
+        padding:28px;
+    }
+
+    .auth-wrapper{
+        border-radius:24px;
+    }
+
+    .brand-panel h1{
+        font-size:30px;
+    }
+
+    .form h2{
+        font-size:26px;
+    }
+
+    .main-result strong{
+        font-size:32px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="auth-wrapper">
+
+    <section class="brand-panel">
+        <div class="logo-icon">
+            <i class="fa-solid fa-square-poll-vertical"></i>
+        </div>
+
+        <h1>PLANNER</h1>
+
+        <p>
+            Tu distribución diaria de proteínas, carbohidratos y grasas ya está lista.
+        </p>
+    </section>
+
+    <section class="form-panel">
+
+        <div class="top-bar">
+            <button class="hub-btn" onclick="window.location.href='app.html'">
+                <i class="fa-solid fa-house"></i>
+                Hub
+            </button>
+        </div>
+
+        <div class="form">
+            <h2>Macros diarios</h2>
+
+            <p class="form-subtitle">
+                Este es el resultado según los objetivos seleccionados.
+            </p>
+
+            <div class="main-result">
+    <span>Calorías diarias</span>
+    <strong id="caloriasFinales">0 kcal</strong>
+</div>
+          
+            <div class="macros-grid">
+                <div class="macro-card">
+                    <span>Proteínas</span>
+                    <strong id="proteinasGr">0 g</strong>
+                    <small id="proteinasKcal">0 kcal</small>
+                </div>
+
+                <div class="macro-card">
+                    <span>Grasas</span>
+                    <strong id="grasasGr">0 g</strong>
+                    <small id="grasasKcal">0 kcal</small>
+                </div>
+
+                <div class="macro-card">
+                    <span>Carbohidratos</span>
+                    <strong id="carbosGr">0 g</strong>
+                    <small id="carbosKcal">0 kcal</small>
+                </div>
+            </div>
+
+            <button class="btn" onclick="window.location.href='planner-distribucion.html'">
+                Distribuir Macros
+            </button>
+
+            <button class="btn-secondary" onclick="window.location.href='planner-macros.html'">
+                Volver
+            </button>
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+const KEY_ACTIVO = "macrofagus_usuario_activo";
+
+let usuarioActivo = JSON.parse(localStorage.getItem(KEY_ACTIVO));
+
+if(!usuarioActivo){
+    window.location.href = "index.html";
+}
+
+if(!usuarioActivo.planner || !usuarioActivo.planner.proteinasGr){
+    window.location.href = "planner-macros.html";
+}
+
+const planner = usuarioActivo.planner;
+
+document.getElementById("proteinasGr").textContent =
+    planner.proteinasGr + " g";
+
+document.getElementById("proteinasKcal").textContent =
+    planner.proteinasKcal + " kcal";
+
+document.getElementById("grasasGr").textContent =
+    planner.grasasGr + " g";
+
+document.getElementById("grasasKcal").textContent =
+    planner.grasasKcal + " kcal";
+
+document.getElementById("carbosGr").textContent =
+    planner.carbosGr + " g";
+
+document.getElementById("carbosKcal").textContent =
+    planner.carbosKcal + " kcal";
+  
+document.getElementById("caloriasFinales").textContent =
+    planner.caloriasObjetivo + " kcal";
+</script>
+
+</body>
+</html>

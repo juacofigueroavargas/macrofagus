@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MacroFagus · Progress Panel</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Segoe UI,system-ui,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    height:100vh;
+    overflow:hidden;
+    background:linear-gradient(135deg,#0f172a,#111827);
+    color:#f8fafc;
+    padding:28px;
+}
+
+.app{
+    max-width:1700px;
+    margin:auto;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:28px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.logo-icon{
+    width:54px;
+    height:54px;
+    border-radius:18px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    display:grid;
+    place-items:center;
+    color:#052e16;
+    font-size:24px;
+}
+
+.logo h1{
+    font-size:30px;
+    font-weight:900;
+}
+
+.logo p{
+    color:#94a3b8;
+    font-size:14px;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+}
+
+.icon-btn{
+    height:42px;
+    padding:0 16px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.icon-btn i{
+    color:#86efac;
+}
+
+.hero{
+    margin-bottom:24px;
+    margin-top:40px;
+}
+
+.hero h2{
+    font-size:34px;
+    margin-bottom:6px;
+}
+
+.hero p{
+    color:#94a3b8;
+}
+
+.dashboard{
+    position:relative;
+    margin-top:80px;
+}
+
+.dashboard-track{
+    display:flex;
+    gap:22px;
+    height:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-behavior:smooth;
+    padding:4px 6px 16px;
+    scrollbar-width:none;
+    align-items:stretch;
+}
+
+.dashboard-track::-webkit-scrollbar{
+    display:none;
+}
+
+.slider-btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:50%;
+    background:rgba(255,255,255,.10);
+    color:#f8fafc;
+    cursor:pointer;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    backdrop-filter:blur(8px);
+}
+
+.slider-btn:hover{
+    background:rgba(34,197,94,.25);
+}
+
+.slider-btn.left{
+    left:-18px;
+}
+
+.slider-btn.right{
+    right:-18px;
+}  
+  
+.panel{
+    min-width:430px;
+    min-height:450px;
+    height:auto;
+    overflow:hidden;
+    background:rgba(15,23,42,.9);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:24px;
+    padding:22px;
+    box-shadow:0 24px 70px rgba(0,0,0,.28);
+}
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:14px;
+}
+
+.stat-card{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:16px;
+    padding:16px;
+    min-height:122px;
+}
+
+.stat-card span{
+    display:block;
+    color:#94a3b8;
+    font-size:12px;
+    margin-bottom:8px;
+}
+
+.stat-card strong{
+    font-size:24px;
+    color:#f8fafc;
+    line-height:1.15;
+}
+
+.stat-card small{
+    display:block;
+    margin-top:6px;
+    color:#86efac;
+    font-size:12px;
+    line-height:1.25;
+}
+
+.progress-box{
+    margin-top:18px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    padding:16px;
+}
+
+.progress-top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:12px;
+    color:#cbd5e1;
+    font-size:14px;
+}
+
+.progress-bar{
+    height:14px;
+    border-radius:999px;
+    background:rgba(255,255,255,.08);
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    border-radius:999px;
+}
+
+.plan-title{
+    font-size:19px;
+    margin-bottom:14px;
+}
+
+.plan-card{
+    background:rgba(34,197,94,.10);
+    border:1px solid rgba(34,197,94,.22);
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:12px;
+}
+
+.plan-card span{
+    display:block;
+    color:#94a3b8;
+    font-size:12px;
+    margin-bottom:8px;
+}
+
+.plan-card strong{
+    font-size:22px;
+    color:#86efac;
+}
+
+.macros{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.macro{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:16px;
+    padding:12px;
+}
+
+.macro span{
+    color:#94a3b8;
+    font-size:12px;
+}
+
+.macro strong{
+    display:block;
+    margin-top:6px;
+    font-size:18px;
+}
+
+.btn{
+    width:100%;
+    height:52px;
+    border:0;
+    border-radius:14px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+    font-weight:900;
+    font-size:15px;
+    cursor:pointer;
+    margin-top:18px;
+}
+
+.history{
+    margin-top:20px;
+}
+
+.history h3{
+    margin-bottom:12px;
+}
+
+.history-list{
+    display:grid;
+    gap:10px;
+    max-height:220px;
+    overflow:auto;
+}
+
+.history-item{
+    display:flex;
+    justify-content:space-between;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:12px;
+    color:#cbd5e1;
+    font-size:14px;
+}
+
+.side-stack{
+    display:grid;
+    gap:22px;
+}
+
+.timeline-list{
+    display:grid;
+    gap:10px;
+    max-height:360px;
+    overflow:auto;
+}
+
+.timeline-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:12px;
+    color:#cbd5e1;
+    font-size:14px;
+}
+
+.timeline-item strong{
+    color:#f8fafc;
+}
+
+.timeline-item span{
+    color:#94a3b8;
+    font-size:13px;
+}
+
+.timeline-note{
+    margin-top:14px;
+    color:#94a3b8;
+    font-size:13px;
+    line-height:1.5;
+}
+  
+.modal-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    background:rgba(0,0,0,.65);
+    backdrop-filter:blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    padding:20px;
+}
+
+.modal{
+    width:100%;
+    max-width:430px;
+    background:#0f172a;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:26px;
+    padding:30px;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+    margin:auto;
+}
+
+.modal{
+    position:relative;
+}
+
+.modal-close{
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:34px;
+    height:34px;
+    border:none;
+    border-radius:10px;
+    background:rgba(255,255,255,.06);
+    color:#94a3b8;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.2s;
+}
+
+.modal-close:hover{
+    background:rgba(239,68,68,.15);
+    color:#fecaca;
+}  
+  
+.modal h3{
+    font-size:26px;
+    margin-bottom:8px;
+}
+
+.modal p{
+    color:#94a3b8;
+    margin-bottom:22px;
+}
+
+.field{
+    margin-bottom:16px;
+}
+
+.field label{
+    display:block;
+    color:#cbd5e1;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.field input{
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#f8fafc;
+    outline:none;
+    font-size:15px;
+}
+
+.modal-actions{
+    display:block;
+}
+
+.btn-secondary{
+    width:100%;
+    height:52px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.message{
+    display:none;
+    margin-top:12px;
+    padding:12px;
+    border-radius:14px;
+    font-size:14px;
+}
+
+.message.error{
+    display:block;
+    background:rgba(239,68,68,.12);
+    color:#fecaca;
+    border:1px solid rgba(239,68,68,.25);
+}
+
+@media(max-width:1000px){
+    .panel{
+        min-width:86vw;
+    }
+
+    .stats-grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero h2{
+        font-size:32px;
+    }
+}
+
+@media(max-width:600px){
+    body{
+        padding:16px;
+    }
+
+    .header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:18px;
+    }
+
+    .actions{
+        width:100%;
+        justify-content:space-between;
+    }
+
+    .macros{
+        grid-template-columns:1fr;
+    }
+
+    .modal-actions{
+        grid-template-columns:1fr;
+    }
+}
+  
+.delete-weight{
+    width:34px;
+    height:34px;
+    border:none;
+    border-radius:10px;
+    background:rgba(239,68,68,.12);
+    color:#fecaca;
+    cursor:pointer;
+}
+
+.delete-weight:hover{
+    background:rgba(239,68,68,.22);
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+
+            <div>
+                <h1>PROGRESS</h1>
+                <p>Panel de seguimiento</p>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="icon-btn" onclick="abrirModal()">
+                <i class="fa-solid fa-plus"></i>
+                Registrar peso
+            </button>
+
+            <button class="icon-btn" onclick="window.location.href='app.html'">
+                <i class="fa-solid fa-house"></i>
+                Hub
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+    <h2 id="tituloUsuario">Seguimiento</h2>
+
+    <p id="subtituloUsuario">
+        Controla el avance según el plan guardado desde Planner.
+    </p>
+</section>
+
+    <main class="dashboard">
+
+    <button class="slider-btn left" onclick="moverDashboard(-1)">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+
+    <div class="dashboard-track" id="dashboardTrack">
+
+        <section class="panel">
+
+            <h3 class="plan-title">Datos principales</h3>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span>Peso inicial</span>
+                    <strong id="pesoInicial">0 kg</strong>
+                    <small>Inicio del plan</small>
+                </div>
+
+                <div class="stat-card">
+                    <span>Peso actual</span>
+                    <strong id="pesoActual">0 kg</strong>
+                    <small>Último registro</small>
+                </div>
+
+                <div class="stat-card">
+                    <span>Peso objetivo</span>
+                    <strong id="pesoObjetivo">0 kg</strong>
+                    <small>Meta definida</small>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span>Variación</span>
+                    <strong id="variacion">0 kg</strong>
+                    <small>Desde el inicio</small>
+                </div>
+
+                <div class="stat-card">
+                    <span>Faltante</span>
+                    <strong id="faltante">0 kg</strong>
+                    <small>Para llegar al objetivo</small>
+                </div>
+
+                <div class="stat-card">
+                    <span>Avance</span>
+                    <strong id="avance">0%</strong>
+                    <small>Progreso estimado</small>
+                </div>
+            </div>
+
+            <div class="progress-box">
+                <div class="progress-top">
+                    <span>Progreso al objetivo</span>
+                    <strong id="avanceTexto">0%</strong>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="barraAvance"></div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="panel">
+
+            <h3 class="plan-title">Plan activo</h3>
+
+            <div class="plan-card">
+                <span>Objetivo</span>
+                <strong id="objetivoPlan">-</strong>
+            </div>
+
+            <div class="plan-card">
+                <span>Estado calórico</span>
+                <strong id="estadoCalorico">-</strong>
+            </div>
+
+            <div class="plan-card">
+                <span>Calorías totales</span>
+                <strong id="caloriasPlan">0 kcal</strong>
+            </div>
+
+            <div class="macros">
+                <div class="macro">
+                    <span>Proteínas</span>
+                    <strong id="proteinasPlan">0 g</strong>
+                </div>
+
+                <div class="macro">
+                    <span>Carbos</span>
+                    <strong id="carbosPlan">0 g</strong>
+                </div>
+
+                <div class="macro">
+                    <span>Grasas</span>
+                    <strong id="grasasPlan">0 g</strong>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="panel">
+
+            <h3 class="plan-title">Últimos registros</h3>
+
+            <div class="history-list" id="historial"></div>
+
+        </section>
+
+        <section class="panel">
+
+            <h3 class="plan-title">Fechas tentativas</h3>
+
+            <div class="plan-card">
+                <span>Meta Estimada</span>
+                <strong id="ritmoEstimado">-</strong>
+            </div>
+
+            <div class="timeline-list" id="fechasTentativas"></div>
+
+        </section>
+
+    </div>
+
+    <button class="slider-btn right" onclick="moverDashboard(1)">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+
+</main>
+
+</div>
+
+<div class="modal-overlay" id="modalPeso">
+    <div class="modal">
+
+    <button class="modal-close" onclick="cerrarModal()">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+        <h3>Registrar peso</h3>
+        <p>Ingresa tu peso actual para actualizar el seguimiento.</p>
+
+        <div class="field">
+            <label>Peso actual (kg)</label>
+            <input type="number" id="nuevoPeso" placeholder="Ej: 78.5" min="1" step="0.1">
+        </div>
+
+        <div class="field">
+            <label>Fecha del registro</label>
+            <input type="date" id="fechaPeso">
+        </div>
+      
+        <div id="mensaje" class="message"></div>
+
+        <div class="modal-actions">
+    <button class="btn" onclick="guardarNuevoPeso()">
+        Guardar
+    </button>
+</div>
+    </div>
+</div>
+
+<script>
+const KEY_USUARIOS = "macrofagus_usuarios";
+const KEY_ACTIVO = "macrofagus_usuario_activo";
+
+let usuarioActivo = JSON.parse(localStorage.getItem(KEY_ACTIVO));
+
+if(!usuarioActivo){
+    window.location.href = "index.html";
+}
+
+if(!usuarioActivo.progress || !usuarioActivo.progress.planActivo){
+    alert("Primero debes guardar un plan desde Planner.");
+    window.location.href = "app.html";
+}
+
+const progress = usuarioActivo.progress;
+const plan = progress.planActivo;
+
+function obtenerUsuarios(){
+    return JSON.parse(localStorage.getItem(KEY_USUARIOS)) || [];
+}
+
+function guardarUsuarios(usuarios){
+    localStorage.setItem(KEY_USUARIOS, JSON.stringify(usuarios));
+}
+
+function guardarUsuarioActivo(){
+    localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
+
+    const usuarios = obtenerUsuarios();
+
+    const usuariosActualizados = usuarios.map(u => {
+        if(u.id === usuarioActivo.id){
+            return usuarioActivo;
+        }
+        return u;
+    });
+
+    guardarUsuarios(usuariosActualizados);
+}
+
+function formatearFecha(fechaISO){
+    if(!fechaISO) return "-";
+
+    // Si viene como YYYY-MM-DD
+    if(/^\d{4}-\d{2}-\d{2}$/.test(fechaISO)){
+        const partes = fechaISO.split("-");
+        return `${partes[2]}-${partes[1]}-${partes[0]}`;
+    }
+
+    // Si viene con hora: YYYY-MM-DDTHH:mm:ss
+    if(/^\d{4}-\d{2}-\d{2}T/.test(fechaISO)){
+        const soloFecha = fechaISO.split("T")[0];
+        const partes = soloFecha.split("-");
+        return `${partes[2]}-${partes[1]}-${partes[0]}`;
+    }
+
+    return fechaISO;
+}
+
+function calcularDatos(){
+    const pesoInicial = parseFloat(progress.pesoInicial);
+    const pesoObjetivo = parseFloat(progress.pesoObjetivo);
+
+    const historial = progress.historialPesos || [];
+    const ultimo = historial[historial.length - 1];
+    const pesoActual = ultimo ? parseFloat(ultimo.peso) : pesoInicial;
+
+    const totalCambio = Math.abs(pesoInicial - pesoObjetivo);
+    const cambioActual = Math.abs(pesoInicial - pesoActual);
+    const faltante = Math.abs(pesoActual - pesoObjetivo);
+
+    let avance = 0;
+
+    if(totalCambio > 0){
+        avance = Math.round((cambioActual / totalCambio) * 100);
+    }
+
+    if(avance > 100) avance = 100;
+
+    return {
+        pesoInicial,
+        pesoObjetivo,
+        pesoActual,
+        variacion: pesoActual - pesoInicial,
+        faltante,
+        avance
+    };
+}
+
+function sumarDias(fecha, dias){
+    const nueva = new Date(fecha);
+    nueva.setDate(nueva.getDate() + dias);
+    return nueva;
+}
+
+function calcularFechasTentativas(){
+    const ajuste = parseFloat(plan.ajusteCalorico) || 0;
+
+    const pesoInicial = parseFloat(progress.pesoInicial);
+    const pesoObjetivo = parseFloat(progress.pesoObjetivo);
+
+    const diferencia = pesoObjetivo - pesoInicial;
+
+    const fechas = [];
+
+    if(ajuste === 0){
+    return {
+        ritmoTexto:"Mantenimiento",
+        fechas:[
+            {
+                mantenimiento:true,
+                peso:pesoInicial
+            }
+        ]
+    };
+}
+
+    const movimientoCorrecto =
+        (diferencia < 0 && ajuste < 0) ||
+        (diferencia > 0 && ajuste > 0);
+
+    if(!movimientoCorrecto){
+        return {
+            ritmoTexto:"Ajuste no coincide con objetivo",
+            fechas
+        };
+    }
+
+    const diasPorKg = Math.ceil(7700 / Math.abs(ajuste));
+    const kilosTotales = Math.abs(diferencia);
+    const diasTotales = Math.ceil(kilosTotales * diasPorKg);
+    const fechaInicio = progress.fechaInicioPlan || plan.fechaGuardado || new Date().toISOString();
+    const fechaObjetivo = sumarDias(fechaInicio, diasTotales);
+
+    
+
+    for(let i = 1; i <= Math.ceil(kilosTotales); i++){
+        let pesoEstimado;
+
+        if(diferencia < 0){
+            pesoEstimado = pesoInicial - i;
+            if(pesoEstimado < pesoObjetivo){
+                pesoEstimado = pesoObjetivo;
+            }
+        }else{
+            pesoEstimado = pesoInicial + i;
+            if(pesoEstimado > pesoObjetivo){
+                pesoEstimado = pesoObjetivo;
+            }
+        }
+
+        const fecha = sumarDias(fechaInicio, diasPorKg * i);
+
+        fechas.push({
+            fecha: fecha.toISOString(),
+            peso: pesoEstimado
+        });
+
+        if(pesoEstimado === pesoObjetivo){
+            break;
+        }
+    }
+
+    return {
+    fechaObjetivo,
+    pesoObjetivo,
+    diasTotales,
+    fechas
+};
+}
+
+function renderFechasTentativas(){
+    const data = calcularFechasTentativas();
+
+    if(data.ritmoTexto === "Mantenimiento"){
+    document.getElementById("ritmoEstimado").innerHTML = `
+        <div style="font-size:28px;font-weight:900;">
+            Mantenimiento
+        </div>
+
+        <div style="
+            margin-top:8px;
+            font-size:14px;
+            color:#94a3b8;
+        ">
+            Sin ajuste calórico
+        </div>
+    `;
+}else{
+    document.getElementById("ritmoEstimado").innerHTML = `
+        <div style="font-size:32px;font-weight:900;">
+            ${formatearFecha(data.fechaObjetivo.toISOString())}
+        </div>
+
+        <div style="
+            margin-top:8px;
+    font-size:14px;
+    color:#94a3b8;
+">
+    ${data.diasTotales} días estimados
+        </div>
+    `;
+}
+
+    const contenedor = document.getElementById("fechasTentativas");
+    contenedor.innerHTML = "";
+
+    if(data.fechas.length === 1 && data.fechas[0].mantenimiento){
+
+    contenedor.innerHTML = `
+        <div class="timeline-item" style="
+            display:block;
+            line-height:1.6;
+        ">
+            Su peso de <strong>${data.fechas[0].peso.toFixed(1)} kg</strong>
+            no debería variar significativamente mientras mantenga sus calorías actuales.
+        </div>
+    `;
+
+    return;
+}
+
+if(data.fechas.length === 0){
+    contenedor.innerHTML = `
+        <div class="timeline-item">
+            <strong>Sin fechas</strong>
+            <span>No hay proyección disponible</span>
+        </div>
+    `;
+    return;
+}
+
+    data.fechas.forEach(item => {
+        contenedor.innerHTML += `
+            <div class="timeline-item">
+                <strong>${parseFloat(item.peso).toFixed(1)} kg</strong>
+                <span>${formatearFecha(item.fecha)}</span>
+            </div>
+        `;
+    });
+}  
+
+function eliminarPeso(id){
+    usuarioActivo.progress.historialPesos =
+        usuarioActivo.progress.historialPesos.filter(item =>
+            item.tipo === "Inicial" || item.id !== id
+        );
+
+    const historial = usuarioActivo.progress.historialPesos;
+
+    usuarioActivo.progress.pesoActual =
+        historial[historial.length - 1].peso;
+
+    guardarUsuarioActivo();
+
+    render();
+}  
+
+function textoEstadoCalorico(){
+    const ajuste = parseFloat(plan.ajusteCalorico) || 0;
+
+    if(ajuste < 0){
+        return "Déficit (" + ajuste + " kcal)";
+    }
+
+    if(ajuste > 0){
+        return "Superávit (+" + ajuste + " kcal)";
+    }
+
+    return "Mantenimiento";
+}  
+
+function moverDashboard(direccion){
+    const track = document.getElementById("dashboardTrack");
+    const ancho = 440;
+
+    track.scrollBy({
+        left: direccion * ancho,
+        behavior: "smooth"
+    });
+}  
+  
+function render(){
+    const d = calcularDatos();
+
+    document.getElementById("tituloUsuario").textContent =
+        "Seguimiento de " + (plan.nombre || usuarioActivo.nombre);
+    
+    document.getElementById("subtituloUsuario").innerHTML =
+        "Inicio del plan: <strong>" + formatearFecha(progress.fechaInicioPlan) + "</strong>";
+
+    document.getElementById("pesoInicial").textContent =
+        d.pesoInicial.toFixed(1) + " kg";
+
+    document.getElementById("pesoActual").textContent =
+        d.pesoActual.toFixed(1) + " kg";
+
+    document.getElementById("pesoObjetivo").textContent =
+        d.pesoObjetivo.toFixed(1) + " kg";
+  
+    document.getElementById("variacion").textContent =
+        d.variacion.toFixed(1) + " kg";
+
+    document.getElementById("faltante").textContent =
+        d.faltante.toFixed(1) + " kg";
+
+    document.getElementById("avance").textContent =
+        d.avance + "%";
+
+    document.getElementById("avanceTexto").textContent =
+        d.avance + "%";
+
+    document.getElementById("barraAvance").style.width =
+        d.avance + "%";
+
+    document.getElementById("objetivoPlan").textContent =
+        plan.objetivo;
+
+    document.getElementById("estadoCalorico").textContent =
+    textoEstadoCalorico();
+  
+    document.getElementById("caloriasPlan").textContent =
+        plan.caloriasTotales + " kcal";
+
+    document.getElementById("proteinasPlan").textContent =
+        plan.macros.proteinasGr + " g";
+
+    document.getElementById("carbosPlan").textContent =
+        plan.macros.carbohidratosGr + " g";
+
+    document.getElementById("grasasPlan").textContent =
+        plan.macros.grasasGr + " g";
+
+    renderHistorial();
+    renderFechasTentativas();
+}
+
+function renderHistorial(){
+    const contenedor = document.getElementById("historial");
+    const historial = progress.historialPesos || [];
+
+    contenedor.innerHTML = "";
+
+    const ultimos = [...historial].reverse().slice(0,5);
+
+    ultimos.forEach(item => {
+        const esInicial = item.tipo === "Inicial";
+
+        contenedor.innerHTML += `
+            <div class="history-item">
+                <div>
+                    <span>${formatearFecha(item.fecha)}</span>
+                    <strong>${parseFloat(item.peso).toFixed(1)} kg</strong>
+                </div>
+
+                ${
+                    esInicial
+                    ? `<small style="color:#86efac;font-weight:800;">Inicial</small>`
+                    : `<button class="delete-weight" onclick="eliminarPeso(${item.id})">
+                            <i class="fa-solid fa-trash"></i>
+                       </button>`
+                }
+            </div>
+        `;
+    });
+}
+
+function abrirModal(){
+    document.getElementById("modalPeso").style.display = "flex";
+    document.body.style.overflow = "hidden";
+    document.getElementById("nuevoPeso").value = "";
+    document.getElementById("fechaPeso").value = new Date().toISOString().split("T")[0];
+    limpiarMensaje();
+}
+
+function cerrarModal(){
+    document.getElementById("modalPeso").style.display = "none";
+    document.body.style.overflow = "auto";
+}
+
+function mostrarMensaje(texto){
+    const msg = document.getElementById("mensaje");
+    msg.textContent = texto;
+    msg.className = "message error";
+}
+
+function limpiarMensaje(){
+    const msg = document.getElementById("mensaje");
+    msg.textContent = "";
+    msg.className = "message";
+}
+
+function guardarNuevoPeso(){
+    const nuevoPeso = parseFloat(document.getElementById("nuevoPeso").value);
+    const fechaPeso = document.getElementById("fechaPeso").value;
+
+    if(!nuevoPeso){
+        mostrarMensaje("Ingresa un peso válido.");
+        return;
+    }
+
+    if(!fechaPeso){
+        mostrarMensaje("Ingresa la fecha del registro.");
+        return;
+    }
+
+    usuarioActivo.progress.historialPesos.push({
+        id: Date.now(),
+        fecha: fechaPeso,
+        peso: nuevoPeso,
+        tipo: "Registro"
+    });
+
+    usuarioActivo.progress.historialPesos.sort((a,b) =>
+        new Date(a.fecha) - new Date(b.fecha)
+    );
+
+    usuarioActivo.progress.pesoActual =
+        usuarioActivo.progress.historialPesos[
+            usuarioActivo.progress.historialPesos.length - 1
+        ].peso;
+
+    guardarUsuarioActivo();
+
+    cerrarModal();
+
+    render();
+}
+
+render();
+</script>
+
+</body>
+</html>

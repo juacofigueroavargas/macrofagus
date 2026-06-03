@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MacroFagus · Acceso</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Segoe UI,system-ui,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#111827);
+    color:#f8fafc;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+}
+
+.auth-wrapper{
+    width:100%;
+    max-width:1050px;
+    min-height:620px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border-radius:34px;
+    overflow:hidden;
+    background:rgba(15,23,42,.9);
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 28px 90px rgba(0,0,0,.38);
+}
+
+.brand-panel{
+    padding:60px;
+    background:
+        radial-gradient(circle at top left, rgba(34,197,94,.22), transparent 38%),
+        linear-gradient(135deg,rgba(34,197,94,.12),rgba(20,184,166,.05));
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.logo-icon{
+    width:70px;
+    height:70px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    display:grid;
+    place-items:center;
+    color:#052e16;
+    font-size:32px;
+    margin-bottom:28px;
+}
+
+.brand-panel h1{
+    font-size:46px;
+    font-weight:900;
+    letter-spacing:1px;
+    margin-bottom:18px;
+}
+
+.brand-panel p{
+    color:#cbd5e1;
+    font-size:20px;
+    line-height:1.6;
+    max-width:360px;
+}
+
+.form-panel{
+    padding:60px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.form{
+    width:100%;
+}
+
+.form h2{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.form-subtitle{
+    color:#94a3b8;
+    font-size:15px;
+    margin-bottom:32px;
+}
+
+.field{
+    margin-bottom:18px;
+}
+
+.field label{
+    display:block;
+    font-size:13px;
+    color:#cbd5e1;
+    margin-bottom:8px;
+}
+
+.field input,
+.field select{
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#f8fafc;
+    outline:none;
+    font-size:15px;
+}
+
+.field select option{
+    color:#0f172a;
+}
+
+.field input:focus,
+.field select:focus{
+    border-color:#22c55e;
+}
+
+.btn{
+    width:100%;
+    height:52px;
+    border:0;
+    border-radius:14px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+    font-weight:900;
+    font-size:15px;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+.switch{
+    margin-top:24px;
+    text-align:center;
+    color:#94a3b8;
+    font-size:14px;
+}
+
+.switch button{
+    background:none;
+    border:0;
+    color:#86efac;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.message{
+    margin-top:18px;
+    padding:12px;
+    border-radius:14px;
+    font-size:14px;
+    display:none;
+}
+
+.message.ok{
+    display:block;
+    background:rgba(34,197,94,.12);
+    color:#86efac;
+    border:1px solid rgba(34,197,94,.25);
+}
+
+.message.error{
+    display:block;
+    background:rgba(239,68,68,.12);
+    color:#fecaca;
+    border:1px solid rgba(239,68,68,.25);
+}
+
+.note{
+    margin-top:24px;
+    color:#64748b;
+    font-size:12px;
+    line-height:1.5;
+}
+
+#registerForm{
+    display:none;
+}
+
+@media(max-width:850px){
+    .auth-wrapper{
+        grid-template-columns:1fr;
+        min-height:auto;
+    }
+
+    .brand-panel{
+        padding:42px;
+        text-align:center;
+        align-items:center;
+    }
+
+    .brand-panel h1{
+        font-size:38px;
+    }
+
+    .brand-panel p{
+        font-size:17px;
+    }
+
+    .form-panel{
+        padding:42px;
+    }
+}
+
+@media(max-width:520px){
+    body{
+        padding:14px;
+    }
+
+    .auth-wrapper{
+        border-radius:24px;
+    }
+
+    .brand-panel,
+    .form-panel{
+        padding:28px;
+    }
+
+    .logo-icon{
+        width:58px;
+        height:58px;
+        font-size:26px;
+    }
+
+    .brand-panel h1{
+        font-size:30px;
+    }
+
+    .form h2{
+        font-size:26px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="auth-wrapper">
+
+    <section class="brand-panel">
+        <div class="logo-icon">
+            <i class="fa-solid fa-dna"></i>
+        </div>
+
+        <h1>MACROFAGUS</h1>
+
+        <p>
+            Planifica. Organiza. Controla.
+        </p>
+    </section>
+
+    <section class="form-panel">
+
+        <div id="loginForm" class="form">
+            <h2>Iniciar sesión</h2>
+            <p class="form-subtitle">
+                Ingresa con tu usuario y contraseña.
+            </p>
+
+            <div class="field">
+                <label>Usuario</label>
+                <input type="text" id="loginUsuario" placeholder="Ej: joaquin">
+            </div>
+
+            <div class="field">
+                <label>Contraseña</label>
+                <input type="password" id="loginPassword" placeholder="Ingresa tu contraseña">
+            </div>
+
+            <button class="btn" onclick="iniciarSesion()">
+                Entrar
+            </button>
+
+            <div class="switch">
+                ¿No tienes cuenta?
+                <button onclick="mostrarRegistro()">Crear cuenta</button>
+            </div>
+        </div>
+
+        <div id="registerForm" class="form">
+            <h2>Crear cuenta</h2>
+            <p class="form-subtitle">
+                Crea tu perfil para comenzar.
+            </p>
+
+            <div class="field">
+                <label>Nombre</label>
+                <input type="text" id="regNombre" placeholder="Ej: Joaquín">
+            </div>
+
+            <div class="field">
+                <label>Apellidos</label>
+                <input type="text" id="regApellidos" placeholder="Ej: Figueroa Vargas">
+            </div>
+
+            <div class="field">
+                <label>Nombre de usuario</label>
+                <input type="text" id="regUsuario" placeholder="Ej: joaquin">
+            </div>
+
+            <div class="field">
+                <label>Sexo</label>
+                <select id="regSexo">
+                    <option value="">Seleccionar</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Contraseña</label>
+                <input type="password" id="regPassword" placeholder="Crea una contraseña">
+            </div>
+
+            <button class="btn" onclick="crearCuenta()">
+                Crear cuenta
+            </button>
+
+            <div class="switch">
+                ¿Ya tienes cuenta?
+                <button onclick="mostrarLogin()">Iniciar sesión</button>
+            </div>
+        </div>
+
+        <div id="mensaje" class="message"></div>
+
+        <div class="note">
+            Los datos se guardan localmente en este navegador.
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+const KEY_USUARIOS = "macrofagus_usuarios";
+const KEY_ACTIVO = "macrofagus_usuario_activo";
+
+function obtenerUsuarios(){
+    return JSON.parse(localStorage.getItem(KEY_USUARIOS)) || [];
+}
+
+function guardarUsuarios(usuarios){
+    localStorage.setItem(KEY_USUARIOS, JSON.stringify(usuarios));
+}
+
+function normalizarUsuario(usuario){
+    return usuario.trim().toLowerCase();
+}
+
+function mostrarMensaje(texto, tipo){
+    const msg = document.getElementById("mensaje");
+    msg.textContent = texto;
+    msg.className = "message " + tipo;
+}
+
+function limpiarMensaje(){
+    const msg = document.getElementById("mensaje");
+    msg.textContent = "";
+    msg.className = "message";
+}
+
+function mostrarRegistro(){
+    limpiarMensaje();
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("registerForm").style.display = "block";
+}
+
+function mostrarLogin(){
+    limpiarMensaje();
+    document.getElementById("registerForm").style.display = "none";
+    document.getElementById("loginForm").style.display = "block";
+}
+
+function crearCuenta(){
+    const nombre = document.getElementById("regNombre").value.trim();
+    const apellidos = document.getElementById("regApellidos").value.trim();
+    const usuario = normalizarUsuario(document.getElementById("regUsuario").value);
+    const sexo = document.getElementById("regSexo").value;
+    const password = document.getElementById("regPassword").value.trim();
+
+    if(!nombre || !apellidos || !usuario || !sexo || !password){
+        mostrarMensaje("Completa todos los campos.", "error");
+        return;
+    }
+
+    const usuarios = obtenerUsuarios();
+
+    const usuarioExiste = usuarios.some(u =>
+        u.usuario && u.usuario.toLowerCase() === usuario
+    );
+
+    if(usuarioExiste){
+        mostrarMensaje("Ese nombre de usuario ya está en uso.", "error");
+        return;
+    }
+
+    const nuevoUsuario = {
+        id: Date.now(),
+        usuario,
+        nombre,
+        apellidos,
+        sexo,
+        password,
+        fechaCreacion: new Date().toISOString(),
+        planner: {},
+        progress: {},
+        daily: {}
+    };
+
+    usuarios.push(nuevoUsuario);
+    guardarUsuarios(usuarios);
+
+    document.getElementById("regNombre").value = "";
+    document.getElementById("regApellidos").value = "";
+    document.getElementById("regUsuario").value = "";
+    document.getElementById("regSexo").value = "";
+    document.getElementById("regPassword").value = "";
+
+    mostrarLogin();
+    mostrarMensaje("Cuenta creada correctamente. Ahora puedes iniciar sesión.", "ok");
+}
+
+function iniciarSesion(){
+    const usuario = normalizarUsuario(document.getElementById("loginUsuario").value);
+    const password = document.getElementById("loginPassword").value.trim();
+
+    if(!usuario || !password){
+        mostrarMensaje("Ingresa usuario y contraseña.", "error");
+        return;
+    }
+
+    const usuarios = obtenerUsuarios();
+
+    const encontrado = usuarios.find(u =>
+        u.usuario &&
+        u.usuario.toLowerCase() === usuario &&
+        u.password === password
+    );
+
+    if(!encontrado){
+        mostrarMensaje("Usuario o contraseña incorrectos.", "error");
+        return;
+    }
+
+    localStorage.setItem(KEY_ACTIVO, JSON.stringify(encontrado));
+
+    window.location.href = "app.html";
+}
+</script>
+
+</body>
+</html>
