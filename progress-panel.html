@@ -17,11 +17,11 @@
 
 body{
     min-height:100vh;
-    height:100vh;
-    overflow:hidden;
     background:linear-gradient(135deg,#0f172a,#111827);
     color:#f8fafc;
     padding:28px;
+    overflow-x:hidden;
+    overflow-y:auto;
 }
 
 .app{
@@ -508,6 +508,41 @@ body{
 
     .modal-actions{
         grid-template-columns:1fr;
+    }
+    
+        .dashboard{
+        margin-top:40px;
+    }
+
+    .dashboard-track{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:18px;
+        overflow:visible;
+        padding:0;
+    }
+
+    .panel{
+        min-width:100%;
+        width:100%;
+        min-height:auto;
+    }
+
+    .slider-btn{
+        display:none;
+    }
+
+    .stats-grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero{
+        margin-top:36px;
+    }
+
+    .hero h2{
+        font-size:34px;
+        line-height:1.15;
     }
 }
   
