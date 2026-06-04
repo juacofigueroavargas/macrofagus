@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MacroFagus · Foods</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Segoe UI,system-ui,sans-serif}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#111827);
+    color:#f8fafc;
+    padding:28px;
+}
+
+.app{max-width:1700px;margin:auto}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:34px;
+}
+
+.logo{display:flex;align-items:center;gap:16px}
+
+.logo-icon{
+    width:54px;height:54px;border-radius:18px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    display:grid;place-items:center;
+    color:#052e16;font-size:24px;
+}
+
+.logo h1{font-size:30px;font-weight:900}
+.logo p{color:#94a3b8;font-size:14px}
+
+.icon-btn{
+    height:42px;padding:0 16px;border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;cursor:pointer;
+    font-size:13px;font-weight:800;
+    display:flex;align-items:center;gap:8px;
+}
+
+.icon-btn i{color:#86efac}
+
+.hero{margin-bottom:24px}
+.hero h2{font-size:34px;margin-bottom:6px}
+.hero p{color:#94a3b8}
+
+.layout{
+    display:grid;
+    grid-template-columns:260px 1fr;
+    gap:22px;
+}
+
+.panel{
+    background:rgba(15,23,42,.9);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:24px;
+    padding:22px;
+    box-shadow:0 24px 70px rgba(0,0,0,.28);
+}
+
+.side-title{
+    font-size:18px;
+    margin-bottom:16px;
+}
+
+.category-list{
+    display:grid;
+    gap:10px;
+}
+
+.category-btn{
+    width:100%;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    padding:13px 14px;
+    display:flex;
+    justify-content:space-between;
+    cursor:pointer;
+    font-weight:800;
+}
+
+.category-btn.active{
+    background:rgba(34,197,94,.14);
+    color:#86efac;
+    border:1px solid rgba(34,197,94,.25);
+}
+
+.toolbar{
+    display:grid;
+    grid-template-columns:1fr 180px;
+    gap:14px;
+    margin-bottom:18px;
+}
+
+.field input{
+    width:100%;
+    height:48px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#f8fafc;
+    padding:0 14px;
+    outline:none;
+}
+
+.btn{
+    height:48px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.table-wrap{
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:18px;
+    overflow:hidden;
+}
+
+.food-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.food-table thead{
+    background:rgba(255,255,255,.08);
+}
+
+.food-table th{
+    text-align:left;
+    color:#86efac;
+    font-size:13px;
+    padding:14px;
+}
+
+.food-table td{
+    padding:14px;
+    border-top:1px solid rgba(255,255,255,.08);
+    color:#cbd5e1;
+    font-size:14px;
+}
+
+.food-table td strong{
+    color:#f8fafc;
+}
+
+.badge{
+    padding:6px 10px;
+    border-radius:999px;
+    background:rgba(34,197,94,.12);
+    color:#86efac;
+    font-size:12px;
+    font-weight:800;
+}
+
+.actions-cell{
+    display:flex;
+    gap:8px;
+}
+
+.mini-btn{
+    height:34px;
+    padding:0 12px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    cursor:pointer;
+    font-weight:800;
+}
+
+.mini-btn.delete{
+    color:#fecaca;
+}
+
+.empty{
+    display:none;
+    text-align:center;
+    color:#94a3b8;
+    padding:34px;
+}
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    backdrop-filter:blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:999;
+    padding:20px;
+}
+
+.modal{
+    width:100%;
+    max-width:460px;
+    background:#0f172a;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:26px;
+    padding:30px;
+}
+
+.modal h3{font-size:26px;margin-bottom:8px}
+.modal p{color:#94a3b8;margin-bottom:22px}
+
+.modal .field{margin-bottom:14px}
+
+.modal label{
+    display:block;
+    color:#cbd5e1;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.modal input,
+.modal select{
+    width:100%;
+    height:46px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#f8fafc;
+    padding:0 14px;
+    outline:none;
+}
+
+.modal select option{
+    color:#0f172a;
+}
+
+.modal-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:10px;
+}
+
+.btn-secondary{
+    height:48px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    font-weight:900;
+    cursor:pointer;
+}
+
+@media(max-width:950px){
+    .layout{grid-template-columns:1fr}
+    .toolbar{grid-template-columns:1fr}
+    .table-wrap{overflow-x:auto}
+    .food-table{min-width:820px}
+}
+
+@media(max-width:600px){
+    body{padding:16px}
+    .header{flex-direction:column;align-items:flex-start;gap:18px}
+    .hero h2{font-size:30px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+    <div class="logo">
+        <div class="logo-icon">
+            <i class="fa-solid fa-carrot"></i>
+        </div>
+        <div>
+            <h1>MACROFAGUS FOODS</h1>
+            <p>Base maestra de alimentos</p>
+        </div>
+    </div>
+
+    <button class="icon-btn" onclick="window.location.href='app.html'">
+        <i class="fa-solid fa-house"></i>
+        Hub
+    </button>
+</header>
+
+<section class="hero">
+    <h2>Base de alimentos</h2>
+<p>Gestiona todos los alimentos disponibles para Planner, Daily y futuros módulos.</p>
+</section>
+
+<div class="layout">
+
+    <aside class="panel">
+        <h3 class="side-title">Categorías</h3>
+        <div class="category-list" id="categoryList"></div>
+    </aside>
+
+    <main class="panel">
+
+        <div class="toolbar">
+            <div class="field">
+                <input type="text" id="searchInput" placeholder="Buscar alimento..." oninput="renderFoods()">
+            </div>
+
+            <button class="btn" onclick="openModal()">
+                <i class="fa-solid fa-plus"></i>
+                Nuevo alimento
+            </button>
+        </div>
+
+        <div class="table-wrap">
+            <table class="food-table">
+                <thead>
+                    <tr>
+                        <th>Alimento</th>
+                        <th>Categoría</th>
+                        <th>Base</th>
+                        <th>Proteína</th>
+                        <th>Carbos</th>
+                        <th>Grasas</th>
+                        <th>Kcal</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="foodTableBody"></tbody>
+            </table>
+
+            <div class="empty" id="emptyState">
+                No se encontraron alimentos.
+            </div>
+        </div>
+
+    </main>
+
+</div>
+
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <h3 id="modalTitle">Nuevo alimento</h3>
+        <p>Completa los datos nutricionales según su base.</p>
+
+        <div class="field">
+            <label>Nombre</label>
+            <input type="text" id="foodName">
+        </div>
+
+        <div class="field">
+            <label>Categoría</label>
+            <select id="foodCategory">
+    <option value="Lácteos">Lácteos</option>
+    <option value="Carnes y huevos">Carnes y huevos</option>
+    <option value="Pescados">Pescados</option>
+    <option value="Legumbres">Legumbres</option>
+    <option value="Cereales">Cereales</option>
+    <option value="Verduras">Verduras</option>
+    <option value="Grasas">Grasas</option>
+    <option value="Frutas">Frutas</option>
+    <option value="Extras">Extras</option>
+</select>
+        </div>
+
+        <div class="field">
+    <label>Base</label>
+    <select id="foodBase">
+        <option value="100 g">100 g</option>
+        <option value="1 unidad">1 unidad</option>
+        <option value="1 litro">1 litro</option>
+        <option value="1 scoop">1 scoop</option>
+    </select>
+</div>
+
+        <div class="field">
+            <label>Proteínas</label>
+            <input type="number" id="foodProtein">
+        </div>
+
+        <div class="field">
+            <label>Carbohidratos</label>
+            <input type="number" id="foodCarbs">
+        </div>
+
+        <div class="field">
+            <label>Grasas</label>
+            <input type="number" id="foodFat">
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+            <button class="btn" onclick="saveFood()">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let activeCategory = "Todos";
+let editIndex = null;
+
+let foods = JSON.parse(localStorage.getItem("macrofagus_foods")) || [
+    {name:"Yoghurt protein", category:"Lácteos", base:"100 g", protein:10, carbs:3.8, fat:0.5},
+    {name:"Yogurt natural", category:"Lácteos", base:"100 g", protein:10, carbs:4, fat:0.4},
+    {name:"Yogurt light", category:"Lácteos", base:"100 g", protein:5, carbs:6, fat:0.2},
+    {name:"Yogurt griego", category:"Lácteos", base:"100 g", protein:10, carbs:4, fat:0.4},
+    {name:"Proteína en polvo", category:"Lácteos", base:"1 scoop", protein:24, carbs:3, fat:2},
+    {name:"Leche descremada", category:"Lácteos", base:"1 litro", protein:34, carbs:50, fat:1},
+    {name:"Leche entera", category:"Lácteos", base:"1 litro", protein:32, carbs:50, fat:35},
+    {name:"Quesillo", category:"Lácteos", base:"100 g", protein:17, carbs:3, fat:5},
+    {name:"Queso fresco", category:"Lácteos", base:"100 g", protein:16, carbs:2, fat:12},
+
+    {name:"Huevo", category:"Carnes y huevos", base:"1 unidad", protein:6.5, carbs:0.6, fat:5.5},
+    {name:"Claras", category:"Carnes y huevos", base:"100 g", protein:11, carbs:0.7, fat:0.2},
+    {name:"Pollo", category:"Carnes y huevos", base:"100 g", protein:31, carbs:0, fat:3.6},
+    {name:"Pavo", category:"Carnes y huevos", base:"100 g", protein:29, carbs:0, fat:4},
+    {name:"Jamón de pavo", category:"Carnes y huevos", base:"100 g", protein:18, carbs:2, fat:3},
+    {name:"Carne magra", category:"Carnes y huevos", base:"100 g", protein:26, carbs:0, fat:10},
+
+    {name:"Atún al agua", category:"Pescados", base:"100 g", protein:23, carbs:0, fat:1},
+    {name:"Merluza", category:"Pescados", base:"100 g", protein:24, carbs:0, fat:2},
+    {name:"Salmón", category:"Pescados", base:"100 g", protein:22, carbs:0, fat:12},
+
+    {name:"Lentejas cocidas", category:"Legumbres", base:"100 g", protein:9, carbs:20, fat:0.4},
+    {name:"Porotos cocidos", category:"Legumbres", base:"100 g", protein:8, carbs:21, fat:0.5},
+    {name:"Garbanzos cocidos", category:"Legumbres", base:"100 g", protein:8.5, carbs:27, fat:2.6},
+    {name:"Arvejas", category:"Legumbres", base:"100 g", protein:5, carbs:14, fat:0.4},
+
+    {name:"Avena", category:"Cereales", base:"100 g", protein:13, carbs:66, fat:7},
+    {name:"Granola", category:"Cereales", base:"100 g", protein:10, carbs:64, fat:20},
+    {name:"Pan integral", category:"Cereales", base:"100 g", protein:9, carbs:49, fat:3.5},
+    {name:"Pan pita integral", category:"Cereales", base:"100 g", protein:9, carbs:50, fat:1},
+    {name:"Marraqueta", category:"Cereales", base:"100 g", protein:8, carbs:55, fat:1},
+    {name:"Hallulla", category:"Cereales", base:"100 g", protein:7, carbs:50, fat:12},
+    {name:"Arroz cocido", category:"Cereales", base:"100 g", protein:2.7, carbs:28, fat:0.3},
+    {name:"Arroz integral cocido", category:"Cereales", base:"100 g", protein:2.5, carbs:23, fat:1},
+    {name:"Fideos cocidos", category:"Cereales", base:"100 g", protein:5, carbs:30, fat:1},
+    {name:"Quinoa cocida", category:"Cereales", base:"100 g", protein:4.4, carbs:21, fat:1.9},
+
+    {name:"Papa cocida", category:"Verduras", base:"100 g", protein:2, carbs:17, fat:0.1},
+    {name:"Zapallo cocido", category:"Verduras", base:"100 g", protein:1, carbs:8, fat:0.1},
+    {name:"Tomate", category:"Verduras", base:"100 g", protein:0.9, carbs:4, fat:0.2},
+    {name:"Lechuga", category:"Verduras", base:"100 g", protein:1, carbs:3, fat:0.1},
+    {name:"Ensalada verde", category:"Verduras", base:"100 g", protein:1.2, carbs:4, fat:0.2},
+    {name:"Verduras salteadas", category:"Verduras", base:"100 g", protein:2, carbs:7, fat:2},
+    {name:"Zanahoria", category:"Verduras", base:"100 g", protein:1, carbs:10, fat:0.2},
+    {name:"Brócoli", category:"Verduras", base:"100 g", protein:2.8, carbs:7, fat:0.4},
+    {name:"Cebolla", category:"Verduras", base:"100 g", protein:1, carbs:9, fat:0.1},
+
+    {name:"Aceite de oliva", category:"Grasas", base:"100 g", protein:0, carbs:0, fat:100},
+    {name:"Palta", category:"Grasas", base:"100 g", protein:2, carbs:9, fat:15},
+    {name:"Almendras", category:"Grasas", base:"100 g", protein:21, carbs:22, fat:49},
+    {name:"Nueces", category:"Grasas", base:"100 g", protein:15, carbs:14, fat:65},
+    {name:"Maní", category:"Grasas", base:"100 g", protein:25, carbs:16, fat:49},
+    {name:"Mantequilla de maní", category:"Grasas", base:"100 g", protein:25, carbs:20, fat:50},
+
+    {name:"Plátano", category:"Frutas", base:"100 g", protein:1.1, carbs:23, fat:0.3},
+    {name:"Manzana", category:"Frutas", base:"100 g", protein:0.3, carbs:14, fat:0.2},
+    {name:"Pera", category:"Frutas", base:"100 g", protein:0.4, carbs:15, fat:0.1},
+    {name:"Frutillas", category:"Frutas", base:"100 g", protein:0.8, carbs:8, fat:0.3},
+    {name:"Frambuesas", category:"Frutas", base:"100 g", protein:1.2, carbs:12, fat:0.7},
+    {name:"Kiwi", category:"Frutas", base:"100 g", protein:1.1, carbs:15, fat:0.5},
+    {name:"Naranja", category:"Frutas", base:"100 g", protein:1, carbs:12, fat:0.1},
+    {name:"Uva", category:"Frutas", base:"100 g", protein:0.6, carbs:18, fat:0.2},
+  
+    {name:"Coca Cola", category:"Extras", base:"1 litro", protein:0, carbs:106, fat:0},
+    {name:"Papas fritas", category:"Extras", base:"100 g", protein:3.4, carbs:41, fat:15}
+];
+
+function saveLocal(){
+    localStorage.setItem("macrofagus_foods", JSON.stringify(foods));
+}
+
+function getKcal(food){
+    return Math.round(
+        (food.protein * 4) +
+        (food.carbs * 4) +
+        (food.fat * 9)
+    );
+}
+
+function getCategories(){
+    return [
+        "Todos",
+        "Lácteos",
+        "Carnes y huevos",
+        "Pescados",
+        "Legumbres",
+        "Cereales",
+        "Verduras",
+        "Grasas",
+        "Frutas",
+        "Extras"
+    ];
+}
+
+function renderCategories(){
+    const box = document.getElementById("categoryList");
+    box.innerHTML = "";
+
+    getCategories().forEach(category => {
+        const count = category === "Todos"
+            ? foods.length
+            : foods.filter(food => food.category === category).length;
+
+        box.innerHTML += `
+            <button class="category-btn ${activeCategory === category ? "active" : ""}" onclick="selectCategory('${category}')">
+                <span>${category}</span>
+                <span>${count}</span>
+            </button>
+        `;
+    });
+}
+
+function selectCategory(category){
+    activeCategory = category;
+    renderCategories();
+    renderFoods();
+}
+
+function renderFoods(){
+    const tbody = document.getElementById("foodTableBody");
+    const empty = document.getElementById("emptyState");
+    const search = document.getElementById("searchInput").value.toLowerCase();
+
+    const filtered = foods.filter(food => {
+        const matchSearch = food.name.toLowerCase().includes(search);
+        const matchCategory = activeCategory === "Todos" || food.category === activeCategory;
+        return matchSearch && matchCategory;
+    });
+
+    tbody.innerHTML = "";
+
+    filtered.forEach(food => {
+        const index = foods.indexOf(food);
+
+        tbody.innerHTML += `
+            <tr>
+                <td><strong>${food.name}</strong></td>
+                <td><span class="badge">${food.category}</span></td>
+                <td>${food.base}</td>
+                <td>${food.protein} g</td>
+                <td>${food.carbs} g</td>
+                <td>${food.fat} g</td>
+                <td><strong>${getKcal(food)} kcal</strong></td>
+                <td>
+                    <div class="actions-cell">
+                        <button class="mini-btn" onclick="editFood(${index})">Editar</button>
+                        <button class="mini-btn delete" onclick="deleteFood(${index})">Eliminar</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+
+    empty.style.display = filtered.length ? "none" : "block";
+}
+
+function openModal(){
+    editIndex = null;
+    document.getElementById("modalTitle").innerText = "Nuevo alimento";
+    document.getElementById("foodName").value = "";
+    document.getElementById("foodCategory").value = "Lácteos";
+    document.getElementById("foodBase").value = "100 g";
+    document.getElementById("foodProtein").value = "";
+    document.getElementById("foodCarbs").value = "";
+    document.getElementById("foodFat").value = "";
+    document.getElementById("modalOverlay").style.display = "flex";
+}
+
+function closeModal(){
+    document.getElementById("modalOverlay").style.display = "none";
+}
+
+function saveFood(){
+    const food = {
+        name:document.getElementById("foodName").value.trim(),
+        category:document.getElementById("foodCategory").value,
+        base:document.getElementById("foodBase").value.trim(),
+        protein:Number(document.getElementById("foodProtein").value),
+        carbs:Number(document.getElementById("foodCarbs").value),
+        fat:Number(document.getElementById("foodFat").value)
+    };
+
+    if(!food.name || !food.base){
+        alert("Completa el nombre y la base del alimento.");
+        return;
+    }
+
+    if(editIndex === null){
+        foods.push(food);
+    }else{
+        foods[editIndex] = food;
+    }
+
+    saveLocal();
+    renderCategories();
+    renderFoods();
+    closeModal();
+}
+
+function editFood(index){
+    editIndex = index;
+    const food = foods[index];
+
+    document.getElementById("modalTitle").innerText = "Editar alimento";
+    document.getElementById("foodName").value = food.name;
+    document.getElementById("foodCategory").value = food.category;
+    document.getElementById("foodBase").value = food.base;
+    document.getElementById("foodProtein").value = food.protein;
+    document.getElementById("foodCarbs").value = food.carbs;
+    document.getElementById("foodFat").value = food.fat;
+
+    document.getElementById("modalOverlay").style.display = "flex";
+}
+
+function deleteFood(index){
+    if(confirm("¿Eliminar este alimento?")){
+        foods.splice(index,1);
+        saveLocal();
+        renderCategories();
+        renderFoods();
+    }
+}
+
+renderCategories();
+renderFoods();
+</script>
+
+</body>
+</html>
