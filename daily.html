@@ -134,6 +134,31 @@ body{
     gap:16px;
 }
 
+.meal-tabs{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding-bottom:12px;
+    margin-bottom:16px;
+}
+
+.meal-tab{
+    min-width:max-content;
+    border:none;
+    border-radius:14px;
+    padding:12px 16px;
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.meal-tab.active{
+    background:rgba(34,197,94,.16);
+    color:#86efac;
+    border:1px solid rgba(34,197,94,.25);
+}  
+  
 .meal{
     border:1px solid rgba(255,255,255,.10);
     background:rgba(255,255,255,.04);
@@ -347,6 +372,15 @@ body{
     cursor:pointer;
 }
 
+.food-row small{
+    color:#94a3b8;
+    font-size:11px;
+}
+
+.food-row strong{
+    color:#f8fafc;
+}  
+  
 @media(max-width:1100px){
     .summary-grid{grid-template-columns:repeat(2,1fr)}
     .daily-layout{grid-template-columns:1fr}
@@ -516,6 +550,7 @@ const foods = JSON.parse(localStorage.getItem(FOODS_KEY)) || [];
 let planner = usuarioActivo && usuarioActivo.planner ? usuarioActivo.planner : null;
 let meals = getPlannerMeals();
 let selectedMeal = null;
+let activeMealView = null;
 let selectedManualFoodIndex = "";
 let selectedDate = getToday();  
 
@@ -668,7 +703,8 @@ function changeSelectedDate(){
     }else{
         meals = getPlannerMeals();
     }
-
+    
+    activeMealView = meals.length ? getMealName(meals[0]) : null;
     renderAll();
 }  
 
@@ -676,75 +712,114 @@ function renderMeals(){
     const box = document.getElementById("mealsBox");
     box.innerHTML = "";
 
+    if(!activeMealView && meals.length > 0){
+        activeMealView = getMealName(meals[0]);
+    }
+
+    let tabs = `<div class="meal-tabs">`;
+
     meals.forEach(meal => {
         const mealName = getMealName(meal);
-        const target = getMealTargets(meal);
-        const records = dailyData.records.filter(r => r.meal === mealName);
-
-        let rows = "";
-
-        if(records.length === 0){
-            rows = `<div class="empty-meal">Sin alimentos registrados.</div>`;
-        }else{
-            records.forEach(record => {
-                const realIndex = dailyData.records.indexOf(record);
-
-                rows += `
-                    <div class="food-row">
-                        <div>
-                            <strong>${record.name}</strong><br>
-                            <small>${record.quantity} ${getQuantityUnit(record.base)}</small>
-                        </div>
-                        <div>${getKcal(record)} kcal</div>
-                        <div>${record.protein} g P</div>
-                        <div>${record.carbs} g C</div>
-                        <div>${record.fat} g G</div>
-                        <button class="delete-btn" onclick="deleteRecord(${realIndex})">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-            });
-        }
-
-        box.innerHTML += `
-            <section class="meal">
-                <div class="meal-head">
-                    <div>
-                        <h4>${mealName}</h4>
-                        <small>${meal.porcentaje || 0}% del plan</small>
-                    </div>
-
-                    <button class="add-btn" onclick="openModal('${mealName}')">
-                        <i class="fa-solid fa-plus"></i>
-                        Agregar
-                    </button>
-                </div>
-
-                <div class="meal-target">
-                    <div class="target-card">
-                        <span>Kcal objetivo</span>
-                        <strong>${target.kcal}</strong>
-                    </div>
-                    <div class="target-card">
-                        <span>Proteína</span>
-                        <strong>${target.protein} g</strong>
-                    </div>
-                    <div class="target-card">
-                        <span>Carbos</span>
-                        <strong>${target.carbs} g</strong>
-                    </div>
-                    <div class="target-card">
-                        <span>Grasas</span>
-                        <strong>${target.fat} g</strong>
-                    </div>
-                </div>
-
-                ${rows}
-            </section>
+        tabs += `
+            <button class="meal-tab ${activeMealView === mealName ? "active" : ""}" onclick="selectMealView('${mealName}')">
+                ${mealName}
+            </button>
         `;
     });
+
+    tabs += `</div>`;
+
+    const meal = meals.find(m => getMealName(m) === activeMealView);
+    const mealName = getMealName(meal);
+    const target = getMealTargets(meal);
+    const records = dailyData.records.filter(r => r.meal === mealName);
+
+    let rows = "";
+
+    if(records.length === 0){
+        rows = `<div class="empty-meal">Sin alimentos registrados.</div>`;
+    }else{
+        records.forEach(record => {
+            const realIndex = dailyData.records.indexOf(record);
+
+            rows += `
+    <div class="food-row">
+        <div>
+            <strong>${record.name}</strong><br>
+            <small>${record.quantity} ${getQuantityUnit(record.base)}</small>
+        </div>
+
+        <div>
+            <strong>${getKcal(record)} kcal</strong>
+        </div>
+
+        <div>
+            <strong>${record.protein} g</strong><br>
+            <small>Proteínas</small>
+        </div>
+
+        <div>
+            <strong>${record.carbs} g</strong><br>
+            <small>Carbohidratos</small>
+        </div>
+
+        <div>
+            <strong>${record.fat} g</strong><br>
+            <small>Grasas</small>
+        </div>
+
+        <button class="delete-btn" onclick="deleteRecord(${realIndex})">
+            <i class="fa-solid fa-trash"></i>
+        </button>
+    </div>
+`;
+        });
+    }
+
+    box.innerHTML = `
+        ${tabs}
+
+        <section class="meal">
+            <div class="meal-head">
+                <div>
+                    <h4>${mealName}</h4>
+                    <small>${meal.porcentaje || 0}% del plan</small>
+                </div>
+
+                <button class="add-btn" onclick="openModal('${mealName}')">
+                    <i class="fa-solid fa-plus"></i>
+                    Agregar
+                </button>
+            </div>
+
+            <div class="meal-target">
+                <div class="target-card">
+                    <span>Kcal objetivo</span>
+                    <strong>${target.kcal}</strong>
+                </div>
+                <div class="target-card">
+                    <span>Proteína</span>
+                    <strong>${target.protein} g</strong>
+                </div>
+                <div class="target-card">
+                    <span>Carbos</span>
+                    <strong>${target.carbs} g</strong>
+                </div>
+                <div class="target-card">
+                    <span>Grasas</span>
+                    <strong>${target.fat} g</strong>
+                </div>
+            </div>
+
+            ${rows}
+        </section>
+    `;
 }
+  
+function selectMealView(mealName){
+    activeMealView = mealName;
+    renderMeals();
+}  
 
 function renderSummary(){
     const targets = dailyData.planSnapshot || getPlanTargets();
