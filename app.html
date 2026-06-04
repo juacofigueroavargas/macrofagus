@@ -23,7 +23,7 @@ body{
 }
 
 .header{
-    max-width:1500px;
+    max-width:1800px;
     margin:0 auto 40px;
     display:flex;
     justify-content:space-between;
@@ -111,7 +111,7 @@ body{
 }
 
 .hero{
-    max-width:1500px;
+    max-width:1800px;
     margin:90px auto 36px;
 }
 
@@ -126,10 +126,10 @@ body{
 }
 
 .cards{
-    max-width:1500px;
+    max-width:1800px;
     margin:auto;
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(4,1fr);
     gap:24px;
 }
 
@@ -191,7 +191,7 @@ body{
 }
 
 .footer{
-    max-width:1150px;
+    max-width:1800px;
     margin:42px auto 0;
     color:#64748b;
     text-align:center;
@@ -308,13 +308,29 @@ body{
         <h3>Daily</h3>
 
         <p>
-            Gestiona comidas, recetas, alimentos y registros diarios.
+            Registra tus comidas diarias y controla el consumo de macros y calorías.
         </p>
 
         <button class="btn" onclick="entrarModulo('daily')">
             Entrar a Daily
         </button>
     </section>
+  
+    <section class="card">
+    <div class="card-icon">
+        <i class="fa-solid fa-carrot"></i>
+    </div>
+
+    <h3>Foods</h3>
+
+    <p>
+        Administra la base maestra de alimentos, categorías y valores nutricionales.
+    </p>
+
+    <button class="btn" onclick="entrarModulo('foods')">
+        Entrar a Foods
+    </button>
+</section>
 
 </main>
 
@@ -354,10 +370,14 @@ function entrarModulo(modulo){
     if(modulo === "progress"){
         window.location.href = "progress.html";
     }
-
+  
     if(modulo === "daily"){
         window.location.href = "daily.html";
     }
+  
+    if(modulo === "foods"){
+    window.location.href = "foods.html";
+}
 }
 </script>
 
