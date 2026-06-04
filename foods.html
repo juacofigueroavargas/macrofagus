@@ -779,6 +779,10 @@ function deleteFood(index){
     }
 }
 
+if(!localStorage.getItem("macrofagus_foods")){
+    localStorage.setItem("macrofagus_foods", JSON.stringify(foods));
+}
+  
 renderCategories();
 renderFoods();
 </script>
