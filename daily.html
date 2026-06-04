@@ -442,8 +442,20 @@ body{
     .panel{padding:16px;border-radius:20px}
     .meal-head{align-items:flex-start}
     .meal-target{grid-template-columns:1fr 1fr}
-    .food-row{grid-template-columns:1fr;gap:8px}
-    .delete-btn{width:100%}
+    .meal{
+    overflow-x:auto;
+}
+
+.food-row{
+    grid-template-columns:1.4fr .6fr .6fr .6fr .6fr 40px;
+    min-width:850px;
+    gap:10px;
+    padding:14px 16px;
+}
+
+.delete-btn{
+    width:34px;
+}
     .modal{padding:22px}
     .modal-actions{grid-template-columns:1fr}
 }
