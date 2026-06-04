@@ -227,6 +227,10 @@ body{
     font-size:14px;
 }
 
+.food-scroll{
+    width:100%;
+}  
+  
 .food-row strong{color:#f8fafc}
 
 .delete-btn{
@@ -442,9 +446,12 @@ body{
     .panel{padding:16px;border-radius:20px}
     .meal-head{align-items:flex-start}
     .meal-target{grid-template-columns:1fr 1fr}
-    .meal{
-    overflow-x:auto;
 }
+  
+.food-scroll{
+    overflow-x:auto;
+    width:100%;
+}  
 
 .food-row{
     grid-template-columns:1.4fr .6fr .6fr .6fr .6fr 40px;
@@ -869,7 +876,9 @@ function renderMeals(){
                 </div>
             </div>
 
-            ${rows}
+            <div class="food-scroll">
+    ${rows}
+</div>
         </section>
     `;
 }
