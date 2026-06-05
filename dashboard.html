@@ -682,7 +682,6 @@ body{
 
 <script>
 const KEY_ACTIVO = "macrofagus_usuario_activo";
-const DAILY_KEY = "macrofagus_daily_records";  
 
 function obtenerUsuarioActivo(){
     return JSON.parse(localStorage.getItem(KEY_ACTIVO));
@@ -906,6 +905,8 @@ if(fechaMeta){
 
 function cargarMacrosHoy(usuarioActivo){
     const planner = usuarioActivo.planner || {};
+    const usuarioId = usuarioActivo?.id || usuarioActivo?.usuario || "default";
+    const DAILY_KEY = `macrofagus_daily_records_${usuarioId}`;
 
     const objetivoProteinas = Number(planner.proteinas || planner.proteinasGr || planner.proteina || 0);
     const objetivoCarbos = Number(planner.carbohidratos || planner.carbosGr || planner.carbos || 0);
