@@ -109,8 +109,8 @@ body{
 /* MAIN */
 .main{
     height:100%;
-    display:grid;
-    grid-template-rows:auto auto 250px 245px auto;
+    display:flex;
+    flex-direction:column;
     gap:12px;
     min-height:0;
 }
@@ -228,15 +228,17 @@ body{
     align-items:stretch;
 }
 
-.dashboard-grid:first-of-type .card{
-    height:250px;
-    min-height:250px;
+.dashboard-grid:first-of-type{
+    min-height:260px;
 }
 
-.dashboard-grid:last-of-type .card{
-    height:245px;
-    min-height:245px;
-}  
+.dashboard-grid:last-of-type{
+    min-height:260px;
+}
+
+.dashboard-grid > .card{
+    height:100%;
+}
   
 .card-title{
     display:flex;
@@ -451,12 +453,12 @@ body{
     display:flex;
     justify-content:space-between;
     gap:18px;
-    margin-top:4px;
+    margin-top:auto;
 }
 
 .quick-actions button{
     flex:1;
-    height:34px;
+    height:38px;
     border:none;
     border-radius:16px;
     background:rgba(255,255,255,.06);
