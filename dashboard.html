@@ -1035,10 +1035,14 @@ function cargarEstadoGeneral(usuarioActivo){
     let estado = "En progreso";
     let mensaje = "Seguimiento correcto";
 
-    if(faltan <= 0.3){
-        estado = "Cerca de la meta";
-        mensaje = "Muy cerca de la meta";
-    }
+    if(faltan === 0){
+    estado = "Objetivo cumplido";
+    mensaje = "Meta alcanzada";
+}
+else if(faltan <= 0.3){
+    estado = "Cerca de la meta";
+    mensaje = "Muy cerca de la meta";
+}
 
     badge.textContent = estado;
 
