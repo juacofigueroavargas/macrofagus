@@ -20,7 +20,8 @@ body{
     background:linear-gradient(135deg,#0f172a,#111827);
     color:#f8fafc;
     padding:14px;
-    overflow:hidden;
+    overflow-x:hidden;
+    overflow-y:auto;
 }
 
 .app{
@@ -409,35 +410,38 @@ body{
 
 /* RESPONSIVE */
 @media(max-width:1000px){
+    body{
+        overflow-x:hidden;
+        overflow-y:auto;
+    }
+
     .app{
+        height:auto;
+        min-height:100vh;
         grid-template-columns:1fr;
     }
 
     .sidebar{
+        height:auto;
         min-height:auto;
     }
 
     .menu{
         flex-direction:row;
         overflow-x:auto;
+        padding-bottom:4px;
     }
 
     .menu a{
         min-width:max-content;
     }
 
-    .kpis{
-    grid-template-columns:repeat(2,1fr);
-}
-
-    .dashboard-grid{
-        grid-template-columns:1fr;
+    .sidebar-logout{
+        margin-top:16px;
     }
-}
 
-@media(max-width:600px){
-    body{
-        padding:14px;
+    .main{
+        gap:14px;
     }
 
     .header{
@@ -446,10 +450,70 @@ body{
         gap:14px;
     }
 
-    .kpis,
-.plan-main{
-    grid-template-columns:1fr;
+    .top-user-card{
+        width:100%;
+    }
+
+    .kpis{
+        grid-template-columns:1fr;
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
+
+    .plan-main{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        width:100%;
+    }
 }
+
+@media(max-width:600px){
+    body{
+        padding:10px;
+    }
+
+    .app{
+        gap:12px;
+    }
+
+    .header{
+        border-radius:22px;
+        padding:16px;
+    }
+
+    .header h2{
+        font-size:24px;
+    }
+
+    .sidebar{
+        padding:14px;
+        border-radius:22px;
+    }
+
+    .logo{
+        margin-bottom:18px;
+    }
+
+    .card{
+        padding:14px;
+        border-radius:22px;
+    }
+
+    .kpi h3{
+        font-size:26px;
+    }
+
+    .info-box strong{
+        font-size:18px;
+    }
+
+    .list-item{
+        align-items:flex-start;
+    }
 }
 </style>
 </head>
