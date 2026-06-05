@@ -297,12 +297,29 @@ if(!usuarioActivo){
     window.location.href = "index.html";
 }
 
-if(!usuarioActivo.progress || !usuarioActivo.progress.planActivo){
+if(!usuarioActivo.planner){
     alert("Primero debes guardar un plan desde Planner.");
     window.location.href = "dashboard.html";
 }
 
-const plan = usuarioActivo.progress.planActivo;
+if(!usuarioActivo.progress){
+    usuarioActivo.progress = {};
+}
+
+const plan = usuarioActivo.progress.planActivo || {
+    nombre: usuarioActivo.nombre,
+    pesoInicial: usuarioActivo.planner.pesoInicial || usuarioActivo.planner.peso || 0,
+    objetivo: usuarioActivo.planner.objetivoPrincipal || usuarioActivo.planner.tipoPlan || "Plan activo",
+    ajusteCalorico: usuarioActivo.planner.ajusteCalorico || usuarioActivo.planner.ajusteCalorias || 0,
+    caloriasTotales: usuarioActivo.planner.caloriasObjetivo || 0,
+    macros: {
+        proteinasGr: usuarioActivo.planner.proteinas || usuarioActivo.planner.proteinasGr || 0,
+        carbohidratosGr: usuarioActivo.planner.carbohidratos || usuarioActivo.planner.carbosGr || 0,
+        grasasGr: usuarioActivo.planner.grasas || usuarioActivo.planner.grasasGr || 0
+    }
+};
+
+usuarioActivo.progress.planActivo = plan;
 
 document.getElementById("nombreUsuario").textContent =
     plan.nombre || usuarioActivo.nombre + " " + usuarioActivo.apellidos;
