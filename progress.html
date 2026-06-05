@@ -276,7 +276,7 @@ body{
                 Comenzar seguimiento
             </button>
 
-            <button class="btn-secondary" onclick="window.location.href='app.html'">
+            <button class="btn-secondary" onclick="window.location.href='dashboard.html'">
                 Volver
             </button>
 
@@ -299,7 +299,7 @@ if(!usuarioActivo){
 
 if(!usuarioActivo.progress || !usuarioActivo.progress.planActivo){
     alert("Primero debes guardar un plan desde Planner.");
-    window.location.href = "app.html";
+    window.location.href = "dashboard.html";
 }
 
 const plan = usuarioActivo.progress.planActivo;
