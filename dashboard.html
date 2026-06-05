@@ -227,11 +227,17 @@ body{
     gap:14px;
     align-items:stretch;
 }
-  
-.dashboard-grid > .card{
-    height:100%;
-}  
 
+/* FILA 2 */
+.dashboard-grid:first-of-type .card{
+    min-height:315px;
+}
+
+/* FILA 3 */
+.dashboard-grid:last-of-type .card{
+    min-height:255px;
+}  
+  
 .card-title{
     display:flex;
     justify-content:space-between;
@@ -444,8 +450,8 @@ body{
 .quick-actions{
     display:flex;
     justify-content:space-between;
-    gap:12px;
-    margin-top:-10px;
+    gap:18px;
+    margin-top:4px;
 }
 
 .quick-actions button{
