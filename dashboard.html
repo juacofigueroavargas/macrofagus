@@ -956,7 +956,12 @@ function cargarFechasImportantes(usuarioActivo){
     const pesoActual = Number(progress.pesoActual || 0);
     const pesoObjetivo = Number(progress.pesoObjetivo || planner.pesoObjetivo || 0);
   
-    const cumplido =
+    const tienePlan =
+    pesoActual > 0 &&
+    pesoObjetivo > 0;
+
+const cumplido =
+    tienePlan &&
     pesoActual === pesoObjetivo;
 
     const fechaMeta =
@@ -996,6 +1001,19 @@ if(fechaMeta){
         tiempoRestante = `${meses} mes${meses > 1 ? "es" : ""} y ${dias} día${dias !== 1 ? "s" : ""}`;
     }
 }
+    if(!tienePlan){
+    contenedor.innerHTML = `
+        <div class="list-item">
+            <div>
+                <strong>Sin objetivo</strong>
+                <span>Primero crea un plan en Planner.</span>
+            </div>
+            <span>--</span>
+        </div>
+    `;
+    return;
+}
+  
     if(cumplido){
 
     contenedor.innerHTML = `
