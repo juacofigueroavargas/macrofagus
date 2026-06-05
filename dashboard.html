@@ -841,8 +841,14 @@ function cargarPlanActivo(usuarioActivo){
         avance = total > 0 ? Math.min((logrado / total) * 100, 100) : 0;
     }
 
+    if(pesoObjetivo){
     document.getElementById("planFaltan").textContent =
-        faltan ? `${faltan.toFixed(1)} kg` : "-- kg";
+        `${faltan.toFixed(1)} kg`;
+}
+else{
+    document.getElementById("planFaltan").textContent =
+        "-- kg";
+}
 
     document.getElementById("planAvance").textContent =
         `${avance.toFixed(0)}%`;
