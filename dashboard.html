@@ -898,8 +898,16 @@ document.getElementById("userAvatar").textContent =
     cargarEstadoGeneral(usuarioActivo);
     cargarResumenRapido(usuarioActivo);
   
-    const tienePlanner = usuarioActivo.planner;
-const tieneProgress = usuarioActivo.progress;
+    const planner = usuarioActivo.planner || {};
+const progress = usuarioActivo.progress || {};
+
+const tienePlanner =
+    Number(planner.caloriasObjetivo || 0) > 0 &&
+    Number(planner.pesoInicial || 0) > 0;
+
+const tieneProgress =
+    Number(progress.pesoObjetivo || 0) > 0 &&
+    Number(progress.pesoActual || 0) > 0;
 
 document.getElementById("quickActions").style.display =
     tienePlanner && tieneProgress ? "flex" : "none";
