@@ -1295,10 +1295,24 @@ function formatearActividad(valor){
 function calcularDiaPlan(fechaInicio){
     if(!fechaInicio) return null;
 
-    const inicio = new Date(fechaInicio);
-    const hoy = new Date();
+    let soloFecha = String(fechaInicio);
 
-    if(isNaN(inicio.getTime())) return null;
+    if(soloFecha.includes("T")){
+        soloFecha = soloFecha.split("T")[0];
+    }
+
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(soloFecha)){
+        return null;
+    }
+
+    const partes = soloFecha.split("-");
+    const inicio = new Date(
+        Number(partes[0]),
+        Number(partes[1]) - 1,
+        Number(partes[2])
+    );
+
+    const hoy = new Date();
 
     inicio.setHours(0,0,0,0);
     hoy.setHours(0,0,0,0);
@@ -1307,7 +1321,7 @@ function calcularDiaPlan(fechaInicio){
     const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24)) + 1;
 
     return dias > 0 ? dias : null;
-}  
+}
 
 function actualizarMacro(textId, fillId, consumido, objetivo){
     const texto = document.getElementById(textId);
