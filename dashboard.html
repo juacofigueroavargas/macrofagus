@@ -110,7 +110,7 @@ body{
 .main{
     height:100%;
     display:grid;
-    grid-template-rows:auto auto 1fr 1fr auto;
+    grid-template-rows:auto auto 250px 245px auto;
     gap:12px;
     min-height:0;
 }
@@ -228,14 +228,14 @@ body{
     align-items:stretch;
 }
 
-/* FILA 2 */
 .dashboard-grid:first-of-type .card{
-    min-height:315px;
+    height:250px;
+    min-height:250px;
 }
 
-/* FILA 3 */
 .dashboard-grid:last-of-type .card{
-    min-height:255px;
+    height:245px;
+    min-height:245px;
 }  
   
 .card-title{
@@ -456,7 +456,7 @@ body{
 
 .quick-actions button{
     flex:1;
-    height:38px;
+    height:34px;
     border:none;
     border-radius:16px;
     background:rgba(255,255,255,.06);
