@@ -1041,6 +1041,17 @@ function textoEstadoCalorico(){
     return "Mantenimiento";
 }  
 
+function formatearObjetivo(valor){
+    const objetivos = {
+        perder: "Perder grasa",
+        ganar: "Ganar masa muscular",
+        resistencia: "Resistencia",
+        poca: "Poca actividad"
+    };
+
+    return objetivos[valor] || valor || "-";
+}  
+  
 function moverDashboard(direccion){
     const track = document.getElementById("dashboardTrack");
     const ancho = 440;
@@ -1085,7 +1096,7 @@ function render(){
         d.avance + "%";
 
     document.getElementById("objetivoPlan").textContent =
-        plan.objetivo;
+    formatearObjetivo(plan.objetivo);
 
     document.getElementById("estadoCalorico").textContent =
     textoEstadoCalorico();
