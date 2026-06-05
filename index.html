@@ -297,17 +297,17 @@ body{
 
             <div class="field">
                 <label>Nombre</label>
-                <input type="text" id="regNombre" placeholder="Ej: Joaquín">
+                <input type="text" id="regNombre" placeholder="Ej: Juan">
             </div>
 
             <div class="field">
                 <label>Apellidos</label>
-                <input type="text" id="regApellidos" placeholder="Ej: Figueroa Vargas">
+                <input type="text" id="regApellidos" placeholder="Ej: Perez">
             </div>
 
             <div class="field">
                 <label>Nombre de usuario</label>
-                <input type="text" id="regUsuario" placeholder="Ej: joaquin">
+                <input type="text" id="regUsuario" placeholder="Ej: jperez">
             </div>
 
             <div class="field">
@@ -316,7 +316,6 @@ body{
                     <option value="">Seleccionar</option>
                     <option value="Masculino">Masculino</option>
                     <option value="Femenino">Femenino</option>
-                    <option value="Otro">Otro</option>
                 </select>
             </div>
 
@@ -458,7 +457,7 @@ function iniciarSesion(){
 
     localStorage.setItem(KEY_ACTIVO, JSON.stringify(encontrado));
 
-    window.location.href = "app.html";
+    window.location.href = "dashboard.html";
 }
 </script>
 

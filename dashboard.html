@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Macrofagus · Dashboard</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Segoe UI,system-ui,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#111827);
+    color:#f8fafc;
+    padding:14px;
+    overflow:hidden;
+}
+
+.app{
+    width:100%;
+    height:calc(100vh - 28px);
+    max-width:1500px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:210px 1fr;
+    gap:16px;
+}
+
+/* SIDEBAR */
+.sidebar{
+    background:rgba(15,23,42,.92);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:24px;
+    padding:18px;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+}
+
+.sidebar-logout{
+    margin-top:auto;
+    display:flex;
+    justify-content:center;
+}
+
+.sidebar-logout .logout-btn{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+}
+  
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:34px;
+}
+
+.logo-icon{
+    width:46px;
+    height:46px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    display:grid;
+    place-items:center;
+    color:#052e16;
+    font-size:22px;
+}
+
+.logo h1{
+    font-size:18px;
+    letter-spacing:.5px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#cbd5e1;
+    padding:14px;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-weight:700;
+    font-size:14px;
+}
+
+.menu a.active,
+.menu a:hover{
+    background:rgba(34,197,94,.14);
+    color:#86efac;
+}
+
+/* MAIN */
+.main{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    min-height:0;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(15,23,42,.82);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:28px;
+    padding:18px 22px;
+}
+
+.header h2{
+    font-size:28px;
+}
+
+.header p{
+    color:#94a3b8;
+    margin-top:4px;
+}
+
+.user-pill{
+    padding:12px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    font-weight:700;
+}
+
+.user-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px 16px;
+    border-radius:18px;
+    background:rgba(255,255,255,.06);
+}
+
+.user-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+    font-weight:900;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+
+.user-info{
+    display:flex;
+    flex-direction:column;
+}
+
+.user-info strong{
+    font-size:14px;
+}
+
+.user-info span{
+    font-size:12px;
+    color:#94a3b8;
+}  
+/* KPI */
+.kpis{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+
+.card{
+    background:rgba(15,23,42,.82);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:26px;
+    padding:16px;
+    box-shadow:0 18px 50px rgba(0,0,0,.18);
+}
+
+.kpi{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+}
+
+.kpi-icon{
+    width:44px;
+    height:44px;
+    border-radius:15px;
+    background:rgba(34,197,94,.14);
+    color:#86efac;
+    display:grid;
+    place-items:center;
+    font-size:19px;
+}
+
+.kpi span{
+    color:#94a3b8;
+    font-size:13px;
+    font-weight:700;
+}
+
+.kpi h3{
+    margin-top:8px;
+    font-size:28px;
+}
+
+/* GRID */
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr;
+    gap:14px;
+}
+
+.card-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.card-title h3{
+    font-size:18px;
+}
+
+.badge{
+    padding:7px 12px;
+    border-radius:999px;
+    background:rgba(34,197,94,.14);
+    color:#86efac;
+    font-size:12px;
+    font-weight:900;
+}
+
+.plan-main{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin-bottom:22px;
+}
+
+.info-box{
+    padding:16px;
+    border-radius:18px;
+    background:rgba(255,255,255,.05);
+}
+
+.info-box span{
+    color:#94a3b8;
+    font-size:12px;
+}
+
+.info-box strong{
+    display:block;
+    margin-top:6px;
+    font-size:20px;
+}
+
+.progress-bar{
+    height:14px;
+    border-radius:999px;
+    background:rgba(255,255,255,.08);
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.progress-fill{
+    width:68%;
+    height:100%;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    border-radius:999px;
+}
+
+.progress-text{
+    display:flex;
+    justify-content:space-between;
+    color:#94a3b8;
+    font-size:13px;
+    margin-top:10px;
+}
+
+.list{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.list-item{
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    padding:11px 12px;
+    border-radius:16px;
+    background:rgba(255,255,255,.05);
+}
+
+.list-item span{
+    color:#94a3b8;
+    font-size:13px;
+}
+
+.list-item strong{
+    font-size:15px;
+}
+
+.list-item div{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}  
+/* MACROS */
+.macro{
+    margin-bottom:16px;
+}
+
+.macro-top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+.macro-top span{
+    color:#94a3b8;
+}
+
+.macro-bar{
+    height:10px;
+    background:rgba(255,255,255,.08);
+    border-radius:999px;
+    overflow:hidden;
+}
+
+.macro-fill{
+    height:100%;
+    border-radius:999px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+}
+  
+.user-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:10px 14px;
+    border-radius:20px;
+    background:rgba(255,255,255,.06);
+}
+
+.user-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.user-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+    font-weight:900;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+
+.user-info{
+    display:flex;
+    flex-direction:column;
+}
+
+.user-info strong{
+    font-size:14px;
+}
+
+.user-info span{
+    font-size:12px;
+    color:#94a3b8;
+}
+
+.logout-btn{
+    border:none;
+    border-radius:14px;
+    padding:12px 18px;
+    background:rgba(255,255,255,.08);
+    color:#f8fafc;
+    cursor:pointer;
+    font-weight:800;
+}
+
+.logout-btn:hover{
+    background:rgba(255,255,255,.14);
+}  
+
+/* RESPONSIVE */
+@media(max-width:1000px){
+    .app{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        min-height:auto;
+    }
+
+    .menu{
+        flex-direction:row;
+        overflow-x:auto;
+    }
+
+    .menu a{
+        min-width:max-content;
+    }
+
+    .kpis{
+    grid-template-columns:repeat(2,1fr);
+}
+
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+    body{
+        padding:14px;
+    }
+
+    .header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:14px;
+    }
+
+    .kpis,
+.plan-main{
+    grid-template-columns:1fr;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fa-solid fa-dna"></i>
+            </div>
+            <h1>MACROFAGUS</h1>
+        </div>
+
+        <nav class="menu">
+    <a href="dashboard.html" class="active"><i class="fa-solid fa-house"></i> Dashboard</a>
+    <a href="planner.html"><i class="fa-solid fa-clipboard-list"></i> Planner</a>
+    <a href="daily.html"><i class="fa-solid fa-utensils"></i> Daily</a>
+    <a href="progress.html"><i class="fa-solid fa-chart-line"></i> Progress</a>
+    <a href="perfil.html"><i class="fa-solid fa-user"></i> Perfil</a>
+</nav>
+      <div class="sidebar-logout">
+    <button class="logout-btn" onclick="cerrarSesion()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Cerrar sesión
+    </button>
+</div>
+    </aside>
+
+    <main class="main">
+
+        <section class="header">
+            <div>
+                <h2>Dashboard Principal</h2>
+                <p id="subtituloDashboard">Resumen general de tu plan activo y evolución.</p>
+            </div>
+
+            <div class="user-card top-user-card">
+    <div class="user-left">
+        <div class="user-avatar" id="userAvatar">J</div>
+
+        <div class="user-info">
+            <strong id="nombreUsuarioActivo">Usuario</strong>
+            <span id="usuarioActivo">@usuario</span>
+        </div>
+    </div>
+</div>
+        </section>
+
+        <section class="kpis">
+            <div class="card kpi">
+                <div>
+                    <span>Peso actual</span>
+                    <h3 id="kpiPesoActual">-- kg</h3>
+                </div>
+                <div class="kpi-icon"><i class="fa-solid fa-weight-scale"></i></div>
+            </div>
+
+            <div class="card kpi">
+                <div>
+                    <span>Calorías objetivo</span>
+                    <h3 id="kpiCalorias">--</h3>
+                </div>
+                <div class="kpi-icon"><i class="fa-solid fa-fire"></i></div>
+            </div>
+
+            <div class="card kpi">
+                <div>
+                    <span>Peso meta</span>
+                    <h3 id="kpiPesoMeta">-- kg</h3>
+                </div>
+                <div class="kpi-icon"><i class="fa-solid fa-bullseye"></i></div>
+            </div>
+
+            <div class="card kpi">
+                <div>
+                    <span>Plan Activo</span>
+                    <h3 id="kpiPlanActivo">--</h3>
+                </div>
+                <div class="kpi-icon"><i class="fa-solid fa-circle-check"></i></div>
+            </div>
+        </section>
+
+        <section class="dashboard-grid">
+
+            <div class="card">
+                <div class="card-title">
+                    <h3>Plan activo</h3>
+                    <span class="badge" id="planBadge">--</span>
+                </div>
+
+                <div class="plan-main">
+                    <div class="info-box">
+                        <span>Inicio</span>
+                        <strong id="planInicio">--</strong>
+                    </div>
+
+                    <div class="info-box">
+                        <span>Peso inicial</span>
+                        <strong id="planPesoInicial">-- kg</strong>
+                    </div>
+
+                    <div class="info-box">
+                        <span>Faltan</span>
+                        <strong id="planFaltan">-- kg</strong>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="planProgressFill"></div>
+                    </div>
+
+                    <div class="progress-text">
+                        <span>Avance del plan</span>
+                        <strong id="planAvance">--%</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+    <div class="card-title">
+        <h3>Últimos registros</h3>
+    </div>
+
+    <div class="list" id="ultimosRegistros">
+        <div class="list-item">
+            <div>
+                <strong>-- kg</strong>
+                <span>Sin registros</span>
+            </div>
+            <span>--</span>
+        </div>
+    </div>
+</div>
+
+            <div class="card">
+                <div class="card-title">
+                    <h3>Objetivo</h3>
+                </div>
+
+                <div class="list" id="fechasImportantes">
+    <div class="list-item">
+        <div>
+            <strong>Sin fechas</strong>
+            <span>Faltan datos del plan</span>
+        </div>
+        <span>--</span>
+    </div>
+</div>
+            </div>
+
+        </section>
+
+        <section class="dashboard-grid">
+
+            <div class="card">
+                <div class="card-title">
+                    <h3>Macros de hoy</h3>
+                    <span class="badge">Daily</span>
+                </div>
+
+                <div class="macro">
+                    <div class="macro-top">
+                        <strong>Proteínas</strong>
+                        <span id="macroProteinasTexto">-- / -- g</span>
+                    </div>
+                    <div class="macro-bar">
+                        <div class="macro-fill" id="macroProteinasFill" style="width:0%"></div>
+                    </div>
+                </div>
+
+                <div class="macro">
+                    <div class="macro-top">
+                        <strong>Carbohidratos</strong>
+                        <span id="macroCarbosTexto">-- / -- g</span>
+                    </div>
+                    <div class="macro-bar">
+                        <div class="macro-fill" id="macroCarbosFill" style="width:0%"></div>
+                    </div>
+                </div>
+
+                <div class="macro">
+                    <div class="macro-top">
+                        <strong>Grasas</strong>
+                        <span id="macroGrasasTexto">-- / -- g</span>
+                    </div>
+                    <div class="macro-bar">
+                        <div class="macro-fill" id="macroGrasasFill" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+    <div class="card-title">
+        <h3>Estado general</h3>
+        <span class="badge" id="estadoBadge">--</span>
+    </div>
+
+    <div class="list" id="estadoGeneral">
+        <div class="list-item">
+            <div>
+                <strong>Sin información</strong>
+                <span>Faltan datos del plan</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div class="card">
+                <div class="card-title">
+                    <h3>Resumen rápido</h3>
+                </div>
+
+                <div class="list" id="resumenRapido">
+    <div class="list-item">
+        <strong>Sin datos</strong>
+        <span>Faltan datos del plan</span>
+    </div>
+</div>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+const KEY_ACTIVO = "macrofagus_usuario_activo";
+const DAILY_KEY = "macrofagus_daily_records";  
+
+function obtenerUsuarioActivo(){
+    return JSON.parse(localStorage.getItem(KEY_ACTIVO));
+}
+
+function cerrarSesion(){
+    localStorage.removeItem(KEY_ACTIVO);
+    window.location.href = "index.html";
+}  
+  
+function cargarDashboard(){
+    const usuarioActivo = obtenerUsuarioActivo();
+
+    if(!usuarioActivo){
+        window.location.href = "index.html";
+        return;
+    }
+
+    const nombreCompleto = `${usuarioActivo.nombre || ""} ${usuarioActivo.apellidos || ""}`.trim();
+
+    document.getElementById("nombreUsuarioActivo").textContent =
+        nombreCompleto || usuarioActivo.usuario || "Usuario";
+  
+    document.getElementById("usuarioActivo").textContent =
+    "@" + (usuarioActivo.usuario || "usuario");
+
+document.getElementById("userAvatar").textContent =
+    (nombreCompleto || usuarioActivo.usuario || "U")
+        .charAt(0)
+        .toUpperCase();
+
+    document.getElementById("subtituloDashboard").textContent =
+        `Resumen general de ${nombreCompleto || usuarioActivo.usuario || "tu usuario"}.`;
+
+    cargarKPIs(usuarioActivo);
+    cargarPlanActivo(usuarioActivo);
+    cargarUltimosRegistros(usuarioActivo);
+    cargarFechasImportantes(usuarioActivo);
+    cargarMacrosHoy(usuarioActivo);
+    cargarEstadoGeneral(usuarioActivo);
+    cargarResumenRapido(usuarioActivo);
+}
+  
+function cargarKPIs(usuarioActivo){
+    const planner = usuarioActivo.planner || {};
+    const progress = usuarioActivo.progress || {};
+
+    document.getElementById("kpiPesoActual").textContent =
+        progress.pesoActual ? `${progress.pesoActual} kg` : "-- kg";
+
+    document.getElementById("kpiCalorias").textContent =
+        planner.caloriasObjetivo ? planner.caloriasObjetivo : "--";
+
+    const pesoMeta =
+    progress.pesoObjetivo ||
+    planner.pesoObjetivo ||
+    0;
+
+document.getElementById("kpiPesoMeta").textContent =
+    pesoMeta ? `${pesoMeta} kg` : "-- kg";
+
+    document.getElementById("kpiPlanActivo").textContent =
+        planner.tipoPlan || "--";
+}  
+
+function cargarPlanActivo(usuarioActivo){
+    const planner = usuarioActivo.planner || {};
+    const progress = usuarioActivo.progress || {};
+
+    const tipoPlan = planner.tipoPlan || "--";
+    const fechaInicio = planner.fechaInicio || "--";
+    const pesoInicial = Number(planner.pesoInicial || progress.pesoInicial || 0);
+    const pesoActual = Number(progress.pesoActual || 0);
+    const pesoObjetivo = Number(
+    progress.pesoObjetivo ||
+    planner.pesoObjetivo ||
+    0
+);
+
+    document.getElementById("planBadge").textContent = tipoPlan;
+    document.getElementById("planInicio").textContent = fechaInicio;
+    document.getElementById("planPesoInicial").textContent =
+        pesoInicial ? `${pesoInicial} kg` : "-- kg";
+
+    let faltan = 0;
+    let avance = 0;
+
+    if(pesoInicial && pesoActual && pesoObjetivo){
+        const total = Math.abs(pesoInicial - pesoObjetivo);
+        const logrado = Math.abs(pesoInicial - pesoActual);
+
+        faltan = Math.abs(pesoActual - pesoObjetivo);
+        avance = total > 0 ? Math.min((logrado / total) * 100, 100) : 0;
+    }
+
+    document.getElementById("planFaltan").textContent =
+        faltan ? `${faltan.toFixed(1)} kg` : "-- kg";
+
+    document.getElementById("planAvance").textContent =
+        `${avance.toFixed(0)}%`;
+
+    document.getElementById("planProgressFill").style.width =
+        `${avance}%`;
+}  
+
+function cargarUltimosRegistros(usuarioActivo){
+    const progress = usuarioActivo.progress || {};
+    const registros =
+    progress.historialPesos ||
+    progress.registros ||
+    progress.pesajes ||
+    [];
+
+    const contenedor = document.getElementById("ultimosRegistros");
+    contenedor.innerHTML = "";
+
+    if(!registros.length){
+        contenedor.innerHTML = `
+            <div class="list-item">
+                <div>
+                    <strong>-- kg</strong>
+                    <span>Sin registros</span>
+                </div>
+                <span>--</span>
+            </div>
+        `;
+        return;
+    }
+
+    const ultimos = registros.slice(-3).reverse();
+
+    ultimos.forEach(registro => {
+        const peso = registro.peso || registro.valor || "--";
+        const fecha = registro.fecha || "--";
+
+        contenedor.innerHTML += `
+            <div class="list-item">
+                <div>
+                    <strong>${peso} kg</strong>
+                    <span>Pesaje registrado</span>
+                </div>
+                <span>${formatearFechaCorta(fecha)}</span>
+            </div>
+        `;
+    });
+}  
+
+function cargarFechasImportantes(usuarioActivo){
+    const planner = usuarioActivo.planner || {};
+    const progress = usuarioActivo.progress || {};
+
+    const contenedor = document.getElementById("fechasImportantes");
+
+    const pesoActual = Number(progress.pesoActual || 0);
+    const pesoObjetivo = Number(progress.pesoObjetivo || planner.pesoObjetivo || 0);
+
+    const fechaMeta =
+        progress.fechaMetaEstimada ||
+        planner.fechaMeta ||
+        null;
+
+    let tiempoRestante = "--";
+
+if(fechaMeta){
+
+    const hoy = new Date();
+    const meta = new Date(fechaMeta);
+
+    let meses =
+        (meta.getFullYear() - hoy.getFullYear()) * 12 +
+        (meta.getMonth() - hoy.getMonth());
+
+    let dias = meta.getDate() - hoy.getDate();
+
+    if(dias < 0){
+        meses--;
+
+        const ultimoDiaMesAnterior = new Date(
+            meta.getFullYear(),
+            meta.getMonth(),
+            0
+        ).getDate();
+
+        dias += ultimoDiaMesAnterior;
+    }
+
+    if(meses <= 0){
+        tiempoRestante = `${dias} días`;
+    }
+    else{
+        tiempoRestante = `${meses} mes${meses > 1 ? "es" : ""} y ${dias} día${dias !== 1 ? "s" : ""}`;
+    }
+}
+
+    contenedor.innerHTML = `
+        <div class="list-item">
+            <div>
+                <strong>Meta estimada</strong>
+                <span>Fecha proyectada</span>
+            </div>
+            <span>${fechaMeta ? formatearFechaCorta(fechaMeta) : "--"}</span>
+        </div>
+
+        <div class="list-item">
+            <div>
+                <strong>Peso objetivo</strong>
+                <span>Meta definida</span>
+            </div>
+            <span>${pesoObjetivo} kg</span>
+        </div>
+
+        <div class="list-item">
+    <div>
+        <strong>Faltan</strong>
+        <span>Para la fecha estimada</span>
+    </div>
+    <span>${tiempoRestante}</span>
+</div>
+    `;
+}
+
+function cargarMacrosHoy(usuarioActivo){
+    const planner = usuarioActivo.planner || {};
+
+    const objetivoProteinas = Number(planner.proteinas || planner.proteinasGr || planner.proteina || 0);
+    const objetivoCarbos = Number(planner.carbohidratos || planner.carbosGr || planner.carbos || 0);
+    const objetivoGrasas = Number(planner.grasas || planner.grasasGr || planner.grasa || 0);
+
+    const hoy = obtenerFechaHoyISO();
+
+    const dailyRecords = JSON.parse(localStorage.getItem(DAILY_KEY)) || {};
+    const registroHoy = dailyRecords[hoy] || { records: [] };
+
+    const consumido = registroHoy.records.reduce((total, item) => {
+        total.proteinas += Number(item.protein || item.proteinas || 0);
+        total.carbos += Number(item.carbs || item.carbohidratos || 0);
+        total.grasas += Number(item.fat || item.grasas || 0);
+        return total;
+    }, {
+        proteinas: 0,
+        carbos: 0,
+        grasas: 0
+    });
+
+    actualizarMacro("macroProteinasTexto", "macroProteinasFill", consumido.proteinas, objetivoProteinas);
+    actualizarMacro("macroCarbosTexto", "macroCarbosFill", consumido.carbos, objetivoCarbos);
+    actualizarMacro("macroGrasasTexto", "macroGrasasFill", consumido.grasas, objetivoGrasas);
+} 
+
+function cargarEstadoGeneral(usuarioActivo){
+    const planner = usuarioActivo.planner || {};
+    const progress = usuarioActivo.progress || {};
+
+    const pesoInicial = Number(planner.pesoInicial || progress.pesoInicial || 0);
+    const pesoActual = Number(progress.pesoActual || 0);
+    const pesoObjetivo = Number(
+    progress.pesoObjetivo ||
+    planner.pesoObjetivo ||
+    0
+);
+    const tipoPlan = planner.tipoPlan || "--";
+
+    const badge = document.getElementById("estadoBadge");
+    const contenedor = document.getElementById("estadoGeneral");
+
+    contenedor.innerHTML = "";
+
+    if(!pesoInicial || !pesoActual || !pesoObjetivo){
+        badge.textContent = "--";
+
+        contenedor.innerHTML = `
+            <div class="list-item">
+                <div>
+                    <strong>Sin información</strong>
+                    <span>Faltan datos del plan o del progreso.</span>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    const cambio = pesoActual - pesoInicial;
+    const faltan = Math.abs(pesoActual - pesoObjetivo);
+
+    let estado = "En progreso";
+    let mensaje = "Seguimiento correcto";
+
+    if(faltan <= 0.3){
+        estado = "Cerca de la meta";
+        mensaje = "Muy cerca de la meta";
+    }
+
+    badge.textContent = estado;
+
+    contenedor.innerHTML = `
+        <div class="list-item">
+            <div>
+                <strong>${mensaje}</strong>
+                <span>Estado calculado según el plan activo.</span>
+            </div>
+        </div>
+
+        <div class="list-item">
+            <div>
+                <strong>${cambio.toFixed(1)} kg</strong>
+                <span>Cambio desde el inicio</span>
+            </div>
+        </div>
+
+        <div class="list-item">
+            <div>
+                <strong>${faltan.toFixed(1)} kg</strong>
+                <span>Diferencia con la meta</span>
+            </div>
+        </div>
+    `;
+}  
+
+function cargarResumenRapido(usuarioActivo){
+    const planner = usuarioActivo.planner || {};
+    const daily = usuarioActivo.daily || {};
+    const progress = usuarioActivo.progress || {};
+
+    const contenedor = document.getElementById("resumenRapido");
+
+    const tipoPlan = planner.tipoPlan || "--";
+    const ajuste = planner.ajusteCalorico || planner.deficit || planner.superavit || "--";
+    const comidas = planner.numeroComidas || planner.comidas || daily.numeroComidas || "--";
+    const entreno =
+    planner.entrenamiento ||
+    progress.entrenamiento ||
+    planner.actividad ||
+    progress.actividad ||
+    "--";
+
+    contenedor.innerHTML = `
+        <div class="list-item">
+            <strong>Plan</strong>
+            <span>${tipoPlan}${ajuste !== "--" ? " " + ajuste + " kcal" : ""}</span>
+        </div>
+
+        <div class="list-item">
+            <strong>Comidas</strong>
+            <span>${comidas !== "--" ? comidas + " al día" : "--"}</span>
+        </div>
+
+        <div class="list-item">
+            <strong>Entreno</strong>
+            <span>${formatearActividad(entreno)}</span>
+        </div>
+    `;
+}  
+  
+function formatearFechaCorta(fecha){
+    if(!fecha || fecha === "--") return "--";
+
+    let soloFecha = fecha;
+
+    if(String(fecha).includes("T")){
+        soloFecha = String(fecha).split("T")[0];
+    }
+
+    if(/^\d{4}-\d{2}-\d{2}$/.test(soloFecha)){
+        const partes = soloFecha.split("-");
+        const dia = partes[2];
+        const mesNumero = Number(partes[1]);
+
+        const meses = [
+            "ene","feb","mar","abr","may","jun",
+            "jul","ago","sept","oct","nov","dic"
+        ];
+
+        return `${dia}-${meses[mesNumero - 1]}`;
+    }
+
+    return fecha;
+}
+  
+function formatearActividad(valor){
+    const actividades = {
+        sedentario: "Sedentario",
+        ligero: "Ligero · 1 a 3 días",
+        moderado: "Moderado · 3 a 5 días",
+        activo: "Activo · 6 a 7 días",
+        muyActivo: "Muy activo"
+    };
+
+    return actividades[valor] || valor || "--";
+}  
+  
+function calcularDiaPlan(fechaInicio){
+    if(!fechaInicio) return null;
+
+    const inicio = new Date(fechaInicio);
+    const hoy = new Date();
+
+    if(isNaN(inicio.getTime())) return null;
+
+    inicio.setHours(0,0,0,0);
+    hoy.setHours(0,0,0,0);
+
+    const diferencia = hoy - inicio;
+    const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24)) + 1;
+
+    return dias > 0 ? dias : null;
+}  
+
+function actualizarMacro(textId, fillId, consumido, objetivo){
+    const texto = document.getElementById(textId);
+    const barra = document.getElementById(fillId);
+
+    texto.textContent = `${consumido.toFixed(0)} / ${objetivo || "--"} g`;
+
+    const porcentaje = objetivo > 0 ? Math.min((consumido / objetivo) * 100, 100) : 0;
+
+    barra.style.width = `${porcentaje}%`;
+}
+
+function obtenerFechaHoyISO(){
+    const hoy = new Date();
+    const year = hoy.getFullYear();
+    const month = String(hoy.getMonth() + 1).padStart(2, "0");
+    const day = String(hoy.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}  
+  
+cargarDashboard();
+</script>  
+  
+</body>
+</html>
