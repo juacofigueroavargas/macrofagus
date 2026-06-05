@@ -607,9 +607,9 @@ body{
 <script>
 const KEY_ACTIVO = "macrofagus_usuario_activo";
 const FOODS_KEY = "macrofagus_foods";
-const DAILY_KEY = "macrofagus_daily_records";
-
-const usuarioActivo = JSON.parse(localStorage.getItem(KEY_ACTIVO));
+const usuarioActivo = JSON.parse(localStorage.getItem(KEY_ACTIVO));  
+const usuarioId = usuarioActivo?.id || usuarioActivo?.usuario || "default";
+const DAILY_KEY = `macrofagus_daily_records_${usuarioId}`;
 const foods = JSON.parse(localStorage.getItem(FOODS_KEY)) || [];
 
 let planner = usuarioActivo && usuarioActivo.planner ? usuarioActivo.planner : null;
