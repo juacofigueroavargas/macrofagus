@@ -706,6 +706,7 @@ body{
 
                 <div id="mensajeMacrosHoy"></div>
               
+                <div id="macrosContainer">
                 <div class="macro">
                     <div class="macro-top">
                         <strong>Proteínas</strong>
@@ -735,6 +736,7 @@ body{
                         <div class="macro-fill" id="macroGrasasFill" style="width:0%"></div>
                     </div>
                 </div>
+                  </div>
             </div>
 
             <div class="card">
@@ -1077,17 +1079,25 @@ function cargarMacrosHoy(usuarioActivo){
         grasas: 0
     });
     const mensajeMacros = document.getElementById("mensajeMacrosHoy");
+    const macrosContainer =
+    document.getElementById("macrosContainer");
 
 if(registroHoy.records.length === 0){
+
     mensajeMacros.innerHTML = `
         <div class="macro-empty-message">
             <strong>Sin registros hoy</strong><br>
             Ingresa tus comidas en Daily para comenzar el seguimiento.
         </div>
     `;
+
+    macrosContainer.style.display = "none";
 }
 else{
+
     mensajeMacros.innerHTML = "";
+
+    macrosContainer.style.display = "block";
 }
 
     actualizarMacro("macroProteinasTexto", "macroProteinasFill", consumido.proteinas, objetivoProteinas);
@@ -1199,6 +1209,10 @@ function cargarResumenRapido(usuarioActivo){
     planner.actividad ||
     progress.actividad ||
     "--";
+    const diasPlan = calcularDiaPlan(
+    progress.fechaInicioPlan ||
+    planner.fechaInicio
+);
 
     contenedor.innerHTML = `
         <div class="list-item">
@@ -1212,9 +1226,14 @@ function cargarResumenRapido(usuarioActivo){
         </div>
 
         <div class="list-item">
-            <strong>Entreno</strong>
-            <span>${formatearActividad(entreno)}</span>
-        </div>
+    <strong>Entreno</strong>
+    <span>${formatearActividad(entreno)}</span>
+</div>
+
+<div class="list-item">
+    <strong>Días plan</strong>
+    <span>${diasPlan || "--"} días</span>
+</div>
     `;
 }  
   
