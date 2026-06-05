@@ -246,6 +246,21 @@ body{
     font-weight:900;
 }
 
+.estado-ok{
+    background:rgba(34,197,94,.20);
+    color:#86efac;
+}
+
+.estado-cerca{
+    background:rgba(245,158,11,.20);
+    color:#fbbf24;
+}
+
+.estado-progreso{
+    background:rgba(59,130,246,.20);
+    color:#93c5fd;
+}  
+  
 .plan-main{
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -807,8 +822,11 @@ function cargarKPIs(usuarioActivo){
 document.getElementById("kpiPesoMeta").textContent =
     pesoMeta ? `${pesoMeta} kg` : "-- kg";
 
-    document.getElementById("kpiPlanActivo").textContent =
-        planner.tipoPlan || "--";
+    const planTexto =
+    planner.objetivo || planner.tipoPlan || "--";
+
+document.getElementById("kpiPlanActivo").textContent =
+    planTexto;
 }  
 
 function cargarPlanActivo(usuarioActivo){
@@ -819,11 +837,7 @@ function cargarPlanActivo(usuarioActivo){
     const fechaInicio = planner.fechaInicio || "--";
     const pesoInicial = Number(planner.pesoInicial || progress.pesoInicial || 0);
     const pesoActual = Number(progress.pesoActual || 0);
-    const pesoObjetivo = Number(
-    progress.pesoObjetivo ||
-    planner.pesoObjetivo ||
-    0
-);
+    const pesoObjetivo = Number(progress.pesoObjetivo || planner.pesoObjetivo || 0);
 
     document.getElementById("planBadge").textContent = tipoPlan;
     document.getElementById("planInicio").textContent = fechaInicio;
@@ -841,20 +855,39 @@ function cargarPlanActivo(usuarioActivo){
         avance = total > 0 ? Math.min((logrado / total) * 100, 100) : 0;
     }
 
-    if(pesoObjetivo){
-    document.getElementById("planFaltan").textContent =
+    const planFaltan = document.getElementById("planFaltan");
+const labelFaltan =
+    planFaltan.parentElement.querySelector("span");
+
+if(avance >= 100){
+    labelFaltan.textContent = "Estado";
+    planFaltan.textContent = "Cumplido";
+}
+else if(pesoObjetivo){
+    labelFaltan.textContent = "Faltan";
+    planFaltan.textContent =
         `${faltan.toFixed(1)} kg`;
 }
 else{
-    document.getElementById("planFaltan").textContent =
+    labelFaltan.textContent = "Faltan";
+    planFaltan.textContent =
         "-- kg";
 }
 
     document.getElementById("planAvance").textContent =
         `${avance.toFixed(0)}%`;
 
-    document.getElementById("planProgressFill").style.width =
-        `${avance}%`;
+    const barra = document.getElementById("planProgressFill");
+
+barra.style.width = `${avance}%`;
+
+if(avance >= 100){
+    barra.style.boxShadow =
+        "0 0 14px rgba(74,222,128,.7)";
+}
+else{
+    barra.style.boxShadow = "none";
+}
 }  
 
 function cargarUltimosRegistros(usuarioActivo){
@@ -907,6 +940,9 @@ function cargarFechasImportantes(usuarioActivo){
 
     const pesoActual = Number(progress.pesoActual || 0);
     const pesoObjetivo = Number(progress.pesoObjetivo || planner.pesoObjetivo || 0);
+  
+    const cumplido =
+    pesoActual === pesoObjetivo;
 
     const fechaMeta =
         progress.fechaMetaEstimada ||
@@ -945,7 +981,37 @@ if(fechaMeta){
         tiempoRestante = `${meses} mes${meses > 1 ? "es" : ""} y ${dias} día${dias !== 1 ? "s" : ""}`;
     }
 }
+    if(cumplido){
 
+    contenedor.innerHTML = `
+        <div class="list-item">
+            <div>
+                <strong>Objetivo alcanzado</strong>
+                <span>Meta cumplida</span>
+            </div>
+            <span>✅</span>
+        </div>
+
+        <div class="list-item">
+            <div>
+                <strong>Peso objetivo</strong>
+                <span>Meta definida</span>
+            </div>
+            <span>${pesoObjetivo} kg</span>
+        </div>
+
+        <div class="list-item">
+            <div>
+                <strong>Estado</strong>
+                <span>Plan completado</span>
+            </div>
+            <span>100%</span>
+        </div>
+    `;
+
+    return;
+}
+  
     contenedor.innerHTML = `
         <div class="list-item">
             <div>
@@ -1051,6 +1117,21 @@ else if(faltan <= 0.3){
 }
 
     badge.textContent = estado;
+    badge.classList.remove(
+    "estado-ok",
+    "estado-cerca",
+    "estado-progreso"
+);
+
+if(estado === "Objetivo cumplido"){
+    badge.classList.add("estado-ok");
+}
+else if(estado === "Cerca de la meta"){
+    badge.classList.add("estado-cerca");
+}
+else{
+    badge.classList.add("estado-progreso");
+}
 
     contenedor.innerHTML = `
         <div class="list-item">
