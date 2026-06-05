@@ -21,7 +21,7 @@ body{
     color:#f8fafc;
     padding:14px;
     overflow-x:hidden;
-    overflow-y:auto;
+    overflow-y:hidden;
 }
 
 .app{
@@ -108,9 +108,10 @@ body{
 
 /* MAIN */
 .main{
-    display:flex;
-    flex-direction:column;
-    gap:14px;
+    height:100%;
+    display:grid;
+    grid-template-rows:auto auto 1fr 1fr auto;
+    gap:12px;
     min-height:0;
 }
 
@@ -224,7 +225,12 @@ body{
     display:grid;
     grid-template-columns:1.4fr 1fr 1fr;
     gap:14px;
+    align-items:stretch;
 }
+  
+.dashboard-grid > .card{
+    height:100%;
+}  
 
 .card-title{
     display:flex;
@@ -264,8 +270,8 @@ body{
 .plan-main{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:14px;
-    margin-bottom:22px;
+    gap:10px;
+    margin-bottom:10px;
 }
 
 .info-box{
@@ -306,6 +312,7 @@ body{
     color:#94a3b8;
     font-size:13px;
     margin-top:10px;
+    margin-bottom:0;
 }
 
 .list{
@@ -437,13 +444,13 @@ body{
 .quick-actions{
     display:flex;
     justify-content:space-between;
-    gap:14px;
-    margin-top:14px;
+    gap:12px;
+    margin-top:-10px;
 }
 
 .quick-actions button{
     flex:1;
-    height:52px;
+    height:38px;
     border:none;
     border-radius:16px;
     background:rgba(255,255,255,.06);
