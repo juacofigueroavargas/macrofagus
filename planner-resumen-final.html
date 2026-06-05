@@ -370,7 +370,7 @@ body{
             </div>
 
             <button class="btn" onclick="guardarPlanParaProgress()">
-              Guardar plan para Progress
+              Guardar plan
             </button>
           
             <button class="btn-secondary" onclick="window.location.href='planner-distribucion-resultado.html'">
@@ -656,49 +656,41 @@ function cerrarModal(){
 }  
 
 function guardarPlanParaProgress(){
+    const fechaHoy = new Date().toISOString().split("T")[0];
 
-    const planProgress = {
-        id: Date.now(),
-        fechaGuardado: new Date().toISOString(),
+    const tipoPlan =
+        p.tipoAjuste === "deficit" ? "Déficit" :
+        p.tipoAjuste === "superavit" ? "Superávit" :
+        "Mantención";
 
-        nombre: usuarioActivo.nombre + " " + usuarioActivo.apellidos,
-        usuario: usuarioActivo.usuario,
+    usuarioActivo.planner = {
+        ...usuarioActivo.planner,
 
-        edad: p.edad,
-        estatura: p.altura,
-        pesoInicial: p.peso,
+        tipoPlan: tipoPlan,
+        fechaInicio: usuarioActivo.planner.fechaInicio || fechaHoy,
+        fechaMeta: usuarioActivo.planner.fechaMeta || "",
 
-        objetivo: textoObjetivo(p.objetivoPrincipal),
+        pesoInicial: usuarioActivo.planner.pesoInicial || usuarioActivo.planner.peso || 0,
+        pesoObjetivo: usuarioActivo.planner.pesoObjetivo || 0,
 
-        tmb: p.tmb,
-        caloriasNecesarias: p.caloriasNecesarias,
-        ajusteCalorico: p.ajusteCalorias || 0,
-        tipoAjuste: p.tipoAjuste || "mantener",
-        caloriasTotales: p.caloriasObjetivo,
+        caloriasObjetivo: usuarioActivo.planner.caloriasObjetivo || 0,
 
-        macros: {
-            proteinasGr: p.proteinasGr,
-            proteinasKcal: p.proteinasKcal,
+        proteinas: usuarioActivo.planner.proteinasGr || 0,
+        carbohidratos: usuarioActivo.planner.carbosGr || 0,
+        grasas: usuarioActivo.planner.grasasGr || 0,
 
-            grasasGr: p.grasasGr,
-            grasasKcal: p.grasasKcal,
-
-            carbohidratosGr: p.carbosGr,
-            carbohidratosKcal: p.carbosKcal
-        },
-
-        distribucionMacros: p.distribucionMacros || []
+        numeroComidas: usuarioActivo.planner.numeroComidas || usuarioActivo.planner.cantidadComidas || 0,
+        ajusteCalorico: usuarioActivo.planner.ajusteCalorias || 0
     };
 
     usuarioActivo.progress = {
         ...usuarioActivo.progress,
-        planActivo: planProgress
+        pesoInicial: usuarioActivo.progress?.pesoInicial || usuarioActivo.planner.pesoInicial,
+        pesoActual: usuarioActivo.progress?.pesoActual || usuarioActivo.planner.pesoInicial,
+        registros: usuarioActivo.progress?.registros || []
     };
 
-    localStorage.setItem(
-        "macrofagus_usuario_activo",
-        JSON.stringify(usuarioActivo)
-    );
+    localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
 
     const usuarios = JSON.parse(localStorage.getItem("macrofagus_usuarios")) || [];
 
@@ -710,13 +702,11 @@ function guardarPlanParaProgress(){
         return u;
     });
 
-    localStorage.setItem(
-        "macrofagus_usuarios",
-        JSON.stringify(usuariosActualizados)
-    );
-  
-  mostrarModal();
-}  
+    localStorage.setItem("macrofagus_usuarios", JSON.stringify(usuariosActualizados));
+
+    alert("Plan guardado correctamente.");
+    window.location.href = "dashboard.html";
+}
 </script>
 
 <div class="modal-overlay" id="modalGuardado">

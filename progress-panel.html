@@ -936,6 +936,12 @@ function calcularFechasTentativas(){
 
 function renderFechasTentativas(){
     const data = calcularFechasTentativas();
+    if(data.fechaObjetivo){
+    usuarioActivo.progress.fechaMetaEstimada =
+        data.fechaObjetivo.toISOString();
+
+    guardarUsuarioActivo();
+}
 
     if(data.ritmoTexto === "Mantenimiento"){
     document.getElementById("ritmoEstimado").innerHTML = `
