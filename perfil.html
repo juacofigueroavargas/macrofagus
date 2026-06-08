@@ -341,6 +341,32 @@ body{
     color:white;
 }
 
+.password-wrapper{
+    position:relative;
+}
+
+.password-wrapper input{
+    width:100%;
+    padding-right:50px;
+}
+
+.toggle-password{
+    position:absolute;
+    right:10px;
+    top:50%;
+    transform:translateY(-50%);
+    width:34px;
+    height:34px;
+    border:none;
+    background:none;
+    cursor:pointer;
+    color:#94a3b8;
+}
+
+.toggle-password:hover{
+    color:#86efac;
+}  
+  
 @media(max-width:850px){
     .header{
         flex-direction:column;
@@ -453,7 +479,22 @@ body{
 
                 <div class="field full">
     <label>Nueva contraseña</label>
-    <input type="password" id="passwordInput" placeholder="Dejar vacío para mantener la actual">
+
+    <div class="password-wrapper">
+        <input
+            type="password"
+            id="passwordInput"
+            placeholder="Dejar vacío para mantener la actual"
+        >
+
+        <button
+            type="button"
+            class="toggle-password"
+            onclick="togglePassword()"
+        >
+            <i id="passwordIcon" class="fa-solid fa-eye"></i>
+        </button>
+    </div>
 </div>
             </div>
 
@@ -675,6 +716,23 @@ function cerrarSesion(){
     localStorage.removeItem(KEY_ACTIVO);
     window.location.href = "index.html";
 }
+  
+function togglePassword(){
+
+    const input = document.getElementById("passwordInput");
+    const icon = document.getElementById("passwordIcon");
+
+    if(input.type === "password"){
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    }else{
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+
+}  
 
 cargarPerfil();
 </script>
