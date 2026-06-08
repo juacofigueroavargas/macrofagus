@@ -306,6 +306,21 @@ if(!usuarioActivo.progress){
     usuarioActivo.progress = {};
 }
 
+const tienePlanActivo =
+    usuarioActivo.planActivoId &&
+    usuarioActivo.planes &&
+    usuarioActivo.planes.some(plan => plan.id === usuarioActivo.planActivoId);
+
+const tieneSeguimiento =
+    usuarioActivo.progress &&
+    usuarioActivo.progress.planId === usuarioActivo.planActivoId &&
+    usuarioActivo.progress.historialPesos &&
+    usuarioActivo.progress.historialPesos.length > 0;
+
+if(tienePlanActivo && tieneSeguimiento){
+    window.location.href = "progress-panel.html";
+}  
+  
 const plan = usuarioActivo.progress.planActivo || {
     nombre: usuarioActivo.nombre,
     pesoInicial: usuarioActivo.planner.pesoInicial || usuarioActivo.planner.peso || 0,
