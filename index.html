@@ -408,17 +408,16 @@ function crearCuenta(){
     }
 
     const nuevoUsuario = {
-        id: Date.now(),
-        usuario,
-        nombre,
-        apellidos,
-        sexo,
-        password,
-        fechaCreacion: new Date().toISOString(),
-        planner: {},
-        progress: {},
-        daily: {}
-    };
+    id: Date.now(),
+    usuario,
+    nombre,
+    apellidos,
+    sexo,
+    password,
+    fechaCreacion: new Date().toISOString(),
+    planes: [],
+    planActivoId: null
+};
 
     usuarios.push(nuevoUsuario);
     guardarUsuarios(usuarios);
