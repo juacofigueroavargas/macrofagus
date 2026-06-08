@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Macrofagus · Planes</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Segoe UI,system-ui,sans-serif}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#111827);
+    color:#f8fafc;
+    padding:14px;
+    overflow:hidden;
+}
+
+.app{
+    width:100%;
+    height:calc(100vh - 28px);
+    max-width:1500px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:210px 1fr;
+    gap:16px;
+}
+
+.sidebar{
+    background:rgba(15,23,42,.92);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:24px;
+    padding:18px;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:34px;
+}
+
+.logo-icon{
+    width:46px;
+    height:46px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    display:grid;
+    place-items:center;
+    color:#052e16;
+    font-size:22px;
+}
+
+.logo h1{font-size:18px}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#cbd5e1;
+    padding:14px;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-weight:700;
+    font-size:14px;
+}
+
+.menu a.active,
+.menu a:hover{
+    background:rgba(34,197,94,.14);
+    color:#86efac;
+}
+
+.sidebar-logout{
+    margin-top:auto;
+}
+
+.logout-btn{
+    width:100%;
+    border:none;
+    border-radius:14px;
+    padding:12px 18px;
+    background:rgba(255,255,255,.08);
+    color:#f8fafc;
+    cursor:pointer;
+    font-weight:800;
+}
+
+.main{
+    height:100%;
+    display:grid;
+    grid-template-rows:auto auto 1fr;
+    gap:14px;
+    min-height:0;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(15,23,42,.82);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:28px;
+    padding:18px 22px;
+}
+
+.header h2{font-size:28px}
+.header p{color:#94a3b8;margin-top:4px}
+
+.btn{
+    height:42px;
+    padding:0 16px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(135deg,#22c55e,#14b8a6);
+    color:#052e16;
+    font-weight:900;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.summary{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+
+.card{
+    background:rgba(15,23,42,.82);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:24px;
+    padding:18px;
+}
+
+.card span{
+    display:block;
+    color:#94a3b8;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.card strong{
+    font-size:24px;
+    color:#f8fafc;
+}
+
+.content{
+    display:grid;
+    grid-template-columns:1fr 1.4fr;
+    gap:14px;
+    min-height:0;
+}
+
+.panel{
+    background:rgba(15,23,42,.82);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:24px;
+    padding:18px;
+    min-height:0;
+    overflow:hidden;
+}
+
+.panel-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+}
+
+.panel-title h3{font-size:20px}
+
+.badge{
+    padding:7px 12px;
+    border-radius:999px;
+    background:rgba(34,197,94,.14);
+    color:#86efac;
+    font-size:12px;
+    font-weight:900;
+}
+
+.plan-active{
+    display:grid;
+    gap:12px;
+}
+
+.info-box{
+    padding:14px;
+    border-radius:16px;
+    background:rgba(255,255,255,.05);
+}
+
+.info-box span{
+    color:#94a3b8;
+    font-size:12px;
+}
+
+.info-box strong{
+    display:block;
+    margin-top:6px;
+    font-size:19px;
+}
+
+.macros{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.macro{
+    padding:12px;
+    border-radius:16px;
+    background:rgba(34,197,94,.10);
+    border:1px solid rgba(34,197,94,.20);
+}
+
+.macro span{font-size:12px;color:#94a3b8}
+.macro strong{display:block;margin-top:6px;color:#86efac}
+
+.plan-list{
+    display:grid;
+    gap:10px;
+    max-height:100%;
+    overflow:auto;
+    padding-right:4px;
+}
+
+.plan-item{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:12px;
+    padding:14px;
+    border-radius:18px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.plan-item h4{
+    font-size:16px;
+    margin-bottom:4px;
+}
+
+.plan-item p{
+    color:#94a3b8;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.plan-actions{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.mini-btn{
+    height:34px;
+    padding:0 12px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#cbd5e1;
+    cursor:pointer;
+    font-weight:800;
+    font-size:12px;
+}
+
+.mini-btn.active{
+    color:#86efac;
+    border-color:rgba(34,197,94,.25);
+}
+
+.empty{
+    padding:18px;
+    border-radius:18px;
+    background:rgba(255,255,255,.05);
+    color:#94a3b8;
+    line-height:1.5;
+}
+
+@media(max-width:1000px){
+    body{overflow:auto}
+    .app{
+        height:auto;
+        min-height:100vh;
+        grid-template-columns:1fr;
+    }
+    .sidebar{height:auto}
+    .menu{
+        flex-direction:row;
+        overflow-x:auto;
+    }
+    .menu a{min-width:max-content}
+    .summary{grid-template-columns:1fr}
+    .content{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar">
+    <div class="logo">
+        <div class="logo-icon">
+            <i class="fa-solid fa-dna"></i>
+        </div>
+        <h1>MACROFAGUS</h1>
+    </div>
+
+    <nav class="menu">
+        <a href="dashboard.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+        <a href="planner.html"><i class="fa-solid fa-clipboard-list"></i> Planner</a>
+        <a href="progress.html"><i class="fa-solid fa-chart-line"></i> Progress</a>
+        <a href="daily.html"><i class="fa-solid fa-utensils"></i> Daily</a>
+        <a href="perfil.html"><i class="fa-solid fa-user"></i> Perfil</a>
+        <a href="planes.html" class="active"><i class="fa-solid fa-layer-group"></i> Planes</a>
+    </nav>
+
+    <div class="sidebar-logout">
+        <button class="logout-btn" onclick="cerrarSesion()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Cerrar sesión
+        </button>
+    </div>
+</aside>
+
+<main class="main">
+
+    <section class="header">
+        <div>
+            <h2>Planes</h2>
+            <p>Administra el plan activo y revisa ciclos anteriores.</p>
+        </div>
+
+        <button class="btn" onclick="window.location.href='planner.html'">
+            <i class="fa-solid fa-plus"></i>
+            Nuevo plan
+        </button>
+    </section>
+
+    <section class="summary">
+        <div class="card">
+            <span>Total planes</span>
+            <strong id="totalPlanes">0</strong>
+        </div>
+
+        <div class="card">
+            <span>Plan activo</span>
+            <strong id="contadorActivo">0</strong>
+        </div>
+
+        <div class="card">
+            <span>Finalizados</span>
+            <strong id="contadorFinalizados">0</strong>
+        </div>
+
+        <div class="card">
+            <span>Último plan</span>
+            <strong id="ultimoPlan">--</strong>
+        </div>
+    </section>
+
+    <section class="content">
+
+        <div class="panel">
+            <div class="panel-title">
+                <h3>Plan activo</h3>
+                <span class="badge" id="badgeActivo">--</span>
+            </div>
+
+            <div class="plan-active" id="planActivoBox"></div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">
+                <h3>Historial de planes</h3>
+                <span class="badge">Historial</span>
+            </div>
+
+            <div class="plan-list" id="historialPlanes"></div>
+        </div>
+
+    </section>
+
+</main>
+
+</div>
+
+<script>
+const KEY_ACTIVO = "macrofagus_usuario_activo";
+const KEY_USUARIOS = "macrofagus_usuarios";
+
+let usuarioActivo = JSON.parse(localStorage.getItem(KEY_ACTIVO));
+
+if(!usuarioActivo){
+    window.location.href = "index.html";
+}
+
+function cerrarSesion(){
+    localStorage.removeItem(KEY_ACTIVO);
+    window.location.href = "index.html";
+}
+
+function guardarUsuarioActivo(){
+    localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
+
+    const usuarios = JSON.parse(localStorage.getItem(KEY_USUARIOS)) || [];
+
+    const actualizados = usuarios.map(u => {
+        if(u.id === usuarioActivo.id){
+            return usuarioActivo;
+        }
+        return u;
+    });
+
+    localStorage.setItem(KEY_USUARIOS, JSON.stringify(actualizados));
+}
+
+function formatearFecha(fecha){
+    if(!fecha) return "--";
+
+    let soloFecha = String(fecha);
+
+    if(soloFecha.includes("T")){
+        soloFecha = soloFecha.split("T")[0];
+    }
+
+    if(/^\d{4}-\d{2}-\d{2}$/.test(soloFecha)){
+        const partes = soloFecha.split("-");
+        return `${partes[2]}-${partes[1]}-${partes[0]}`;
+    }
+
+    return soloFecha;
+}
+
+function obtenerPlanes(){
+    if(usuarioActivo.planes && usuarioActivo.planes.length){
+        return usuarioActivo.planes;
+    }
+
+    if(usuarioActivo.planner){
+        const planLegacy = {
+            id:"plan_legacy",
+            nombre: usuarioActivo.planner.tipoPlan || "Plan actual",
+            estado:"activo",
+            fechaInicio: usuarioActivo.planner.fechaInicio || "",
+            fechaTermino:"",
+            tipoPlan: usuarioActivo.planner.tipoPlan || "",
+            planner: usuarioActivo.planner,
+            progress: usuarioActivo.progress || {}
+        };
+
+        usuarioActivo.planes = [planLegacy];
+        usuarioActivo.planActivoId = planLegacy.id;
+        guardarUsuarioActivo();
+
+        return usuarioActivo.planes;
+    }
+
+    return [];
+}
+
+function obtenerPlanActivo(){
+    const planes = obtenerPlanes();
+
+    return planes.find(plan => plan.id === usuarioActivo.planActivoId) ||
+           planes.find(plan => plan.estado === "activo") ||
+           null;
+}
+
+function renderResumen(){
+    const planes = obtenerPlanes();
+    const activos = planes.filter(p => p.estado === "activo");
+    const finalizados = planes.filter(p => p.estado === "finalizado");
+
+    document.getElementById("totalPlanes").textContent = planes.length;
+    document.getElementById("contadorActivo").textContent = activos.length;
+    document.getElementById("contadorFinalizados").textContent = finalizados.length;
+
+    const ultimo = planes[planes.length - 1];
+
+    document.getElementById("ultimoPlan").textContent =
+        ultimo ? (ultimo.tipoPlan || ultimo.nombre || "--") : "--";
+}
+
+function renderPlanActivo(){
+    const box = document.getElementById("planActivoBox");
+    const badge = document.getElementById("badgeActivo");
+
+    const plan = obtenerPlanActivo();
+
+    if(!plan){
+        badge.textContent = "--";
+        box.innerHTML = `
+            <div class="empty">
+                No tienes un plan activo. Crea uno desde Planner.
+            </div>
+        `;
+        return;
+    }
+
+    const planner = plan.planner || {};
+    const progress = usuarioActivo.progress || plan.progress || {};
+
+    const tipoPlan = planner.tipoPlan || plan.tipoPlan || plan.nombre || "--";
+    const fechaInicio = planner.fechaInicio || plan.fechaInicio || "--";
+    const pesoInicial = planner.pesoInicial || progress.pesoInicial || "--";
+    const pesoObjetivo = progress.pesoObjetivo || planner.pesoObjetivo || "--";
+    const calorias = planner.caloriasObjetivo || "--";
+
+    badge.textContent = tipoPlan;
+
+    box.innerHTML = `
+        <div class="info-box">
+            <span>Nombre</span>
+            <strong>${plan.nombre || tipoPlan}</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Inicio</span>
+            <strong>${formatearFecha(fechaInicio)}</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Peso inicial</span>
+            <strong>${pesoInicial !== "--" ? pesoInicial + " kg" : "--"}</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Peso objetivo</span>
+            <strong>${pesoObjetivo !== "--" ? pesoObjetivo + " kg" : "--"}</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Calorías objetivo</span>
+            <strong>${calorias !== "--" ? calorias + " kcal" : "--"}</strong>
+        </div>
+
+        <div class="macros">
+            <div class="macro">
+                <span>Proteínas</span>
+                <strong>${planner.proteinas || planner.proteinasGr || 0} g</strong>
+            </div>
+
+            <div class="macro">
+                <span>Carbos</span>
+                <strong>${planner.carbohidratos || planner.carbosGr || 0} g</strong>
+            </div>
+
+            <div class="macro">
+                <span>Grasas</span>
+                <strong>${planner.grasas || planner.grasasGr || 0} g</strong>
+            </div>
+        </div>
+    `;
+}
+
+function renderHistorial(){
+    const contenedor = document.getElementById("historialPlanes");
+    const planes = obtenerPlanes().slice().reverse();
+
+    contenedor.innerHTML = "";
+
+    if(!planes.length){
+        contenedor.innerHTML = `
+            <div class="empty">
+                No hay planes guardados.
+            </div>
+        `;
+        return;
+    }
+
+    planes.forEach(plan => {
+        const activo = plan.id === usuarioActivo.planActivoId;
+        const planner = plan.planner || {};
+        const tipo = planner.tipoPlan || plan.tipoPlan || plan.nombre || "Plan";
+
+        contenedor.innerHTML += `
+            <div class="plan-item">
+                <div>
+                    <h4>${plan.nombre || tipo}</h4>
+                    <p>
+                        ${tipo}<br>
+                        Inicio: ${formatearFecha(plan.fechaInicio || planner.fechaInicio)}
+                        ${plan.fechaTermino ? "<br>Término: " + formatearFecha(plan.fechaTermino) : ""}
+                    </p>
+                </div>
+
+                <div class="plan-actions">
+                    <button class="mini-btn ${activo ? "active" : ""}" onclick="activarPlan('${plan.id}')">
+                        ${activo ? "Activo" : "Activar"}
+                    </button>
+
+                    <button class="mini-btn" onclick="duplicarPlan('${plan.id}')">
+                        Duplicar
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function activarPlan(planId){
+    const planes = obtenerPlanes();
+
+    planes.forEach(plan => {
+        plan.estado = plan.id === planId ? "activo" : "finalizado";
+
+        if(plan.id === planId){
+            plan.fechaTermino = "";
+        }else if(!plan.fechaTermino){
+            plan.fechaTermino = new Date().toISOString().split("T")[0];
+        }
+    });
+
+    const nuevoActivo = planes.find(p => p.id === planId);
+
+    usuarioActivo.planActivoId = planId;
+    usuarioActivo.planner = nuevoActivo.planner || usuarioActivo.planner;
+
+    if(nuevoActivo.progress){
+        usuarioActivo.progress = {
+            ...usuarioActivo.progress,
+            ...nuevoActivo.progress,
+            planId
+        };
+    }else{
+        usuarioActivo.progress = {
+            ...usuarioActivo.progress,
+            planId
+        };
+    }
+
+    guardarUsuarioActivo();
+    render();
+}
+
+function duplicarPlan(planId){
+    const planes = obtenerPlanes();
+    const original = planes.find(p => p.id === planId);
+
+    if(!original) return;
+
+    const confirmar = confirm("¿Duplicar este plan y dejarlo como nuevo plan activo?");
+
+    if(!confirmar) return;
+
+    const fechaHoy = new Date().toISOString().split("T")[0];
+
+    planes.forEach(plan => {
+        if(plan.estado === "activo"){
+            plan.estado = "finalizado";
+            plan.fechaTermino = fechaHoy;
+        }
+    });
+
+    const copia = JSON.parse(JSON.stringify(original));
+
+    copia.id = "plan_" + Date.now();
+    copia.nombre = (original.nombre || "Plan") + " copia";
+    copia.estado = "activo";
+    copia.fechaInicio = fechaHoy;
+    copia.fechaTermino = "";
+
+    copia.planner.fechaInicio = fechaHoy;
+
+    usuarioActivo.planes.push(copia);
+    usuarioActivo.planActivoId = copia.id;
+    usuarioActivo.planner = copia.planner;
+
+    usuarioActivo.progress = {
+        planId: copia.id,
+        pesoInicial: copia.planner.pesoInicial || copia.planner.peso || 0,
+        pesoActual: copia.planner.pesoInicial || copia.planner.peso || 0,
+        pesoObjetivo: copia.planner.pesoObjetivo || 0,
+        historialPesos: []
+    };
+
+    guardarUsuarioActivo();
+    render();
+}
+
+function render(){
+    renderResumen();
+    renderPlanActivo();
+    renderHistorial();
+}
+
+render();
+</script>
+
+</body>
+</html>
