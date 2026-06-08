@@ -303,12 +303,32 @@ body{
 .modal{
     width:420px;
     max-width:92%;
+    max-height:90vh;
+    overflow-y:auto;
+
     background:#0f172a;
     border:1px solid rgba(255,255,255,.10);
     border-radius:24px;
     padding:24px;
 }
 
+.modal::-webkit-scrollbar{
+    width:8px;
+}
+
+.modal::-webkit-scrollbar-track{
+    background:transparent;
+}
+
+.modal::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,.15);
+    border-radius:999px;
+}
+
+.modal::-webkit-scrollbar-thumb:hover{
+    background:rgba(255,255,255,.25);
+}  
+  
 .modal h3{
     font-size:22px;
     margin-bottom:8px;
