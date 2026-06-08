@@ -1,3 +1,5 @@
+ado en Planner/Progress.
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -427,36 +429,115 @@ body{
 const KEY_USUARIOS = "macrofagus_usuarios";
 const KEY_ACTIVO = "macrofagus_usuario_activo";
 
-let usuarioActivo = JSON.parse(localStorage.getItem(KEY_ACTIVO));
+let usuarioActivo = leerJSON(KEY_ACTIVO, null);
 
 if(!usuarioActivo){
     window.location.href = "index.html";
 }
 
+function leerJSON(key, fallback){
+    try{
+        return JSON.parse(localStorage.getItem(key)) ?? fallback;
+    }
+    catch(e){
+        return fallback;
+    }
+}
+
 function obtenerUsuarios(){
-    return JSON.parse(localStorage.getItem(KEY_USUARIOS)) || [];
+    return leerJSON(KEY_USUARIOS, []);
 }
 
 function guardarUsuarios(usuarios){
     localStorage.setItem(KEY_USUARIOS, JSON.stringify(usuarios));
 }
 
+function refrescarUsuarioActivo(){
+    const usuarios = obtenerUsuarios();
+    const actualizado = usuarios.find(u =>
+        (usuarioActivo.id && u.id === usuarioActivo.id) ||
+        (usuarioActivo.usuario && u.usuario === usuarioActivo.usuario)
+    );
+
+    if(actualizado){
+        usuarioActivo = actualizado;
+        localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
+    }
+}
+
 function guardarUsuarioActivo(){
     localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
 
     const usuarios = obtenerUsuarios();
+    const existe = usuarios.some(u => u.id === usuarioActivo.id);
 
-    const actualizados = usuarios.map(u => {
-        if(u.id === usuarioActivo.id){
-            return usuarioActivo;
-        }
-        return u;
-    });
+    const actualizados = existe
+        ? usuarios.map(u => u.id === usuarioActivo.id ? usuarioActivo : u)
+        : [...usuarios, usuarioActivo];
 
     guardarUsuarios(actualizados);
 }
 
+function formatoNumero(valor, decimales = 0){
+    const numero = Number(valor);
+    if(!Number.isFinite(numero) || numero <= 0) return "--";
+    return numero.toLocaleString("es-CL", {
+        minimumFractionDigits: decimales,
+        maximumFractionDigits: decimales
+    });
+}
+
+function textoPlan(planner, progress){
+    const raw =
+        planner.tipoPlan ||
+        progress.planActivo?.objetivo ||
+        planner.tipoAjuste ||
+        planner.objetivoPrincipal ||
+        "";
+
+    const textos = {
+        deficit: "Déficit",
+        superavit: "Superávit",
+        mantener: "Mantención",
+        ganar: "Ganar masa muscular",
+        perder: "Perder grasa",
+        resistencia: "Resistencia",
+        poca: "Poca actividad"
+    };
+
+    return textos[raw] || raw || "--";
+}
+
+function obtenerPesoActual(progress, planner){
+    const historial = progress.historialPesos || progress.registros || progress.pesajes || [];
+    const ultimo = historial.length ? historial[historial.length - 1] : null;
+
+    return progress.pesoActual ||
+        ultimo?.peso ||
+        ultimo?.valor ||
+        planner.pesoActual ||
+        planner.pesoInicial ||
+        planner.peso ||
+        0;
+}
+
+function obtenerPesoObjetivo(progress, planner){
+    return progress.pesoObjetivo || planner.pesoObjetivo || 0;
+}
+
+function obtenerCalorias(planner, progress){
+    return planner.caloriasObjetivo ||
+        progress.planActivo?.caloriasTotales ||
+        planner.caloriasFinales ||
+        0;
+}
+
 function cargarPerfil(){
+    refrescarUsuarioActivo();
+
+    const planner = usuarioActivo.planner || {};
+    const progress = usuarioActivo.progress || {};
+
     const nombreCompleto =
         `${usuarioActivo.nombre || ""} ${usuarioActivo.apellidos || ""}`.trim();
 
@@ -471,29 +552,22 @@ function cargarPerfil(){
     document.getElementById("usuarioPerfil").textContent =
         "@" + (usuarioActivo.usuario || "usuario");
 
-    document.getElementById("nombreInput").value =
-        usuarioActivo.nombre || "";
+    document.getElementById("nombreInput").value = usuarioActivo.nombre || "";
+    document.getElementById("apellidosInput").value = usuarioActivo.apellidos || "";
+    document.getElementById("usuarioInput").value = usuarioActivo.usuario || "";
 
-    document.getElementById("apellidosInput").value =
-        usuarioActivo.apellidos || "";
+    const plan = textoPlan(planner, progress);
+    const pesoActual = obtenerPesoActual(progress, planner);
+    const pesoObjetivo = obtenerPesoObjetivo(progress, planner);
+    const calorias = obtenerCalorias(planner, progress);
 
-    document.getElementById("usuarioInput").value =
-        usuarioActivo.usuario || "";
-
-    const planner = usuarioActivo.planner || {};
-    const progress = usuarioActivo.progress || {};
-
-    document.getElementById("perfilPlan").textContent =
-        planner.tipoPlan || "--";
-
+    document.getElementById("perfilPlan").textContent = plan;
     document.getElementById("perfilPesoActual").textContent =
-        progress.pesoActual ? `${progress.pesoActual} kg` : "-- kg";
-
+        pesoActual ? `${formatoNumero(pesoActual, 1)} kg` : "-- kg";
     document.getElementById("perfilPesoObjetivo").textContent =
-        progress.pesoObjetivo ? `${progress.pesoObjetivo} kg` : "-- kg";
-
+        pesoObjetivo ? `${formatoNumero(pesoObjetivo, 1)} kg` : "-- kg";
     document.getElementById("perfilCalorias").textContent =
-        planner.caloriasObjetivo || "--";
+        calorias ? `${formatoNumero(calorias)} kcal` : "--";
 }
 
 function guardarPerfil(){
@@ -522,13 +596,14 @@ function guardarPerfil(){
 }
 
 function limpiarDatosUsuario(){
-    document
-        .getElementById("modalLimpiar")
-        .classList.add("active");
+    document.getElementById("modalLimpiar").classList.add("active");
 }
 
-    if(!confirmar) return;
+function cerrarModalLimpiar(){
+    document.getElementById("modalLimpiar").classList.remove("active");
+}
 
+function confirmarLimpiarUsuario(){
     const usuarioId = usuarioActivo.id || usuarioActivo.usuario || "default";
 
     delete usuarioActivo.planner;
@@ -539,33 +614,6 @@ function limpiarDatosUsuario(){
 
     guardarUsuarioActivo();
     cargarPerfil();
-
-}
-
-function cerrarModalLimpiar(){
-    document
-        .getElementById("modalLimpiar")
-        .classList.remove("active");
-}
-
-function confirmarLimpiarUsuario(){
-
-    const usuarioId =
-        usuarioActivo.id ||
-        usuarioActivo.usuario ||
-        "default";
-
-    delete usuarioActivo.planner;
-    delete usuarioActivo.progress;
-    delete usuarioActivo.daily;
-
-    localStorage.removeItem(
-        `macrofagus_daily_records_${usuarioId}`
-    );
-
-    guardarUsuarioActivo();
-    cargarPerfil();
-
     cerrarModalLimpiar();
 }
 
