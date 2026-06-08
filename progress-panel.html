@@ -1187,11 +1187,12 @@ function guardarNuevoPeso(){
     }
 
     usuarioActivo.progress.historialPesos.push({
-        id: Date.now(),
-        fecha: fechaPeso,
-        peso: nuevoPeso,
-        tipo: "Registro"
-    });
+    id: Date.now(),
+    fecha: fechaPeso,
+    peso: nuevoPeso,
+    tipo: "Registro",
+    planId: usuarioActivo.planActivoId
+});
 
     usuarioActivo.progress.historialPesos.sort((a,b) =>
         new Date(a.fecha) - new Date(b.fecha)

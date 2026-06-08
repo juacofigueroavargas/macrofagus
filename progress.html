@@ -384,18 +384,21 @@ function comenzarSeguimiento(){
     const pesoInicial = parseFloat(plan.pesoInicial);
 
     usuarioActivo.progress = {
+        planId: usuarioActivo.planActivoId,
         ...usuarioActivo.progress,
         pesoInicial,
         pesoObjetivo,
         fechaInicioPlan,
         pesoActual: pesoInicial,
-        historialPesos: usuarioActivo.progress.historialPesos || [
-            {
-                fecha: fechaInicioPlan,
-                peso: pesoInicial,
-                tipo: "Inicial"
-            }
-        ]
+        historialPesos: [
+    {
+        id: Date.now(),
+        fecha: fechaInicioPlan,
+        peso: pesoInicial,
+        tipo: "Inicial",
+        planId: usuarioActivo.planActivoId
+    }
+]
     };
 
     guardarUsuarioActivo();
