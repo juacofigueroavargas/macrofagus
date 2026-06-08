@@ -289,6 +289,64 @@ body{
     line-height:1.5;
 }
 
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    backdrop-filter:blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+}
+
+.modal{
+    width:420px;
+    max-width:92%;
+    background:#0f172a;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:24px;
+    padding:24px;
+}
+
+.modal h3{
+    font-size:22px;
+    margin-bottom:8px;
+}
+
+.modal p{
+    color:#94a3b8;
+    margin-bottom:18px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    margin-bottom:12px;
+}
+
+.field label{
+    color:#94a3b8;
+    font-size:13px;
+    font-weight:700;
+}
+
+.field input,
+.field select{
+    height:44px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#f8fafc;
+    padding:0 12px;
+    outline:none;
+}
+
+.field select option{
+    color:#0f172a;
+}  
+  
 @media(max-width:1000px){
     body{overflow:auto}
     .app{
@@ -346,10 +404,17 @@ body{
             <p>Administra el plan activo y revisa ciclos anteriores.</p>
         </div>
 
-        <button class="btn" onclick="window.location.href='planner.html'">
-            <i class="fa-solid fa-plus"></i>
-            Nuevo plan
-        </button>
+        <div style="display:flex;gap:10px;">
+    <button class="btn" onclick="abrirModalPlanAnterior()">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        Agregar anterior
+    </button>
+
+    <button class="btn" onclick="window.location.href='planner.html'">
+        <i class="fa-solid fa-plus"></i>
+        Nuevo plan
+    </button>
+</div>
     </section>
 
     <section class="summary">
@@ -400,6 +465,60 @@ body{
 
 </div>
 
+<div class="modal-overlay" id="modalPlanAnterior">
+    <div class="modal">
+        <h3>Agregar plan anterior</h3>
+        <p>Registra un plan que ya hiciste y finalizaste.</p>
+
+        <div class="field">
+            <label>Nombre del plan</label>
+            <input type="text" id="histNombre" placeholder="Ej: Déficit marzo-mayo">
+        </div>
+
+        <div class="field">
+            <label>Tipo de plan</label>
+            <select id="histTipo">
+                <option value="Déficit">Déficit</option>
+                <option value="Mantención">Mantención</option>
+                <option value="Superávit">Superávit</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>Fecha inicio</label>
+            <input type="date" id="histInicio">
+        </div>
+
+        <div class="field">
+            <label>Fecha término</label>
+            <input type="date" id="histTermino">
+        </div>
+
+        <div class="field">
+            <label>Peso inicial</label>
+            <input type="number" id="histPesoInicial" placeholder="Ej: 78">
+        </div>
+
+        <div class="field">
+            <label>Peso final</label>
+            <input type="number" id="histPesoFinal" placeholder="Ej: 64">
+        </div>
+
+        <div class="field">
+            <label>Calorías objetivo</label>
+            <input type="number" id="histCalorias" placeholder="Ej: 1949">
+        </div>
+
+        <button class="btn" onclick="guardarPlanAnterior()">
+            Guardar plan anterior
+        </button>
+
+        <button class="mini-btn" style="margin-top:10px;width:100%;" onclick="cerrarModalPlanAnterior()">
+            Cancelar
+        </button>
+    </div>
+</div>  
+  
 <script>
 const KEY_ACTIVO = "macrofagus_usuario_activo";
 const KEY_USUARIOS = "macrofagus_usuarios";
@@ -701,6 +820,95 @@ pesoActual: copia.planner.peso || copia.planner.pesoInicial || 0,
     render();
 }
 
+function abrirModalPlanAnterior(){
+    document.getElementById("modalPlanAnterior").style.display = "flex";
+}
+
+function cerrarModalPlanAnterior(){
+    document.getElementById("modalPlanAnterior").style.display = "none";
+}
+
+function guardarPlanAnterior(){
+    const nombre = document.getElementById("histNombre").value.trim();
+    const tipoPlan = document.getElementById("histTipo").value;
+    const fechaInicio = document.getElementById("histInicio").value;
+    const fechaTermino = document.getElementById("histTermino").value;
+    const pesoInicial = Number(document.getElementById("histPesoInicial").value || 0);
+    const pesoFinal = Number(document.getElementById("histPesoFinal").value || 0);
+    const calorias = Number(document.getElementById("histCalorias").value || 0);
+
+    if(!nombre || !fechaInicio || !fechaTermino || !pesoInicial || !pesoFinal){
+        alert("Completa nombre, fechas, peso inicial y peso final.");
+        return;
+    }
+
+    if(!usuarioActivo.planes){
+        usuarioActivo.planes = [];
+    }
+
+    const planAnterior = {
+        id: "plan_hist_" + Date.now(),
+        nombre,
+        estado: "finalizado",
+        fechaInicio,
+        fechaTermino,
+        tipoPlan,
+
+        planner: {
+            tipoPlan,
+            fechaInicio,
+            fechaTermino,
+            peso: pesoInicial,
+            pesoInicial,
+            pesoFinal,
+            caloriasObjetivo: calorias,
+            proteinas: 0,
+            carbohidratos: 0,
+            grasas: 0,
+            cantidadComidas: 0,
+            numeroComidas: 0
+        },
+
+        progress: {
+            planId: "",
+            pesoInicial,
+            pesoActual: pesoFinal,
+            pesoObjetivo: pesoFinal,
+            historialPesos: [
+                {
+                    id: Date.now(),
+                    fecha: fechaInicio,
+                    peso: pesoInicial,
+                    tipo: "Inicial",
+                    planId: ""
+                },
+                {
+                    id: Date.now() + 1,
+                    fecha: fechaTermino,
+                    peso: pesoFinal,
+                    tipo: "Final",
+                    planId: ""
+                }
+            ]
+        },
+
+        daily: {
+            registros: []
+        }
+    };
+
+    planAnterior.progress.planId = planAnterior.id;
+    planAnterior.progress.historialPesos.forEach(peso => {
+        peso.planId = planAnterior.id;
+    });
+
+    usuarioActivo.planes.push(planAnterior);
+
+    guardarUsuarioActivo();
+    cerrarModalPlanAnterior();
+    render();
+}  
+  
 function render(){
     renderResumen();
     renderPlanActivo();
