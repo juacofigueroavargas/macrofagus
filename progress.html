@@ -297,27 +297,27 @@ if(!usuarioActivo){
     window.location.href = "index.html";
 }
 
-if(!usuarioActivo.planner){
-    alert("Primero debes guardar un plan desde Planner.");
+const planActivo = usuarioActivo.planes?.find(
+    plan => plan.id === usuarioActivo.planActivoId
+);
+
+if(!planActivo){
+    alert("Primero debes crear o activar un plan.");
     window.location.href = "dashboard.html";
 }
 
-if(!usuarioActivo.progress){
-    usuarioActivo.progress = {};
+usuarioActivo.planner = planActivo.planner || {};
+
+if(!usuarioActivo.progress || usuarioActivo.progress.planId !== planActivo.id){
+    usuarioActivo.progress = planActivo.progress || {};
 }
-
-const tienePlanActivo =
-    usuarioActivo.planActivoId &&
-    usuarioActivo.planes &&
-    usuarioActivo.planes.some(plan => plan.id === usuarioActivo.planActivoId);
-
+  
 const tieneSeguimiento =
-    usuarioActivo.progress &&
-    usuarioActivo.progress.planId === usuarioActivo.planActivoId &&
-    usuarioActivo.progress.historialPesos &&
-    usuarioActivo.progress.historialPesos.length > 0;
+    usuarioActivo.progress?.planId === usuarioActivo.planActivoId &&
+    usuarioActivo.progress?.historialPesos?.length > 0;
 
-if(tienePlanActivo && tieneSeguimiento){
+if(tieneSeguimiento){
+    localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
     window.location.href = "progress-panel.html";
 }  
   
