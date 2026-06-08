@@ -655,31 +655,30 @@ function cerrarModal(){
     document.getElementById("modalGuardado").style.display = "none";
 }  
 
-function guardarPlanParaProgress(){
-    const fechaHoy = new Date().toISOString().split("T")[0];
+let planPendiente = null;
 
-    const tipoPlan =
-        p.tipoAjuste === "deficit" ? "Déficit" :
-        p.tipoAjuste === "superavit" ? "Superávit" :
-        "Mantención";
-
-    if(!usuarioActivo.planes){
-        usuarioActivo.planes = [];
-    }
-
-    const planActivoActual = usuarioActivo.planes.find(plan => plan.estado === "activo");
-
-    if(planActivoActual){
-    const confirmar = confirm("Ya tienes un plan activo. ¿Quieres finalizarlo y crear uno nuevo?");
-
-    if(!confirmar) return;
-
-    planActivoActual.estado = "finalizado";
-    planActivoActual.fechaTermino = fechaHoy;
-
-    planActivoActual.progress = usuarioActivo.progress || {};
+function mostrarModalConfirmar(){
+    document.getElementById("modalConfirmarPlan").style.display = "flex";
 }
 
+function cerrarModalConfirmar(){
+    document.getElementById("modalConfirmarPlan").style.display = "none";
+    planPendiente = null;
+}
+
+function confirmarNuevoPlan(){
+    cerrarModalConfirmar();
+
+    if(!planPendiente) return;
+
+    planPendiente.planActivoActual.estado = "finalizado";
+    planPendiente.planActivoActual.fechaTermino = planPendiente.fechaHoy;
+    planPendiente.planActivoActual.progress = usuarioActivo.progress || {};
+
+    crearNuevoPlan(planPendiente.fechaHoy, planPendiente.tipoPlan);
+}  
+
+function crearNuevoPlan(fechaHoy, tipoPlan){
     const nuevoPlan = {
         id: "plan_" + Date.now(),
         nombre: `${tipoPlan} ${fechaHoy}`,
@@ -696,7 +695,7 @@ function guardarPlanParaProgress(){
             fechaMeta: usuarioActivo.planner.fechaMeta || "",
 
             pesoInicial: usuarioActivo.planner.peso || 0,
-pesoObjetivo: usuarioActivo.planner.pesoObjetivo || 0,
+            pesoObjetivo: usuarioActivo.planner.pesoObjetivo || 0,
 
             caloriasObjetivo: usuarioActivo.planner.caloriasObjetivo || 0,
 
@@ -705,14 +704,14 @@ pesoObjetivo: usuarioActivo.planner.pesoObjetivo || 0,
             grasas: usuarioActivo.planner.grasasGr || 0,
 
             numeroComidas: usuarioActivo.planner.cantidadComidas || 0,
-cantidadComidas: usuarioActivo.planner.cantidadComidas || 0,
+            cantidadComidas: usuarioActivo.planner.cantidadComidas || 0,
             ajusteCalorico: usuarioActivo.planner.ajusteCalorias || 0
         },
 
         progress: {
             planId: "",
             pesoInicial: usuarioActivo.planner.peso || 0,
-pesoActual: usuarioActivo.planner.peso || 0,
+            pesoActual: usuarioActivo.planner.peso || 0,
             pesoObjetivo: usuarioActivo.planner.pesoObjetivo || 0,
             historialPesos: []
         },
@@ -745,7 +744,6 @@ pesoActual: usuarioActivo.planner.peso || 0,
         if(u.id === usuarioActivo.id){
             return usuarioActivo;
         }
-
         return u;
     });
 
@@ -753,8 +751,58 @@ pesoActual: usuarioActivo.planner.peso || 0,
 
     mostrarModal();
 }
+  
+function guardarPlanParaProgress(){
+    const fechaHoy = new Date().toISOString().split("T")[0];
+
+    const tipoPlan =
+        p.tipoAjuste === "deficit" ? "Déficit" :
+        p.tipoAjuste === "superavit" ? "Superávit" :
+        "Mantención";
+
+    if(!usuarioActivo.planes){
+        usuarioActivo.planes = [];
+    }
+
+    const planActivoActual = usuarioActivo.planes.find(plan => plan.estado === "activo");
+
+    if(planActivoActual){
+    planPendiente = {
+        fechaHoy,
+        tipoPlan,
+        planActivoActual
+    };
+
+    mostrarModalConfirmar();
+    return;
+}
+
+    crearNuevoPlan(fechaHoy, tipoPlan);
+}
 </script>
 
+<div class="modal-overlay" id="modalConfirmarPlan">
+    <div class="modal">
+        <div class="modal-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+
+        <h3>Plan activo existente</h3>
+
+        <p>
+            Ya tienes un plan activo. ¿Quieres finalizarlo y crear uno nuevo?
+        </p>
+
+        <button class="modal-btn" onclick="confirmarNuevoPlan()">
+            Sí, crear nuevo plan
+        </button>
+
+        <button class="btn-secondary" onclick="cerrarModalConfirmar()">
+            Cancelar
+        </button>
+    </div>
+</div>  
+  
 <div class="modal-overlay" id="modalGuardado">
 
     <div class="modal">
