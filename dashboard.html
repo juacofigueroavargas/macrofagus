@@ -1382,10 +1382,21 @@ function cargarResumenRapido(usuarioActivo){
         progress.actividad ||
         "--";
 
-    const diasPlan = calcularDiaPlan(
-        progress.fechaInicioPlan ||
-        planner.fechaInicio
-    );
+    let diasPlan = "--";
+
+const historial = progress.historialPesos || [];
+
+if(historial.length >= 2){
+
+    const inicio = new Date(historial[0].fecha);
+    const fin = new Date(historial[historial.length - 1].fecha);
+
+    diasPlan =
+        Math.floor(
+            (fin - inicio) /
+            (1000 * 60 * 60 * 24)
+        ) + 1;
+}
 
     contenedor.innerHTML = `
         <div class="list-item">
