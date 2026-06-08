@@ -793,7 +793,7 @@ if(!usuarioActivo.progress.historialPesos){
 
 const progress = usuarioActivo.progress;
 
-const plan = progress.planActivo || {
+const plan = {
     nombre: planActivo.nombre,
     objetivo: planActivo.planner?.objetivoPrincipal || planActivo.tipoPlan,
     ajusteCalorico:
@@ -1065,18 +1065,19 @@ function eliminarPeso(id){
 }  
 
 function textoEstadoCalorico(){
-    const ajuste = parseFloat(plan.ajusteCalorico) || 0;
+    const tipoPlan = planActivo.tipoPlan || plan.objetivo || "";
+    const ajusteBase = Math.abs(parseFloat(plan.ajusteCalorico) || 0);
 
-    if(ajuste < 0){
-        return "Déficit (" + ajuste + " kcal)";
+    if(tipoPlan === "Déficit"){
+        return "Déficit (-" + ajusteBase + " kcal)";
     }
 
-    if(ajuste > 0){
-        return "Superávit (+" + ajuste + " kcal)";
+    if(tipoPlan === "Superávit"){
+        return "Superávit (+" + ajusteBase + " kcal)";
     }
 
     return "Mantenimiento";
-}  
+}
 
 function formatearObjetivo(valor){
     const objetivos = {
