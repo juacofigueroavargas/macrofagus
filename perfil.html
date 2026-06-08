@@ -773,11 +773,16 @@ function confirmarLimpiarUsuario(){
     delete usuarioActivo.progress;
     delete usuarioActivo.daily;
 
+    usuarioActivo.planes = [];
+    usuarioActivo.planActivoId = null;
+
     localStorage.removeItem(`macrofagus_daily_records_${usuarioId}`);
 
     guardarUsuarioActivo();
     cargarPerfil();
     cerrarModalLimpiar();
+
+    window.location.href = "dashboard.html";
 }
 
 function cerrarSesion(){
