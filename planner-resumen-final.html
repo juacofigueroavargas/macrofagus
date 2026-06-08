@@ -667,16 +667,19 @@ function cerrarModalConfirmar(){
 }
 
 function confirmarNuevoPlan(){
-    cerrarModalConfirmar();
-
     if(!planPendiente) return;
 
-    planPendiente.planActivoActual.estado = "finalizado";
-    planPendiente.planActivoActual.fechaTermino = planPendiente.fechaHoy;
-    planPendiente.planActivoActual.progress = usuarioActivo.progress || {};
+    const datosPendientes = planPendiente;
 
-    crearNuevoPlan(planPendiente.fechaHoy, planPendiente.tipoPlan);
-}  
+    document.getElementById("modalConfirmarPlan").style.display = "none";
+    planPendiente = null;
+
+    datosPendientes.planActivoActual.estado = "finalizado";
+    datosPendientes.planActivoActual.fechaTermino = datosPendientes.fechaHoy;
+    datosPendientes.planActivoActual.progress = usuarioActivo.progress || {};
+
+    crearNuevoPlan(datosPendientes.fechaHoy, datosPendientes.tipoPlan);
+}
 
 function crearNuevoPlan(fechaHoy, tipoPlan){
     const nuevoPlan = {
