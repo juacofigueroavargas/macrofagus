@@ -11,15 +11,19 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Segoe UI,system-ui,sans-serif}
 
 body{
-    min-height:100vh;
+    height:100vh;
     background:linear-gradient(135deg,#0f172a,#111827);
     color:#f8fafc;
     padding:28px;
+    overflow:hidden;
 }
 
 .app{
     max-width:1800px;
+    height:calc(100vh - 56px);
     margin:auto;
+    display:flex;
+    flex-direction:column;
 }
 
 .header{
@@ -65,6 +69,8 @@ body{
     display:grid;
     grid-template-columns:350px 1fr;
     gap:24px;
+    flex:1;
+    min-height:0;
 }
 
 .panel{
@@ -267,6 +273,29 @@ body{
     cursor:pointer;
 }
 
+.layout > .panel{
+    min-height:0;
+}
+
+.layout main.panel{
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+}
+
+.table-wrap{
+    flex:1;
+    min-height:0;
+    overflow:auto;
+}
+
+.food-table thead th{
+    position:sticky;
+    top:0;
+    z-index:5;
+    background:#252b3d;
+}  
+  
 @media(max-width:950px){
     .layout{
         grid-template-columns:1fr;
