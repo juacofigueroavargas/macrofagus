@@ -947,8 +947,14 @@ function cargarKPIs(usuarioActivo){
 const planner = datosActivos.planner;
 const progress = datosActivos.progress;
 
-    document.getElementById("kpiPesoActual").textContent =
-        progress.pesoActual ? `${progress.pesoActual} kg` : "-- kg";
+    const pesoActualKPI =
+    progress.pesoActual ||
+    planner.pesoInicial ||
+    planner.peso ||
+    0;
+
+document.getElementById("kpiPesoActual").textContent =
+    pesoActualKPI ? `${pesoActualKPI} kg` : "-- kg";
 
     document.getElementById("kpiCalorias").textContent =
         planner.caloriasObjetivo ? planner.caloriasObjetivo : "--";
@@ -975,8 +981,8 @@ const progress = datosActivos.progress;
 
     const tipoPlan = planner.tipoPlan || "--";
     const fechaInicio = planner.fechaInicio || "--";
-    const pesoInicial = Number(planner.pesoInicial || progress.pesoInicial || 0);
-    const pesoActual = Number(progress.pesoActual || 0);
+    const pesoInicial = Number(planner.pesoInicial || planner.peso || progress.pesoInicial || 0);
+const pesoActual = Number(progress.pesoActual || planner.pesoInicial || planner.peso || 0);
     const pesoObjetivo = Number(progress.pesoObjetivo || planner.pesoObjetivo || 0);
 
     document.getElementById("planBadge").textContent = tipoPlan;
@@ -1351,7 +1357,7 @@ function cargarResumenRapido(usuarioActivo){
 
     const tipoPlan = planner.tipoPlan || "--";
     const ajuste = planner.ajusteCalorico || planner.ajusteCalorias || planner.deficit || planner.superavit || "--";
-    const comidas = planner.numeroComidas || planner.cantidadComidas || planner.comidas || daily.numeroComidas || "--";
+    const comidas = planner.cantidadComidas || planner.numeroComidas || planner.comidas || daily.numeroComidas || "--";
 
     const entreno =
         planner.entrenamiento ||
@@ -1415,12 +1421,14 @@ function formatearFechaCorta(fecha){
   
 function formatearActividad(valor){
     const actividades = {
-        sedentario: "Sedentario",
-        ligero: "Ligero · 1 a 3 días",
-        moderado: "Moderado · 3 a 5 días",
-        activo: "Activo · 6 a 7 días",
-        muyActivo: "Muy activo"
-    };
+    sedentario: "Sedentario",
+    bajo: "Bajo · poca actividad",
+    ligero: "Ligero · 1 a 3 días",
+    moderado: "Moderado · 3 a 5 días",
+    alto: "Alto · 6 a 7 días",
+    activo: "Activo · 6 a 7 días",
+    muyActivo: "Muy activo"
+};
 
     return actividades[valor] || valor || "--";
 }  
