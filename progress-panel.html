@@ -772,13 +772,41 @@ if(!usuarioActivo){
     window.location.href = "index.html";
 }
 
-if(!usuarioActivo.progress || !usuarioActivo.progress.planActivo){
-    alert("Primero debes guardar un plan desde Planner.");
-    window.location.href = "app.html";
+const planActivo = usuarioActivo.planes?.find(
+    plan => plan.id === usuarioActivo.planActivoId
+);
+
+if(!planActivo){
+    alert("Primero debes crear o activar un plan.");
+    window.location.href = "planes.html";
+}
+
+if(!usuarioActivo.progress || usuarioActivo.progress.planId !== planActivo.id){
+    usuarioActivo.progress = planActivo.progress || {};
+}
+
+usuarioActivo.planner = planActivo.planner || {};
+
+if(!usuarioActivo.progress.historialPesos){
+    usuarioActivo.progress.historialPesos = [];
 }
 
 const progress = usuarioActivo.progress;
-const plan = progress.planActivo;
+
+const plan = progress.planActivo || {
+    nombre: planActivo.nombre,
+    objetivo: planActivo.planner?.objetivoPrincipal || planActivo.tipoPlan,
+    ajusteCalorico: planActivo.planner?.ajusteCalorico || planActivo.planner?.ajusteCalorias || 0,
+    caloriasTotales: planActivo.planner?.caloriasObjetivo || 0,
+    macros: {
+        proteinasGr: planActivo.planner?.proteinas || planActivo.planner?.proteinasGr || 0,
+        carbohidratosGr: planActivo.planner?.carbohidratos || planActivo.planner?.carbosGr || 0,
+        grasasGr: planActivo.planner?.grasas || planActivo.planner?.grasasGr || 0
+    }
+};
+
+progress.planActivo = plan;
+localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
 
 function obtenerUsuarios(){
     return JSON.parse(localStorage.getItem(KEY_USUARIOS)) || [];
