@@ -947,11 +947,16 @@ function cargarKPIs(usuarioActivo){
 const planner = datosActivos.planner;
 const progress = datosActivos.progress;
 
-    const pesoActualKPI =
-    progress.pesoActual ||
-    planner.pesoInicial ||
-    planner.peso ||
-    0;
+    const registrosPeso =
+    progress.historialPesos ||
+    progress.registros ||
+    progress.pesajes ||
+    [];
+
+const pesoActualKPI =
+    registrosPeso.length > 0
+        ? progress.pesoActual
+        : planner.peso || planner.pesoInicial || progress.pesoActual || 0;
 
 document.getElementById("kpiPesoActual").textContent =
     pesoActualKPI ? `${pesoActualKPI} kg` : "-- kg";
@@ -981,8 +986,19 @@ const progress = datosActivos.progress;
 
     const tipoPlan = planner.tipoPlan || "--";
     const fechaInicio = planner.fechaInicio || "--";
-    const pesoInicial = Number(planner.pesoInicial || planner.peso || progress.pesoInicial || 0);
-const pesoActual = Number(progress.pesoActual || planner.pesoInicial || planner.peso || 0);
+    const registrosPeso =
+    progress.historialPesos ||
+    progress.registros ||
+    progress.pesajes ||
+    [];
+
+const pesoInicial = Number(planner.peso || planner.pesoInicial || progress.pesoInicial || 0);
+
+const pesoActual = Number(
+    registrosPeso.length > 0
+        ? progress.pesoActual
+        : planner.peso || planner.pesoInicial || progress.pesoActual || 0
+);
     const pesoObjetivo = Number(progress.pesoObjetivo || planner.pesoObjetivo || 0);
 
     document.getElementById("planBadge").textContent = tipoPlan;
