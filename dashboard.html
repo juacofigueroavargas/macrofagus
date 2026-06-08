@@ -621,7 +621,8 @@ body{
     <a href="dashboard.html" class="active"><i class="fa-solid fa-house"></i> Dashboard</a>
     <a href="planner.html"><i class="fa-solid fa-clipboard-list"></i> Planner</a>
     <a href="progress.html"><i class="fa-solid fa-chart-line"></i> Progress</a>
-    <a href="daily.html"><i class="fa-solid fa-utensils"></i> Daily</a>      
+    <a href="daily.html"><i class="fa-solid fa-utensils"></i> Daily</a>  
+    <a href="planes.html"><i class="fa-solid fa-layer-group"></i> Planes</a>
     <a href="perfil.html"><i class="fa-solid fa-user"></i> Perfil</a>
 </nav>
       <div class="sidebar-logout">
@@ -829,8 +830,8 @@ body{
 </div>
             </div>
 
-        </section>
-
+        </section> 
+      
 <section class="quick-actions" id="quickActions" style="display:none;">
 
     <button onclick="window.location.href='progress.html'">
@@ -865,7 +866,29 @@ function cerrarSesion(){
     localStorage.removeItem(KEY_ACTIVO);
     window.location.href = "index.html";
 }  
-  
+
+function obtenerPlanActivo(usuarioActivo){
+    const planActivo = usuarioActivo.planes?.find(
+        plan => plan.id === usuarioActivo.planActivoId
+    );
+
+    if(planActivo){
+        return {
+            plan: planActivo,
+            planner: planActivo.planner || {},
+            progress: usuarioActivo.progress || {},
+            daily: planActivo.daily || {}
+        };
+    }
+
+    return {
+        plan: null,
+        planner: usuarioActivo.planner || {},
+        progress: usuarioActivo.progress || {},
+        daily: usuarioActivo.daily || {}
+    };
+}  
+    
 function cargarDashboard(){
     const usuarioActivo = obtenerUsuarioActivo();
 
@@ -874,18 +897,22 @@ function cargarDashboard(){
         return;
     }
 
+    const datosActivos = obtenerPlanActivo(usuarioActivo);
+    const planner = datosActivos.planner;
+    const progress = datosActivos.progress;
+
     const nombreCompleto = `${usuarioActivo.nombre || ""} ${usuarioActivo.apellidos || ""}`.trim();
 
     document.getElementById("nombreUsuarioActivo").textContent =
         nombreCompleto || usuarioActivo.usuario || "Usuario";
-  
-    document.getElementById("usuarioActivo").textContent =
-    "@" + (usuarioActivo.usuario || "usuario");
 
-document.getElementById("userAvatar").textContent =
-    (nombreCompleto || usuarioActivo.usuario || "U")
-        .charAt(0)
-        .toUpperCase();
+    document.getElementById("usuarioActivo").textContent =
+        "@" + (usuarioActivo.usuario || "usuario");
+
+    document.getElementById("userAvatar").textContent =
+        (nombreCompleto || usuarioActivo.usuario || "U")
+            .charAt(0)
+            .toUpperCase();
 
     document.getElementById("subtituloDashboard").textContent =
         `Resumen general de ${nombreCompleto || usuarioActivo.usuario || "tu usuario"}.`;
@@ -897,25 +924,23 @@ document.getElementById("userAvatar").textContent =
     cargarMacrosHoy(usuarioActivo);
     cargarEstadoGeneral(usuarioActivo);
     cargarResumenRapido(usuarioActivo);
-  
-    const planner = usuarioActivo.planner || {};
-const progress = usuarioActivo.progress || {};
 
-const tienePlanner =
-    Number(planner.caloriasObjetivo || 0) > 0 &&
-    Number(planner.pesoInicial || 0) > 0;
+    const tienePlanner =
+        Number(planner.caloriasObjetivo || 0) > 0 &&
+        Number(planner.pesoInicial || 0) > 0;
 
-const tieneProgress =
-    Number(progress.pesoObjetivo || 0) > 0 &&
-    Number(progress.pesoActual || 0) > 0;
+    const tieneProgress =
+        Number(progress.pesoObjetivo || 0) > 0 &&
+        Number(progress.pesoActual || 0) > 0;
 
-document.getElementById("quickActions").style.display =
-    tienePlanner && tieneProgress ? "flex" : "none";
+    document.getElementById("quickActions").style.display =
+        tienePlanner && tieneProgress ? "flex" : "none";
 }
   
 function cargarKPIs(usuarioActivo){
-    const planner = usuarioActivo.planner || {};
-    const progress = usuarioActivo.progress || {};
+    const datosActivos = obtenerPlanActivo(usuarioActivo);
+const planner = datosActivos.planner;
+const progress = datosActivos.progress;
 
     document.getElementById("kpiPesoActual").textContent =
         progress.pesoActual ? `${progress.pesoActual} kg` : "-- kg";
@@ -939,8 +964,9 @@ document.getElementById("kpiPlanActivo").textContent =
 }  
 
 function cargarPlanActivo(usuarioActivo){
-    const planner = usuarioActivo.planner || {};
-    const progress = usuarioActivo.progress || {};
+    const datosActivos = obtenerPlanActivo(usuarioActivo);
+const planner = datosActivos.planner;
+const progress = datosActivos.progress;
 
     const tipoPlan = planner.tipoPlan || "--";
     const fechaInicio = planner.fechaInicio || "--";
@@ -1001,11 +1027,16 @@ else{
 
 function cargarUltimosRegistros(usuarioActivo){
     const progress = usuarioActivo.progress || {};
-    const registros =
+    const planActivoId = usuarioActivo.planActivoId;
+    const registrosBase =
     progress.historialPesos ||
     progress.registros ||
     progress.pesajes ||
     [];
+
+const registros = registrosBase.filter(registro =>
+    !registro.planId || registro.planId === planActivoId
+);
 
     const contenedor = document.getElementById("ultimosRegistros");
     contenedor.innerHTML = "";
@@ -1042,8 +1073,9 @@ function cargarUltimosRegistros(usuarioActivo){
 }  
 
 function cargarFechasImportantes(usuarioActivo){
-    const planner = usuarioActivo.planner || {};
-    const progress = usuarioActivo.progress || {};
+    const datosActivos = obtenerPlanActivo(usuarioActivo);
+const planner = datosActivos.planner;
+const progress = datosActivos.progress;
 
     const contenedor = document.getElementById("fechasImportantes");
 
@@ -1167,7 +1199,9 @@ if(fechaMeta){
 }
 
 function cargarMacrosHoy(usuarioActivo){
-    const planner = usuarioActivo.planner || {};
+    const datosActivos = obtenerPlanActivo(usuarioActivo);
+    const planner = datosActivos.planner;
+
     const usuarioId = usuarioActivo?.id || usuarioActivo?.usuario || "default";
     const DAILY_KEY = `macrofagus_daily_records_${usuarioId}`;
 
@@ -1190,36 +1224,33 @@ function cargarMacrosHoy(usuarioActivo){
         carbos: 0,
         grasas: 0
     });
+
     const mensajeMacros = document.getElementById("mensajeMacrosHoy");
-    const macrosContainer =
-    document.getElementById("macrosContainer");
+    const macrosContainer = document.getElementById("macrosContainer");
 
-if(registroHoy.records.length === 0){
+    if(registroHoy.records.length === 0){
+        mensajeMacros.innerHTML = `
+            <div class="macro-empty-message">
+                <strong>Sin registros hoy</strong><br>
+                Ingresa tus comidas en Daily para comenzar el seguimiento.
+            </div>
+        `;
 
-    mensajeMacros.innerHTML = `
-        <div class="macro-empty-message">
-            <strong>Sin registros hoy</strong><br>
-            Ingresa tus comidas en Daily para comenzar el seguimiento.
-        </div>
-    `;
-
-    macrosContainer.style.display = "none";
-}
-else{
-
-    mensajeMacros.innerHTML = "";
-
-    macrosContainer.style.display = "block";
-}
+        macrosContainer.style.display = "none";
+    }else{
+        mensajeMacros.innerHTML = "";
+        macrosContainer.style.display = "block";
+    }
 
     actualizarMacro("macroProteinasTexto", "macroProteinasFill", consumido.proteinas, objetivoProteinas);
     actualizarMacro("macroCarbosTexto", "macroCarbosFill", consumido.carbos, objetivoCarbos);
     actualizarMacro("macroGrasasTexto", "macroGrasasFill", consumido.grasas, objetivoGrasas);
-} 
+}
 
 function cargarEstadoGeneral(usuarioActivo){
-    const planner = usuarioActivo.planner || {};
-    const progress = usuarioActivo.progress || {};
+    const datosActivos = obtenerPlanActivo(usuarioActivo);
+const planner = datosActivos.planner;
+const progress = datosActivos.progress;
 
     const pesoInicial = Number(planner.pesoInicial || progress.pesoInicial || 0);
     const pesoActual = Number(progress.pesoActual || 0);
@@ -1306,25 +1337,28 @@ else{
 }  
 
 function cargarResumenRapido(usuarioActivo){
-    const planner = usuarioActivo.planner || {};
-    const daily = usuarioActivo.daily || {};
-    const progress = usuarioActivo.progress || {};
+    const datosActivos = obtenerPlanActivo(usuarioActivo);
+    const planner = datosActivos.planner;
+    const progress = datosActivos.progress;
+    const daily = datosActivos.daily;
 
     const contenedor = document.getElementById("resumenRapido");
 
     const tipoPlan = planner.tipoPlan || "--";
-    const ajuste = planner.ajusteCalorico || planner.deficit || planner.superavit || "--";
-    const comidas = planner.numeroComidas || planner.comidas || daily.numeroComidas || "--";
+    const ajuste = planner.ajusteCalorico || planner.ajusteCalorias || planner.deficit || planner.superavit || "--";
+    const comidas = planner.numeroComidas || planner.cantidadComidas || planner.comidas || daily.numeroComidas || "--";
+
     const entreno =
-    planner.entrenamiento ||
-    progress.entrenamiento ||
-    planner.actividad ||
-    progress.actividad ||
-    "--";
+        planner.entrenamiento ||
+        progress.entrenamiento ||
+        planner.actividad ||
+        progress.actividad ||
+        "--";
+
     const diasPlan = calcularDiaPlan(
-    progress.fechaInicioPlan ||
-    planner.fechaInicio
-);
+        progress.fechaInicioPlan ||
+        planner.fechaInicio
+    );
 
     contenedor.innerHTML = `
         <div class="list-item">
@@ -1338,16 +1372,16 @@ function cargarResumenRapido(usuarioActivo){
         </div>
 
         <div class="list-item">
-    <strong>Entreno</strong>
-    <span>${formatearActividad(entreno)}</span>
-</div>
+            <strong>Entreno</strong>
+            <span>${formatearActividad(entreno)}</span>
+        </div>
 
-<div class="list-item">
-    <strong>Días plan</strong>
-    <span>${diasPlan || "--"} días</span>
-</div>
+        <div class="list-item">
+            <strong>Días plan</strong>
+            <span>${diasPlan || "--"} días</span>
+        </div>
     `;
-}  
+}
   
 function formatearFechaCorta(fecha){
     if(!fecha || fecha === "--") return "--";
