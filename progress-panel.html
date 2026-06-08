@@ -796,7 +796,12 @@ const progress = usuarioActivo.progress;
 const plan = progress.planActivo || {
     nombre: planActivo.nombre,
     objetivo: planActivo.planner?.objetivoPrincipal || planActivo.tipoPlan,
-    ajusteCalorico: planActivo.planner?.ajusteCalorico || planActivo.planner?.ajusteCalorias || 0,
+    ajusteCalorico:
+    planActivo.tipoPlan === "Déficit"
+        ? -Math.abs(planActivo.planner?.ajusteCalorico || planActivo.planner?.ajusteCalorias || 0)
+        : planActivo.tipoPlan === "Superávit"
+            ? Math.abs(planActivo.planner?.ajusteCalorico || planActivo.planner?.ajusteCalorias || 0)
+            : 0,
     caloriasTotales: planActivo.planner?.caloriasObjetivo || 0,
     macros: {
         proteinasGr: planActivo.planner?.proteinas || planActivo.planner?.proteinasGr || 0,
@@ -922,7 +927,11 @@ function calcularFechasTentativas(){
     const diasPorKg = Math.ceil(7700 / Math.abs(ajuste));
     const kilosTotales = Math.abs(diferencia);
     const diasTotales = Math.ceil(kilosTotales * diasPorKg);
-    const fechaInicio = progress.fechaInicioPlan || plan.fechaGuardado || new Date().toISOString();
+    const fechaInicio =
+    progress.fechaInicioPlan ||
+    planActivo.fechaInicio ||
+    planActivo.planner?.fechaInicio ||
+    new Date().toISOString();
     const fechaObjetivo = sumarDias(fechaInicio, diasTotales);
 
     
@@ -1097,7 +1106,14 @@ function render(){
         "Seguimiento de " + (plan.nombre || usuarioActivo.nombre);
     
     document.getElementById("subtituloUsuario").innerHTML =
-        "Inicio del plan: <strong>" + formatearFecha(progress.fechaInicioPlan) + "</strong>";
+        const fechaInicioMostrar =
+    progress.fechaInicioPlan ||
+    planActivo.fechaInicio ||
+    planActivo.planner?.fechaInicio ||
+    "-";
+
+document.getElementById("subtituloUsuario").innerHTML =
+    "Inicio del plan: <strong>" + formatearFecha(fechaInicioMostrar) + "</strong>";
 
     document.getElementById("pesoInicial").textContent =
         d.pesoInicial.toFixed(1) + " kg";
