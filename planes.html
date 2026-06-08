@@ -451,15 +451,22 @@ function obtenerPlanes(){
         return usuarioActivo.planes;
     }
 
-    if(usuarioActivo.planner){
+    const planner = usuarioActivo.planner || {};
+
+    const tienePlanReal =
+        Number(planner.caloriasObjetivo || 0) > 0 &&
+        Number(planner.pesoInicial || planner.peso || 0) > 0 &&
+        (planner.tipoPlan || planner.objetivoPrincipal);
+
+    if(tienePlanReal){
         const planLegacy = {
             id:"plan_legacy",
-            nombre: usuarioActivo.planner.tipoPlan || "Plan actual",
+            nombre: planner.tipoPlan || "Plan actual",
             estado:"activo",
-            fechaInicio: usuarioActivo.planner.fechaInicio || "",
+            fechaInicio: planner.fechaInicio || "",
             fechaTermino:"",
-            tipoPlan: usuarioActivo.planner.tipoPlan || "",
-            planner: usuarioActivo.planner,
+            tipoPlan: planner.tipoPlan || "",
+            planner: planner,
             progress: usuarioActivo.progress || {}
         };
 
