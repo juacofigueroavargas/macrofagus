@@ -873,10 +873,15 @@ function obtenerPlanActivo(usuarioActivo){
     );
 
     if(planActivo){
+        const progressActivo =
+            usuarioActivo.progress?.planId === planActivo.id
+                ? usuarioActivo.progress
+                : planActivo.progress || {};
+
         return {
             plan: planActivo,
             planner: planActivo.planner || {},
-            progress: usuarioActivo.progress || {},
+            progress: progressActivo,
             daily: planActivo.daily || {}
         };
     }
@@ -887,7 +892,7 @@ function obtenerPlanActivo(usuarioActivo){
         progress: usuarioActivo.progress || {},
         daily: usuarioActivo.daily || {}
     };
-}  
+}
     
 function cargarDashboard(){
     const usuarioActivo = obtenerUsuarioActivo();
