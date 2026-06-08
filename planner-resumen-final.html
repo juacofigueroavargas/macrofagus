@@ -707,9 +707,11 @@ function guardarPlanParaProgress(){
         },
 
         progress: {
+            planId: "",
             pesoInicial: usuarioActivo.planner.pesoInicial || usuarioActivo.planner.peso || 0,
             pesoActual: usuarioActivo.planner.pesoInicial || usuarioActivo.planner.peso || 0,
-            registros: []
+            pesoObjetivo: usuarioActivo.planner.pesoObjetivo || 0,
+            historialPesos: []
         },
 
         daily: {
@@ -717,17 +719,19 @@ function guardarPlanParaProgress(){
         }
     };
 
+    nuevoPlan.progress.planId = nuevoPlan.id;
+
     usuarioActivo.planes.push(nuevoPlan);
     usuarioActivo.planActivoId = nuevoPlan.id;
 
     usuarioActivo.planner = nuevoPlan.planner;
 
     usuarioActivo.progress = {
-        ...usuarioActivo.progress,
         planId: nuevoPlan.id,
         pesoInicial: nuevoPlan.progress.pesoInicial,
         pesoActual: nuevoPlan.progress.pesoActual,
-        registros: []
+        pesoObjetivo: nuevoPlan.progress.pesoObjetivo,
+        historialPesos: []
     };
 
     localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
