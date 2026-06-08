@@ -677,7 +677,6 @@ function guardarPlanParaProgress(){
     planActivoActual.estado = "finalizado";
     planActivoActual.fechaTermino = fechaHoy;
 
-    planActivoActual.planner = usuarioActivo.planner;
     planActivoActual.progress = usuarioActivo.progress || {};
 }
 
@@ -696,8 +695,8 @@ function guardarPlanParaProgress(){
             fechaInicio: usuarioActivo.planner.fechaInicio || fechaHoy,
             fechaMeta: usuarioActivo.planner.fechaMeta || "",
 
-            pesoInicial: usuarioActivo.planner.pesoInicial || usuarioActivo.planner.peso || 0,
-            pesoObjetivo: usuarioActivo.planner.pesoObjetivo || 0,
+            pesoInicial: usuarioActivo.planner.peso || 0,
+pesoObjetivo: usuarioActivo.planner.pesoObjetivo || 0,
 
             caloriasObjetivo: usuarioActivo.planner.caloriasObjetivo || 0,
 
@@ -705,14 +704,15 @@ function guardarPlanParaProgress(){
             carbohidratos: usuarioActivo.planner.carbosGr || 0,
             grasas: usuarioActivo.planner.grasasGr || 0,
 
-            numeroComidas: usuarioActivo.planner.numeroComidas || usuarioActivo.planner.cantidadComidas || 0,
+            numeroComidas: usuarioActivo.planner.cantidadComidas || 0,
+cantidadComidas: usuarioActivo.planner.cantidadComidas || 0,
             ajusteCalorico: usuarioActivo.planner.ajusteCalorias || 0
         },
 
         progress: {
             planId: "",
-            pesoInicial: usuarioActivo.planner.pesoInicial || usuarioActivo.planner.peso || 0,
-            pesoActual: usuarioActivo.planner.pesoInicial || usuarioActivo.planner.peso || 0,
+            pesoInicial: usuarioActivo.planner.peso || 0,
+pesoActual: usuarioActivo.planner.peso || 0,
             pesoObjetivo: usuarioActivo.planner.pesoObjetivo || 0,
             historialPesos: []
         },
