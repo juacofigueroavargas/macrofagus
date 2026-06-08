@@ -663,31 +663,71 @@ function guardarPlanParaProgress(){
         p.tipoAjuste === "superavit" ? "Superávit" :
         "Mantención";
 
-    usuarioActivo.planner = {
-        ...usuarioActivo.planner,
+    if(!usuarioActivo.planes){
+        usuarioActivo.planes = [];
+    }
 
-        tipoPlan: tipoPlan,
+    const planActivoActual = usuarioActivo.planes.find(plan => plan.estado === "activo");
+
+    if(planActivoActual){
+        const confirmar = confirm("Ya tienes un plan activo. ¿Quieres finalizarlo y crear uno nuevo?");
+
+        if(!confirmar) return;
+
+        planActivoActual.estado = "finalizado";
+        planActivoActual.fechaTermino = fechaHoy;
+    }
+
+    const nuevoPlan = {
+        id: "plan_" + Date.now(),
+        nombre: `${tipoPlan} ${fechaHoy}`,
+        estado: "activo",
         fechaInicio: usuarioActivo.planner.fechaInicio || fechaHoy,
-        fechaMeta: usuarioActivo.planner.fechaMeta || "",
+        fechaTermino: "",
+        tipoPlan: tipoPlan,
 
-        pesoInicial: usuarioActivo.planner.pesoInicial || usuarioActivo.planner.peso || 0,
-        pesoObjetivo: usuarioActivo.planner.pesoObjetivo || 0,
+        planner: {
+            ...usuarioActivo.planner,
 
-        caloriasObjetivo: usuarioActivo.planner.caloriasObjetivo || 0,
+            tipoPlan: tipoPlan,
+            fechaInicio: usuarioActivo.planner.fechaInicio || fechaHoy,
+            fechaMeta: usuarioActivo.planner.fechaMeta || "",
 
-        proteinas: usuarioActivo.planner.proteinasGr || 0,
-        carbohidratos: usuarioActivo.planner.carbosGr || 0,
-        grasas: usuarioActivo.planner.grasasGr || 0,
+            pesoInicial: usuarioActivo.planner.pesoInicial || usuarioActivo.planner.peso || 0,
+            pesoObjetivo: usuarioActivo.planner.pesoObjetivo || 0,
 
-        numeroComidas: usuarioActivo.planner.numeroComidas || usuarioActivo.planner.cantidadComidas || 0,
-        ajusteCalorico: usuarioActivo.planner.ajusteCalorias || 0
+            caloriasObjetivo: usuarioActivo.planner.caloriasObjetivo || 0,
+
+            proteinas: usuarioActivo.planner.proteinasGr || 0,
+            carbohidratos: usuarioActivo.planner.carbosGr || 0,
+            grasas: usuarioActivo.planner.grasasGr || 0,
+
+            numeroComidas: usuarioActivo.planner.numeroComidas || usuarioActivo.planner.cantidadComidas || 0,
+            ajusteCalorico: usuarioActivo.planner.ajusteCalorias || 0
+        },
+
+        progress: {
+            pesoInicial: usuarioActivo.planner.pesoInicial || usuarioActivo.planner.peso || 0,
+            pesoActual: usuarioActivo.planner.pesoInicial || usuarioActivo.planner.peso || 0,
+            registros: []
+        },
+
+        daily: {
+            registros: []
+        }
     };
+
+    usuarioActivo.planes.push(nuevoPlan);
+    usuarioActivo.planActivoId = nuevoPlan.id;
+
+    usuarioActivo.planner = nuevoPlan.planner;
 
     usuarioActivo.progress = {
         ...usuarioActivo.progress,
-        pesoInicial: usuarioActivo.progress?.pesoInicial || usuarioActivo.planner.pesoInicial,
-        pesoActual: usuarioActivo.progress?.pesoActual || usuarioActivo.planner.pesoInicial,
-        registros: usuarioActivo.progress?.registros || []
+        planId: nuevoPlan.id,
+        pesoInicial: nuevoPlan.progress.pesoInicial,
+        pesoActual: nuevoPlan.progress.pesoActual,
+        registros: []
     };
 
     localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
