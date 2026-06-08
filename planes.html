@@ -508,6 +508,41 @@ body{
             <label>Calorías objetivo</label>
             <input type="number" id="histCalorias" placeholder="Ej: 1949">
         </div>
+      
+        <div class="field">
+    <label>Ajuste calórico</label>
+    <input type="number" id="histAjuste" placeholder="Ej: -500 o 300">
+</div>
+
+<div class="field">
+    <label>Actividad física</label>
+    <select id="histActividad">
+        <option value="sedentario">Sedentario</option>
+        <option value="ligero">Ligero · 1 a 3 días</option>
+        <option value="moderado">Moderado · 3 a 5 días</option>
+        <option value="alto">Alto · 6 a 7 días</option>
+    </select>
+</div>
+
+<div class="field">
+    <label>Comidas al día</label>
+    <input type="number" id="histComidas" placeholder="Ej: 5">
+</div>
+
+<div class="field">
+    <label>Proteínas</label>
+    <input type="number" id="histProteinas" placeholder="Ej: 125">
+</div>
+
+<div class="field">
+    <label>Carbohidratos</label>
+    <input type="number" id="histCarbos" placeholder="Ej: 287">
+</div>
+
+<div class="field">
+    <label>Grasas</label>
+    <input type="number" id="histGrasas" placeholder="Ej: 55">
+</div>
 
         <button class="btn" onclick="guardarPlanAnterior()">
             Guardar plan anterior
@@ -836,6 +871,12 @@ function guardarPlanAnterior(){
     const pesoInicial = Number(document.getElementById("histPesoInicial").value || 0);
     const pesoFinal = Number(document.getElementById("histPesoFinal").value || 0);
     const calorias = Number(document.getElementById("histCalorias").value || 0);
+    const ajuste = Number(document.getElementById("histAjuste").value || 0);
+const actividad = document.getElementById("histActividad").value;
+const comidas = Number(document.getElementById("histComidas").value || 0);
+const proteinas = Number(document.getElementById("histProteinas").value || 0);
+const carbos = Number(document.getElementById("histCarbos").value || 0);
+const grasas = Number(document.getElementById("histGrasas").value || 0);
 
     if(!nombre || !fechaInicio || !fechaTermino || !pesoInicial || !pesoFinal){
         alert("Completa nombre, fechas, peso inicial y peso final.");
@@ -862,11 +903,18 @@ function guardarPlanAnterior(){
             pesoInicial,
             pesoFinal,
             caloriasObjetivo: calorias,
-            proteinas: 0,
-            carbohidratos: 0,
-            grasas: 0,
-            cantidadComidas: 0,
-            numeroComidas: 0
+ajusteCalorico: ajuste,
+ajusteCalorias: Math.abs(ajuste),
+actividad: actividad,
+entrenamiento: actividad,
+proteinas: proteinas,
+proteinasGr: proteinas,
+carbohidratos: carbos,
+carbosGr: carbos,
+grasas: grasas,
+grasasGr: grasas,
+cantidadComidas: comidas,
+numeroComidas: comidas
         },
 
         progress: {
