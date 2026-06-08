@@ -525,7 +525,7 @@ function renderPlanActivo(){
 
     const tipoPlan = planner.tipoPlan || plan.tipoPlan || plan.nombre || "--";
     const fechaInicio = planner.fechaInicio || plan.fechaInicio || "--";
-    const pesoInicial = planner.pesoInicial || progress.pesoInicial || "--";
+    const pesoInicial = planner.peso || planner.pesoInicial || progress.pesoInicial || "--";
     const pesoObjetivo = progress.pesoObjetivo || planner.pesoObjetivo || "--";
     const calorias = planner.caloriasObjetivo || "--";
 
@@ -691,8 +691,8 @@ function duplicarPlan(planId){
 
     usuarioActivo.progress = {
         planId: copia.id,
-        pesoInicial: copia.planner.pesoInicial || copia.planner.peso || 0,
-        pesoActual: copia.planner.pesoInicial || copia.planner.peso || 0,
+        pesoInicial: copia.planner.peso || copia.planner.pesoInicial || 0,
+pesoActual: copia.planner.peso || copia.planner.pesoInicial || 0,
         pesoObjetivo: copia.planner.pesoObjetivo || 0,
         historialPesos: []
     };
