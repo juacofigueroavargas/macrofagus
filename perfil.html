@@ -1,5 +1,3 @@
-ado en Planner/Progress.
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -90,6 +88,10 @@ body{
     border:none;
 }
 
+.btn.primary i{
+    color:#052e16;
+}
+
 .btn.danger{
     color:#fecaca;
     border-color:rgba(239,68,68,.25);
@@ -150,6 +152,7 @@ body{
     padding:14px;
     border-radius:16px;
     background:rgba(255,255,255,.05);
+    text-align:left;
 }
 
 .info-item strong{
@@ -159,6 +162,19 @@ body{
 .info-item span{
     color:#94a3b8;
     font-size:14px;
+    text-align:right;
+}
+
+.status-badge{
+    display:inline-flex!important;
+    width:max-content;
+    margin-left:auto;
+    padding:6px 10px;
+    border-radius:999px;
+    background:rgba(34,197,94,.13);
+    color:#86efac!important;
+    font-weight:900;
+    font-size:12px!important;
 }
 
 .form-grid{
@@ -213,47 +229,53 @@ body{
     font-weight:700;
 }
 
+.connection-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-top:18px;
+}
+
+.connection-card{
+    padding:14px;
+    border-radius:16px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.connection-card span{
+    display:block;
+    color:#94a3b8;
+    font-size:12px;
+    margin-bottom:8px;
+}
+
+.connection-card strong{
+    font-size:14px;
+}
+
+.ok{
+    color:#86efac;
+}
+
+.no{
+    color:#fca5a5;
+}
+
 .danger-zone{
     margin-top:18px;
     border-top:1px solid rgba(255,255,255,.08);
     padding-top:18px;
 }
 
-@media(max-width:850px){
-    .header{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:16px;
-    }
-
-    .grid{
-        grid-template-columns:1fr;
-    }
-
-    .form-grid{
-        grid-template-columns:1fr;
-    }
-
-    .actions{
-        width:100%;
-    }
-
-    .btn{
-        flex:1;
-        justify-content:center;
-    }
-}
-  
 .modal-overlay{
     position:fixed;
     inset:0;
     background:rgba(0,0,0,.65);
     backdrop-filter:blur(4px);
-
     display:none;
     align-items:center;
     justify-content:center;
-
     z-index:9999;
 }
 
@@ -276,14 +298,11 @@ body{
     height:70px;
     margin:auto;
     margin-bottom:18px;
-
     border-radius:50%;
     background:rgba(239,68,68,.12);
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     color:#ef4444;
     font-size:28px;
 }
@@ -320,7 +339,33 @@ body{
 .modal-btn.danger{
     background:#ef4444;
     color:white;
-}  
+}
+
+@media(max-width:850px){
+    .header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:16px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid,
+    .connection-grid{
+        grid-template-columns:1fr;
+    }
+
+    .actions{
+        width:100%;
+    }
+
+    .btn{
+        flex:1;
+        justify-content:center;
+    }
+}
 </style>
 </head>
 
@@ -335,7 +380,7 @@ body{
             </div>
             <div>
                 <h1>Perfil</h1>
-                <p>Administra los datos del usuario activo.</p>
+                <p>Administra la identidad del usuario activo.</p>
             </div>
         </div>
 
@@ -361,23 +406,28 @@ body{
 
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Plan activo</strong>
-                    <span id="perfilPlan">--</span>
+                    <strong>Nombre completo</strong>
+                    <span id="perfilNombreCompleto">--</span>
                 </div>
 
                 <div class="info-item">
-                    <strong>Peso actual</strong>
-                    <span id="perfilPesoActual">-- kg</span>
+                    <strong>Usuario</strong>
+                    <span id="perfilUsuarioTexto">--</span>
                 </div>
 
                 <div class="info-item">
-                    <strong>Peso objetivo</strong>
-                    <span id="perfilPesoObjetivo">-- kg</span>
+    <strong>Contraseña</strong>
+    <span>••••••••</span>
+</div>
+
+                <div class="info-item">
+                    <strong>Estado</strong>
+                    <span class="status-badge">Activo</span>
                 </div>
 
                 <div class="info-item">
-                    <strong>Calorías objetivo</strong>
-                    <span id="perfilCalorias">--</span>
+                    <strong>ID interno</strong>
+                    <span id="perfilIdTexto">--</span>
                 </div>
             </div>
         </section>
@@ -388,18 +438,23 @@ body{
             <div class="form-grid">
                 <div class="field">
                     <label>Nombre</label>
-                    <input type="text" id="nombreInput">
+                    <input type="text" id="nombreInput" placeholder="Ej: Joaquín">
                 </div>
 
                 <div class="field">
                     <label>Apellidos</label>
-                    <input type="text" id="apellidosInput">
+                    <input type="text" id="apellidosInput" placeholder="Ej: Figueroa">
                 </div>
 
                 <div class="field full">
                     <label>Usuario</label>
-                    <input type="text" id="usuarioInput">
+                    <input type="text" id="usuarioInput" placeholder="Ej: juacofigueroa">
                 </div>
+
+                <div class="field full">
+    <label>Nueva contraseña</label>
+    <input type="password" id="passwordInput" placeholder="Dejar vacío para mantener la actual">
+</div>
             </div>
 
             <button class="btn primary" style="margin-top:18px;width:100%;justify-content:center;" onclick="guardarPerfil()">
@@ -409,6 +464,27 @@ body{
 
             <div class="alert" id="mensajePerfil">
                 Perfil actualizado correctamente.
+            </div>
+
+            <div class="danger-zone">
+                <h3 class="section-title">Datos conectados</h3>
+
+                <div class="connection-grid">
+                    <div class="connection-card">
+                        <span>Planner</span>
+                        <strong id="estadoPlanner">--</strong>
+                    </div>
+
+                    <div class="connection-card">
+                        <span>Progress</span>
+                        <strong id="estadoProgress">--</strong>
+                    </div>
+
+                    <div class="connection-card">
+                        <span>Daily</span>
+                        <strong id="estadoDaily">--</strong>
+                    </div>
+                </div>
             </div>
 
             <div class="danger-zone">
@@ -425,168 +501,146 @@ body{
 
 </div>
 
+<div id="modalLimpiar" class="modal-overlay">
+    <div class="modal-card">
+
+        <div class="modal-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+
+        <h3>Limpiar datos del usuario</h3>
+
+        <p>
+            Esta acción eliminará los datos guardados de Planner, Progress y Daily,
+            pero mantendrá el perfil y la cuenta del usuario.
+        </p>
+
+        <div class="modal-actions">
+            <button class="modal-btn cancel" onclick="cerrarModalLimpiar()">
+                Cancelar
+            </button>
+
+            <button class="modal-btn danger" onclick="confirmarLimpiarUsuario()">
+                Sí, eliminar
+            </button>
+        </div>
+
+    </div>
+</div>
+
 <script>
 const KEY_USUARIOS = "macrofagus_usuarios";
 const KEY_ACTIVO = "macrofagus_usuario_activo";
 
-let usuarioActivo = leerJSON(KEY_ACTIVO, null);
+let usuarioActivo = JSON.parse(localStorage.getItem(KEY_ACTIVO));
 
 if(!usuarioActivo){
     window.location.href = "index.html";
 }
 
-function leerJSON(key, fallback){
-    try{
-        return JSON.parse(localStorage.getItem(key)) ?? fallback;
-    }
-    catch(e){
-        return fallback;
-    }
-}
-
 function obtenerUsuarios(){
-    return leerJSON(KEY_USUARIOS, []);
+    return JSON.parse(localStorage.getItem(KEY_USUARIOS)) || [];
 }
 
 function guardarUsuarios(usuarios){
     localStorage.setItem(KEY_USUARIOS, JSON.stringify(usuarios));
 }
 
-function refrescarUsuarioActivo(){
-    const usuarios = obtenerUsuarios();
-    const actualizado = usuarios.find(u =>
-        (usuarioActivo.id && u.id === usuarioActivo.id) ||
-        (usuarioActivo.usuario && u.usuario === usuarioActivo.usuario)
-    );
-
-    if(actualizado){
-        usuarioActivo = actualizado;
-        localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
-    }
-}
-
 function guardarUsuarioActivo(){
     localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
 
     const usuarios = obtenerUsuarios();
-    const existe = usuarios.some(u => u.id === usuarioActivo.id);
 
-    const actualizados = existe
-        ? usuarios.map(u => u.id === usuarioActivo.id ? usuarioActivo : u)
-        : [...usuarios, usuarioActivo];
+    const actualizados = usuarios.map(u => {
+        if(u.id === usuarioActivo.id || u.usuario === usuarioActivo.usuarioAnterior){
+            return usuarioActivo;
+        }
+        return u;
+    });
 
     guardarUsuarios(actualizados);
 }
 
-function formatoNumero(valor, decimales = 0){
-    const numero = Number(valor);
-    if(!Number.isFinite(numero) || numero <= 0) return "--";
-    return numero.toLocaleString("es-CL", {
-        minimumFractionDigits: decimales,
-        maximumFractionDigits: decimales
-    });
+function textoDato(valor){
+    return valor ? valor : "--";
 }
 
-function textoPlan(planner, progress){
-    const raw =
-        planner.tipoPlan ||
-        progress.planActivo?.objetivo ||
-        planner.tipoAjuste ||
-        planner.objetivoPrincipal ||
-        "";
-
-    const textos = {
-        deficit: "Déficit",
-        superavit: "Superávit",
-        mantener: "Mantención",
-        ganar: "Ganar masa muscular",
-        perder: "Perder grasa",
-        resistencia: "Resistencia",
-        poca: "Poca actividad"
-    };
-
-    return textos[raw] || raw || "--";
+function tieneDatos(obj){
+    return obj && typeof obj === "object" && Object.keys(obj).length > 0;
 }
 
-function obtenerPesoActual(progress, planner){
-    const historial = progress.historialPesos || progress.registros || progress.pesajes || [];
-    const ultimo = historial.length ? historial[historial.length - 1] : null;
+function pintarEstado(id, existe){
+    const elemento = document.getElementById(id);
 
-    return progress.pesoActual ||
-        ultimo?.peso ||
-        ultimo?.valor ||
-        planner.pesoActual ||
-        planner.pesoInicial ||
-        planner.peso ||
-        0;
-}
-
-function obtenerPesoObjetivo(progress, planner){
-    return progress.pesoObjetivo || planner.pesoObjetivo || 0;
-}
-
-function obtenerCalorias(planner, progress){
-    return planner.caloriasObjetivo ||
-        progress.planActivo?.caloriasTotales ||
-        planner.caloriasFinales ||
-        0;
+    if(existe){
+        elemento.textContent = "Con datos";
+        elemento.className = "ok";
+    }else{
+        elemento.textContent = "Sin datos";
+        elemento.className = "no";
+    }
 }
 
 function cargarPerfil(){
-    refrescarUsuarioActivo();
-
-    const planner = usuarioActivo.planner || {};
-    const progress = usuarioActivo.progress || {};
-
-    const nombreCompleto =
-        `${usuarioActivo.nombre || ""} ${usuarioActivo.apellidos || ""}`.trim();
+    const nombreCompleto = `${usuarioActivo.nombre || ""} ${usuarioActivo.apellidos || ""}`.trim();
+    const usuario = usuarioActivo.usuario || "usuario";
+    const idInterno = usuarioActivo.id || usuarioActivo.usuario || "--";
 
     document.getElementById("avatarPerfil").textContent =
-        (usuarioActivo.nombre || usuarioActivo.usuario || "U")
-            .charAt(0)
-            .toUpperCase();
+        (usuarioActivo.nombre || usuario || "U").charAt(0).toUpperCase();
 
     document.getElementById("nombrePerfil").textContent =
         nombreCompleto || "Usuario";
 
     document.getElementById("usuarioPerfil").textContent =
-        "@" + (usuarioActivo.usuario || "usuario");
+        "@" + usuario;
+
+    document.getElementById("perfilNombreCompleto").textContent =
+        textoDato(nombreCompleto);
+
+    document.getElementById("perfilUsuarioTexto").textContent =
+        "@" + usuario;
+
+    document.getElementById("perfilIdTexto").textContent =
+        textoDato(idInterno);
 
     document.getElementById("nombreInput").value = usuarioActivo.nombre || "";
     document.getElementById("apellidosInput").value = usuarioActivo.apellidos || "";
     document.getElementById("usuarioInput").value = usuarioActivo.usuario || "";
 
-    const plan = textoPlan(planner, progress);
-    const pesoActual = obtenerPesoActual(progress, planner);
-    const pesoObjetivo = obtenerPesoObjetivo(progress, planner);
-    const calorias = obtenerCalorias(planner, progress);
-
-    document.getElementById("perfilPlan").textContent = plan;
-    document.getElementById("perfilPesoActual").textContent =
-        pesoActual ? `${formatoNumero(pesoActual, 1)} kg` : "-- kg";
-    document.getElementById("perfilPesoObjetivo").textContent =
-        pesoObjetivo ? `${formatoNumero(pesoObjetivo, 1)} kg` : "-- kg";
-    document.getElementById("perfilCalorias").textContent =
-        calorias ? `${formatoNumero(calorias)} kcal` : "--";
+    pintarEstado("estadoPlanner", tieneDatos(usuarioActivo.planner));
+    pintarEstado("estadoProgress", tieneDatos(usuarioActivo.progress));
+    pintarEstado("estadoDaily", tieneDatos(usuarioActivo.daily));
 }
 
 function guardarPerfil(){
     const nombre = document.getElementById("nombreInput").value.trim();
     const apellidos = document.getElementById("apellidosInput").value.trim();
     const usuario = document.getElementById("usuarioInput").value.trim();
+    const nuevaPassword = document.getElementById("passwordInput").value.trim();
 
     if(!nombre || !usuario){
         alert("Nombre y usuario son obligatorios.");
         return;
     }
 
+    usuarioActivo.usuarioAnterior = usuarioActivo.usuario;
     usuarioActivo.nombre = nombre;
     usuarioActivo.apellidos = apellidos;
     usuarioActivo.usuario = usuario;
+    if(nuevaPassword){
+    usuarioActivo.password = nuevaPassword;
+}
+    usuarioActivo.actualizadoEn = new Date().toISOString();
 
+    guardarUsuarioActivo();
+    delete usuarioActivo.usuarioAnterior;
     guardarUsuarioActivo();
     cargarPerfil();
 
+    // Limpiar campo contraseña
+    document.getElementById("passwordInput").value = "";
+  
     const mensaje = document.getElementById("mensajePerfil");
     mensaje.style.display = "block";
 
@@ -625,35 +679,5 @@ function cerrarSesion(){
 cargarPerfil();
 </script>
 
-<!-- Modal Confirmación -->
-<div id="modalLimpiar" class="modal-overlay">
-    <div class="modal-card">
-
-        <div class="modal-icon">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-        </div>
-
-        <h3>Limpiar datos del usuario</h3>
-
-        <p>
-            Esta acción eliminará los datos de Planner, Progress y Daily
-            del usuario seleccionado.
-        </p>
-
-        <div class="modal-actions">
-            <button class="modal-btn cancel"
-                onclick="cerrarModalLimpiar()">
-                Cancelar
-            </button>
-
-            <button class="modal-btn danger"
-                onclick="confirmarLimpiarUsuario()">
-                Sí, eliminar
-            </button>
-        </div>
-
-    </div>
-</div>  
-  
 </body>
 </html>
