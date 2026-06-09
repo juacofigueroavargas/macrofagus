@@ -985,7 +985,15 @@ const planner = datosActivos.planner;
 const progress = datosActivos.progress;
 
     const tipoPlan = planner.tipoPlan || "--";
-    const fechaInicio = planner.fechaInicio || "--";
+    const primerRegistro =
+    registrosPeso.length > 0
+        ? registrosPeso[0].fecha
+        : null;
+
+const fechaInicio =
+    primerRegistro ||
+    planner.fechaInicio ||
+    "--";
     const registrosPeso =
     progress.historialPesos ||
     progress.registros ||
