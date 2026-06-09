@@ -1382,20 +1382,18 @@ function cargarResumenRapido(usuarioActivo){
         progress.actividad ||
         "--";
 
-    let diasPlan = "--";
+let diasPlan = "--";
 
-const historial = progress.historialPesos || [];
+const fechaInicioPlan =
+    progress.fechaInicioPlan ||
+    planner.fechaInicio ||
+    datosActivos.plan?.fechaInicio ||
+    null;
 
-if(historial.length >= 2){
+const diasCalculados = calcularDiaPlan(fechaInicioPlan);
 
-    const inicio = new Date(historial[0].fecha);
-    const fin = new Date(historial[historial.length - 1].fecha);
-
-    diasPlan =
-        Math.floor(
-            (fin - inicio) /
-            (1000 * 60 * 60 * 24)
-        ) + 1;
+if(diasCalculados){
+    diasPlan = diasCalculados;
 }
 
     contenedor.innerHTML = `
