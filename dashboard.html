@@ -1401,7 +1401,16 @@ const fechaInicioPlan =
     datosActivos.plan?.fechaInicio ||
     null;
 
-const diasCalculados = calcularDiaPlan(fechaInicioPlan);
+const fechaTerminoPlan =
+    datosActivos.plan?.fechaTermino ||
+    progress.fechaTermino ||
+    planner.fechaTermino ||
+    null;
+
+const diasCalculados = calcularDiasEntrePlan(
+    fechaInicioPlan,
+    fechaTerminoPlan
+);
 
 if(diasCalculados){
     diasPlan = diasCalculados;
@@ -1500,6 +1509,30 @@ function calcularDiaPlan(fechaInicio){
     return dias > 0 ? dias : null;
 }
 
+function calcularDiasEntrePlan(fechaInicio, fechaTermino){
+    if(!fechaInicio) return null;
+
+    let inicioTexto = String(fechaInicio).split("T")[0];
+    let terminoTexto = fechaTermino ? String(fechaTermino).split("T")[0] : obtenerFechaHoyISO();
+
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(inicioTexto)) return null;
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(terminoTexto)) return null;
+
+    const [anioI, mesI, diaI] = inicioTexto.split("-").map(Number);
+    const [anioT, mesT, diaT] = terminoTexto.split("-").map(Number);
+
+    const inicio = new Date(anioI, mesI - 1, diaI);
+    const termino = new Date(anioT, mesT - 1, diaT);
+
+    inicio.setHours(0,0,0,0);
+    termino.setHours(0,0,0,0);
+
+    const diferencia = termino - inicio;
+    const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24)) + 1;
+
+    return dias > 0 ? dias : null;
+}  
+  
 function actualizarMacro(textId, fillId, consumido, objetivo){
     const texto = document.getElementById(textId);
     const barra = document.getElementById(fillId);
