@@ -155,7 +155,7 @@ body{
 .panel{
     min-width:430px;
     min-height:450px;
-    height:auto;
+    height:450px;
     overflow:hidden;
     background:rgba(15,23,42,.9);
     border:1px solid rgba(255,255,255,.10);
@@ -303,8 +303,11 @@ body{
 .history-list{
     display:grid;
     gap:10px;
-    max-height:220px;
-    overflow:auto;
+    height:360px;
+    max-height:360px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding-right:6px;
 }
 
 .history-item{
