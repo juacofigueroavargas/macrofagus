@@ -924,9 +924,9 @@ function calcularFechasTentativas(){
         };
     }
 
-    const diasPorKg = Math.ceil(7700 / Math.abs(ajuste));
-    const kilosTotales = Math.abs(diferencia);
-    const diasTotales = Math.ceil(kilosTotales * diasPorKg);
+    const diasPorKg = 7700 / Math.abs(ajuste);
+const kilosTotales = Math.abs(diferencia);
+const diasTotales = Math.round(kilosTotales * diasPorKg);
     const fechaInicio =
     progress.fechaInicioPlan ||
     planActivo.fechaInicio ||
@@ -951,7 +951,7 @@ function calcularFechasTentativas(){
             }
         }
 
-        const fecha = sumarDias(fechaInicio, diasPorKg * i);
+        const fecha = sumarDias(fechaInicio, Math.round(diasPorKg * i));
 
         fechas.push({
             fecha: fecha.toISOString(),
