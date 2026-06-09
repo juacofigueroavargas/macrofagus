@@ -999,7 +999,7 @@ const primerRegistro =
 
 const fechaInicio =
     primerRegistro ||
-    planner.fechaInicio ||
+    progress.fechaInicioPlan ||
     "--";
 
 const pesoInicial = Number(planner.peso || planner.pesoInicial || progress.pesoInicial || 0);
@@ -1397,8 +1397,6 @@ let diasPlan = "--";
 
 const fechaInicioPlan =
     progress.fechaInicioPlan ||
-    planner.fechaInicio ||
-    datosActivos.plan?.fechaInicio ||
     null;
 
 const fechaTerminoPlan =
