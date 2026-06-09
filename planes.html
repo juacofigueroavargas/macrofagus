@@ -797,6 +797,13 @@ function renderHistorial(){
 
 function activarPlan(planId){
     const planes = obtenerPlanes();
+  
+    const planActual = planes.find(p => p.id === usuarioActivo.planActivoId);
+
+if(planActual){
+    planActual.progress = usuarioActivo.progress || planActual.progress || {};
+    planActual.planner = usuarioActivo.planner || planActual.planner || {};
+}
 
     planes.forEach(plan => {
         plan.estado = plan.id === planId ? "activo" : "finalizado";
@@ -810,24 +817,32 @@ function activarPlan(planId){
 
     const nuevoActivo = planes.find(p => p.id === planId);
 
-    usuarioActivo.planActivoId = planId;
-    usuarioActivo.planner = nuevoActivo.planner || usuarioActivo.planner;
+if(!nuevoActivo) return;
 
-    if(nuevoActivo.progress){
-        usuarioActivo.progress = {
-            ...usuarioActivo.progress,
-            ...nuevoActivo.progress,
-            planId
-        };
-    }else{
-        usuarioActivo.progress = {
-            ...usuarioActivo.progress,
-            planId
-        };
-    }
+usuarioActivo.planActivoId = planId;
+usuarioActivo.planner = nuevoActivo.planner || {};
 
-    guardarUsuarioActivo();
-    render();
+// Cada plan debe cargar SU propio progress
+usuarioActivo.progress = nuevoActivo.progress || {
+    planId: nuevoActivo.id,
+    pesoInicial:
+        nuevoActivo.planner?.peso ||
+        nuevoActivo.planner?.pesoInicial ||
+        0,
+    pesoActual:
+        nuevoActivo.planner?.peso ||
+        nuevoActivo.planner?.pesoInicial ||
+        0,
+    pesoObjetivo:
+        nuevoActivo.planner?.pesoObjetivo ||
+        0,
+    historialPesos: []
+};
+
+usuarioActivo.progress.planId = nuevoActivo.id;
+
+guardarUsuarioActivo();
+render();
 }
 
 function duplicarPlan(planId){
