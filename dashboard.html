@@ -985,7 +985,14 @@ const planner = datosActivos.planner;
 const progress = datosActivos.progress;
 
     const tipoPlan = planner.tipoPlan || "--";
-    const primerRegistro =
+
+const registrosPeso =
+    progress.historialPesos ||
+    progress.registros ||
+    progress.pesajes ||
+    [];
+
+const primerRegistro =
     registrosPeso.length > 0
         ? registrosPeso[0].fecha
         : null;
@@ -994,11 +1001,6 @@ const fechaInicio =
     primerRegistro ||
     planner.fechaInicio ||
     "--";
-    const registrosPeso =
-    progress.historialPesos ||
-    progress.registros ||
-    progress.pesajes ||
-    [];
 
 const pesoInicial = Number(planner.peso || planner.pesoInicial || progress.pesoInicial || 0);
 
@@ -1010,7 +1012,8 @@ const pesoActual = Number(
     const pesoObjetivo = Number(progress.pesoObjetivo || planner.pesoObjetivo || 0);
 
     document.getElementById("planBadge").textContent = tipoPlan;
-    document.getElementById("planInicio").textContent = fechaInicio;
+    document.getElementById("planInicio").textContent =
+    fechaInicio !== "--" ? formatearFechaCorta(fechaInicio) : "--";
     document.getElementById("planPesoInicial").textContent =
         pesoInicial ? `${pesoInicial} kg` : "-- kg";
 
