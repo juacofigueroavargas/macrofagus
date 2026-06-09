@@ -619,7 +619,9 @@ body{
 
         <nav class="menu">
     <a href="dashboard.html" class="active"><i class="fa-solid fa-house"></i> Dashboard</a>
-    <a href="planner.html"><i class="fa-solid fa-clipboard-list"></i> Planner</a>
+    <a href="#" onclick="irAPlanner()">
+    <i class="fa-solid fa-clipboard-list"></i> Planner
+</a>
     <a href="progress.html"><i class="fa-solid fa-chart-line"></i> Progress</a>
     <a href="daily.html"><i class="fa-solid fa-utensils"></i> Daily</a>  
     <a href="planes.html"><i class="fa-solid fa-layer-group"></i> Planes</a>
@@ -1549,6 +1551,22 @@ function obtenerFechaHoyISO(){
     const day = String(hoy.getDate()).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
+}  
+
+function irAPlanner(){
+    const usuarioActivo = obtenerUsuarioActivo();
+
+    const tienePlanActivo =
+        usuarioActivo &&
+        usuarioActivo.planActivoId &&
+        usuarioActivo.planes &&
+        usuarioActivo.planes.some(plan => plan.id === usuarioActivo.planActivoId);
+
+    if(tienePlanActivo){
+        window.location.href = "planner-resumen-final.html";
+    }else{
+        window.location.href = "planner.html";
+    }
 }  
   
 cargarDashboard();
