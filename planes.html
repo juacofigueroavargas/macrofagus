@@ -906,8 +906,14 @@ function guardarPlanAnterior(){
     const pesoInicial = Number(document.getElementById("histPesoInicial").value || 0);
     const pesoFinal = Number(document.getElementById("histPesoFinal").value || 0);
     const calorias = Number(document.getElementById("histCalorias").value || 0);
-  
-    const caloriasDesdeMacros =
+const ajuste = Number(document.getElementById("histAjuste").value || 0);
+const actividad = document.getElementById("histActividad").value;
+const comidas = Number(document.getElementById("histComidas").value || 0);
+const proteinas = Number(document.getElementById("histProteinas").value || 0);
+const carbos = Number(document.getElementById("histCarbos").value || 0);
+const grasas = Number(document.getElementById("histGrasas").value || 0);
+
+const caloriasDesdeMacros =
     (proteinas * 4) +
     (carbos * 4) +
     (grasas * 9);
@@ -928,13 +934,6 @@ const ajusteFinal =
     tipoPlan === "Déficit" ? -Math.abs(ajuste) :
     tipoPlan === "Superávit" ? Math.abs(ajuste) :
     0;
-  
-    const ajuste = Number(document.getElementById("histAjuste").value || 0);
-const actividad = document.getElementById("histActividad").value;
-const comidas = Number(document.getElementById("histComidas").value || 0);
-const proteinas = Number(document.getElementById("histProteinas").value || 0);
-const carbos = Number(document.getElementById("histCarbos").value || 0);
-const grasas = Number(document.getElementById("histGrasas").value || 0);
 
     if(!nombre || !fechaInicio || !fechaTermino || !pesoInicial || !pesoFinal){
         alert("Completa nombre, fechas, peso inicial y peso final.");
