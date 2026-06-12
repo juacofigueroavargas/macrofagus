@@ -505,10 +505,6 @@ body{
     <p>Daily usa los macros y la distribución creada en Planner.</p>
 </section>
 
-<div class="plan-alert" id="planAlert">
-    No se encontró un plan activo desde Planner. Primero genera un plan para usar Daily correctamente.
-</div>
-
 <section class="summary-grid">
     <div class="summary-card">
         <span>Calorías</span>
@@ -632,6 +628,11 @@ function obtenerPlanActivoDaily(){
 }
 
 let planner = obtenerPlanActivoDaily();
+  window.addEventListener("load", () => {
+    if(!planner){
+        mostrarModalSinPlan();
+    }
+});
 let meals = getPlannerMeals();
 let selectedMeal = null;
 let activeMealView = null;
@@ -965,7 +966,6 @@ function renderSummary(){
     document.getElementById("foodCount").textContent = dailyData.records.length;
     document.getElementById("selectedDateInput").value = selectedDate;
     document.getElementById("planName").textContent = dailyData.planLabel || getPlanLabel();
-    document.getElementById("planAlert").style.display = planner ? "none" : "block";
 }
 
 function setSummary(label, consumed, target, unit, fillId, totalId, leftId){
@@ -1122,12 +1122,45 @@ function clearDaily(){
 }
 
 function renderAll(){
+
+    if(!planner){
+        document.querySelector(".daily-layout").style.display = "none";
+        document.querySelector(".summary-grid").style.display = "none";
+        return;
+    }
+
     renderMeals();
     renderSummary();
 }
+  
+function mostrarModalSinPlan(){
+    document.getElementById("modalSinPlan").style.display = "flex";
+}  
 
 renderAll();
 </script>
+<div class="modal-overlay" id="modalSinPlan">
+    <div class="modal">
+        <h3>Sin plan activo</h3>
 
+        <p>
+            Primero debes crear o activar un plan para utilizar Daily.
+        </p>
+
+        <div class="modal-actions">
+            <button class="btn-secondary"
+                onclick="window.location.href='planes.html'">
+                Ir a Planes
+            </button>
+
+            <button class="btn"
+                onclick="window.location.href='dashboard.html'">
+                Volver al Dashboard
+            </button>
+        </div>
+    </div>
+</div>
 </body>
+  
+  
 </html>
