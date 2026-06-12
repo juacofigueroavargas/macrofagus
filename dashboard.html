@@ -1247,26 +1247,16 @@ if(fechaMeta){
 
         <div class="list-item">
             <div>
-                <strong>Inicio</strong>
-                <span>Peso inicial</span>
+                <strong>${resultado.pesoInicial} → ${resultado.pesoFinal} kg</strong>
+                <span>Peso inicial y final</span>
             </div>
-            <span>${resultado.pesoInicial} kg</span>
         </div>
 
         <div class="list-item">
             <div>
-                <strong>Final</strong>
-                <span>Peso final</span>
+                <strong>${resultado.cambio.toFixed(1)} kg</strong>
+                <span>Cambio total</span>
             </div>
-            <span>${resultado.pesoFinal} kg</span>
-        </div>
-
-        <div class="list-item">
-            <div>
-                <strong>Cambio total</strong>
-                <span>Desde el inicio</span>
-            </div>
-            <span>${resultado.cambio.toFixed(1)} kg</span>
         </div>
     `;
 
