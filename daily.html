@@ -612,7 +612,23 @@ const usuarioId = usuarioActivo?.id || usuarioActivo?.usuario || "default";
 const DAILY_KEY = `macrofagus_daily_records_${usuarioId}`;
 const foods = JSON.parse(localStorage.getItem(FOODS_KEY)) || [];
 
-let planner = usuarioActivo && usuarioActivo.planner ? usuarioActivo.planner : null;
+function obtenerPlanActivoDaily(){
+    if(!usuarioActivo) return null;
+
+    if(usuarioActivo.planes && usuarioActivo.planActivoId){
+        const planActivo = usuarioActivo.planes.find(
+            plan => plan.id === usuarioActivo.planActivoId
+        );
+
+        if(planActivo && planActivo.planner){
+            return planActivo.planner;
+        }
+    }
+
+    return usuarioActivo.planner || null;
+}
+
+let planner = obtenerPlanActivoDaily();
 let meals = getPlannerMeals();
 let selectedMeal = null;
 let activeMealView = null;
@@ -663,17 +679,48 @@ function formatObjetivo(objetivo){
 }  
   
 function getPlannerMeals(){
-    if(!planner || !planner.distribucionMacros || planner.distribucionMacros.length === 0){
-        return [
-            {comida:"Desayuno", porcentaje:30, proteinas:0, carbos:0, grasas:0},
-            {comida:"Colación 1", porcentaje:10, proteinas:0, carbos:0, grasas:0},
-            {comida:"Almuerzo", porcentaje:30, proteinas:0, carbos:0, grasas:0},
-            {comida:"Colación 2", porcentaje:10, proteinas:0, carbos:0, grasas:0},
-            {comida:"Cena", porcentaje:20, proteinas:0, carbos:0, grasas:0}
-        ];
+    if(planner && planner.distribucionMacros && planner.distribucionMacros.length > 0){
+        return planner.distribucionMacros;
     }
 
-    return planner.distribucionMacros;
+    const targets = getPlanTargets();
+    const cantidad = Number(planner?.cantidadComidas || planner?.numeroComidas || 5);
+
+    const plantillas = {
+        4: [
+            ["Desayuno", 30],
+            ["Almuerzo", 35],
+            ["Colación", 10],
+            ["Cena", 25]
+        ],
+        5: [
+            ["Desayuno", 30],
+            ["Colación 1", 10],
+            ["Almuerzo", 30],
+            ["Colación 2", 10],
+            ["Cena", 20]
+        ],
+        6: [
+            ["Desayuno", 25],
+            ["Colación 1", 10],
+            ["Almuerzo", 25],
+            ["Colación 2", 10],
+            ["Cena", 20],
+            ["Colación 3", 10]
+        ]
+    };
+
+    const plantilla = plantillas[cantidad] || plantillas[5];
+
+    return plantilla.map(([comida, porcentaje]) => {
+        return {
+            comida,
+            porcentaje,
+            proteinas: Math.round(targets.protein * porcentaje / 100),
+            carbos: Math.round(targets.carbs * porcentaje / 100),
+            grasas: Math.round(targets.fat * porcentaje / 100)
+        };
+    });
 }
 
 function getPlanTargets(){
@@ -681,11 +728,19 @@ function getPlanTargets(){
         return {kcal:0, protein:0, carbs:0, fat:0};
     }
 
+    const protein = Number(planner.proteinasGr || planner.proteinas || 0);
+    const carbs = Number(planner.carbosGr || planner.carbohidratos || planner.carbos || 0);
+    const fat = Number(planner.grasasGr || planner.grasas || 0);
+
+    const kcal =
+        Number(planner.caloriasObjetivo || planner.caloriasFinales || 0) ||
+        Math.round((protein * 4) + (carbs * 4) + (fat * 9));
+
     return {
-        kcal: Number(planner.caloriasObjetivo || 0),
-        protein: Number(planner.proteinasGr || 0),
-        carbs: Number(planner.carbosGr || 0),
-        fat: Number(planner.grasasGr || 0)
+        kcal,
+        protein,
+        carbs,
+        fat
     };
 }
 
