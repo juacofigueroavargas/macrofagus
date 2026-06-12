@@ -895,7 +895,60 @@ function obtenerPlanActivo(usuarioActivo){
         daily: usuarioActivo.daily || {}
     };
 }
-    
+
+function obtenerResultadoPlan(usuarioActivo){
+    const datosActivos = obtenerPlanActivo(usuarioActivo);
+    const planner = datosActivos.planner;
+    const progress = datosActivos.progress;
+    const plan = datosActivos.plan;
+
+    const registros =
+        progress.historialPesos ||
+        progress.registros ||
+        progress.pesajes ||
+        [];
+
+    const pesoInicial = Number(planner.peso || planner.pesoInicial || progress.pesoInicial || 0);
+    const pesoFinal = Number(progress.pesoActual || registros.at(-1)?.peso || 0);
+    const pesoObjetivo = Number(progress.pesoObjetivo || planner.pesoObjetivo || 0);
+
+    const fechaInicio =
+        registros[0]?.fecha ||
+        progress.fechaInicioPlan ||
+        plan?.fechaInicio ||
+        planner.fechaInicio ||
+        null;
+
+    const fechaTermino =
+        plan?.fechaTermino ||
+        progress.fechaTermino ||
+        planner.fechaTermino ||
+        registros.at(-1)?.fecha ||
+        null;
+
+    const dias = calcularDiasEntrePlan(fechaInicio, fechaTermino);
+    const cambio = pesoFinal - pesoInicial;
+    const promedioSemanal = dias ? cambio / (dias / 7) : 0;
+
+    const cumplido =
+        pesoInicial &&
+        pesoFinal &&
+        pesoObjetivo &&
+        Math.abs(pesoFinal - pesoObjetivo) <= 0.1;
+
+    return {
+        cumplido,
+        pesoInicial,
+        pesoFinal,
+        pesoObjetivo,
+        fechaInicio,
+        fechaTermino,
+        dias,
+        cambio,
+        promedioSemanal
+    };
+}  
+  
 function cargarDashboard(){
     const usuarioActivo = obtenerUsuarioActivo();
 
@@ -1114,8 +1167,8 @@ const registros = registrosBase.filter(registro =>
 
 function cargarFechasImportantes(usuarioActivo){
     const datosActivos = obtenerPlanActivo(usuarioActivo);
-const planner = datosActivos.planner;
-const progress = datosActivos.progress;
+    const planner = datosActivos.planner;
+    const progress = datosActivos.progress;
 
     const contenedor = document.getElementById("fechasImportantes");
 
@@ -1126,7 +1179,7 @@ const progress = datosActivos.progress;
     pesoActual > 0 &&
     pesoObjetivo > 0;
 
-const cumplido =
+    const cumplido =
     tienePlan &&
     pesoActual === pesoObjetivo;
 
@@ -1181,30 +1234,39 @@ if(fechaMeta){
 }
   
     if(cumplido){
+    const resultado = obtenerResultadoPlan(usuarioActivo);
 
     contenedor.innerHTML = `
         <div class="list-item">
             <div>
                 <strong>Objetivo alcanzado</strong>
-                <span>Meta cumplida</span>
+                <span>Resultado final del plan</span>
             </div>
             <span>✅</span>
         </div>
 
         <div class="list-item">
             <div>
-                <strong>Peso objetivo</strong>
-                <span>Meta definida</span>
+                <strong>Inicio</strong>
+                <span>Peso inicial</span>
             </div>
-            <span>${pesoObjetivo} kg</span>
+            <span>${resultado.pesoInicial} kg</span>
         </div>
 
         <div class="list-item">
             <div>
-                <strong>Estado</strong>
-                <span>Plan completado</span>
+                <strong>Final</strong>
+                <span>Peso final</span>
             </div>
-            <span>100%</span>
+            <span>${resultado.pesoFinal} kg</span>
+        </div>
+
+        <div class="list-item">
+            <div>
+                <strong>Cambio total</strong>
+                <span>Desde el inicio</span>
+            </div>
+            <span>${resultado.cambio.toFixed(1)} kg</span>
         </div>
     `;
 
@@ -1352,6 +1414,43 @@ else{
     badge.classList.add("estado-progreso");
 }
 
+  if(faltan <= 0.1){
+
+    const resultado = obtenerResultadoPlan(usuarioActivo);
+
+    contenedor.innerHTML = `
+        <div class="list-item">
+            <div>
+                <strong>Plan completado</strong>
+                <span>Objetivo alcanzado correctamente</span>
+            </div>
+        </div>
+
+        <div class="list-item">
+            <div>
+                <strong>${resultado.dias || "--"} días</strong>
+                <span>Duración del plan</span>
+            </div>
+        </div>
+
+        <div class="list-item">
+            <div>
+                <strong>${resultado.cambio.toFixed(1)} kg</strong>
+                <span>Cambio total</span>
+            </div>
+        </div>
+
+        <div class="list-item">
+            <div>
+                <strong>${Math.abs(resultado.promedioSemanal).toFixed(2)} kg/sem</strong>
+                <span>Promedio semanal</span>
+            </div>
+        </div>
+    `;
+
+    return;
+}
+  
     contenedor.innerHTML = `
         <div class="list-item">
             <div>
@@ -1433,8 +1532,8 @@ if(diasCalculados){
         </div>
 
         <div class="list-item">
-            <strong>Días plan</strong>
-            <span>${diasPlan || "--"} días</span>
+            <strong>Duración</strong>
+<span>${diasPlan || "--"} días</span>
         </div>
     `;
 }
