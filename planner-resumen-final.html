@@ -424,7 +424,7 @@ document.getElementById("objetivo").textContent =
     textoObjetivo(p.objetivoPrincipal);
 
 document.getElementById("tmb").textContent =
-    p.tmb + " kcal";
+    p.tmb ? p.tmb + " kcal" : "-- kcal";
 
 document.getElementById("ajuste").textContent =
     textoAjuste();

@@ -906,6 +906,29 @@ function guardarPlanAnterior(){
     const pesoInicial = Number(document.getElementById("histPesoInicial").value || 0);
     const pesoFinal = Number(document.getElementById("histPesoFinal").value || 0);
     const calorias = Number(document.getElementById("histCalorias").value || 0);
+  
+    const caloriasDesdeMacros =
+    (proteinas * 4) +
+    (carbos * 4) +
+    (grasas * 9);
+
+const caloriasFinales = calorias || caloriasDesdeMacros;
+
+const tipoAjuste =
+    tipoPlan === "Déficit" ? "deficit" :
+    tipoPlan === "Superávit" ? "superavit" :
+    "mantencion";
+
+const objetivoPrincipal =
+    tipoPlan === "Déficit" ? "perder" :
+    tipoPlan === "Superávit" ? "ganar" :
+    "mantener";
+
+const ajusteFinal =
+    tipoPlan === "Déficit" ? -Math.abs(ajuste) :
+    tipoPlan === "Superávit" ? Math.abs(ajuste) :
+    0;
+  
     const ajuste = Number(document.getElementById("histAjuste").value || 0);
 const actividad = document.getElementById("histActividad").value;
 const comidas = Number(document.getElementById("histComidas").value || 0);
@@ -937,17 +960,27 @@ const grasas = Number(document.getElementById("histGrasas").value || 0);
             peso: pesoInicial,
             pesoInicial,
             pesoFinal,
-            caloriasObjetivo: calorias,
-ajusteCalorico: ajuste,
-ajusteCalorias: Math.abs(ajuste),
+              objetivoPrincipal,
+tipoAjuste,
+
+caloriasObjetivo: caloriasFinales,
+caloriasFinales: caloriasFinales,
+
+ajusteCalorico: ajusteFinal,
+ajusteCalorias: Math.abs(ajusteFinal),
 actividad: actividad,
 entrenamiento: actividad,
 proteinas: proteinas,
 proteinasGr: proteinas,
+proteinasKcal: proteinas * 4,
+
 carbohidratos: carbos,
 carbosGr: carbos,
+carbosKcal: carbos * 4,
+
 grasas: grasas,
 grasasGr: grasas,
+grasasKcal: grasas * 9,
 cantidadComidas: comidas,
 numeroComidas: comidas
         },
