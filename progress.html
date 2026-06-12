@@ -217,6 +217,39 @@ body{
         align-items:center;
     }
 }
+  
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    backdrop-filter:blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    padding:20px;
+}
+
+.modal{
+    width:100%;
+    max-width:420px;
+    background:#0f172a;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:24px;
+    padding:30px;
+    text-align:center;
+}
+
+.modal h3{
+    font-size:24px;
+    margin-bottom:10px;
+}
+
+.modal p{
+    color:#94a3b8;
+    line-height:1.5;
+    margin-bottom:20px;
+}  
 </style>
 </head>
 
@@ -287,6 +320,21 @@ body{
 
 </div>
 
+<div class="modal-overlay" id="modalSinPlan">
+    <div class="modal">
+        <h3>Sin plan activo</h3>
+        <p>Primero debes crear o activar un plan para usar Progress.</p>
+
+        <button class="btn" onclick="window.location.href='planes.html'">
+            Ir a Planes
+        </button>
+
+        <button class="btn-secondary" onclick="window.location.href='dashboard.html'">
+            Volver al Dashboard
+        </button>
+    </div>
+</div>  
+  
 <script>
 const KEY_USUARIOS = "macrofagus_usuarios";
 const KEY_ACTIVO = "macrofagus_usuario_activo";
@@ -302,8 +350,8 @@ const planActivo = usuarioActivo.planes?.find(
 );
 
 if(!planActivo){
-    alert("Primero debes crear o activar un plan.");
-    window.location.href = "dashboard.html";
+    mostrarModalSinPlan();
+    throw new Error("Sin plan activo");
 }
 
 usuarioActivo.planner = planActivo.planner || {};
@@ -366,6 +414,10 @@ function mostrarMensaje(texto){
     msg.className = "message error";
 }
 
+function mostrarModalSinPlan(){
+    document.getElementById("modalSinPlan").style.display = "flex";
+}  
+  
 function guardarUsuarioActivo(){
     localStorage.setItem(KEY_ACTIVO, JSON.stringify(usuarioActivo));
 
